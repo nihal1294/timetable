@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets
 from mainwindow import Ui_MainWindow
 
 
-
 def generate(subjects, name, faculty): # subjects is a list of tuples (name, hours/week, teacher)
     tt = empty_timetable()
     for subject in subjects:
