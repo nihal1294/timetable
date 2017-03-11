@@ -35,7 +35,6 @@ QLineEdit:clicked{
 }
 
 
-
 #addBtn:hover, #assignBtn:hover, #printBtn:hover, #saveBtn:hover{
 	border-color:cyan;
 }
