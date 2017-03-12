@@ -43,7 +43,6 @@ class Ui_trialwindow(object):
         self.input_list.setFont(font)
         self.input_list.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.input_list.setAlternatingRowColors(False)
-        self.input_list.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
         self.input_list.setMovement(QtWidgets.QListView.Static)
         self.input_list.setResizeMode(QtWidgets.QListView.Adjust)
         self.input_list.setObjectName("input_list")
