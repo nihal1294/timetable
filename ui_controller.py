@@ -1,9 +1,10 @@
+
 #from PyQt5 import QtWidgets, QtCore
 
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
 from PyQt5 import Qt
 
 import sys
@@ -21,9 +22,16 @@ class ParentWindow(QMainWindow):
 
 	def __init__(self, parent = None):
 		super(ParentWindow,self).__init__(parent)
-		self.top_window = 1
 		self.central_window = QWidget()
 		self.layered_windows = QStackedLayout()
+
+		#code to resize the main window ...does NOT resize the widgets !
+		screen_width = QDesktopWidget().screenGeometry().width()
+		screen_height = QDesktopWidget().screenGeometry().height()
+		print('current screen res: ',screen_width, screen_height)
+		self.adjusted_width = (screen_width/1366)
+		self.adjusted_height = (screen_height/768)
+		print('resize ratio: ',self.adjusted_width, self.adjusted_height)
 
 		self.setup_first_window()
 		self.setup_second_window()
@@ -39,14 +47,18 @@ class ParentWindow(QMainWindow):
 
 		self.central_window.setLayout(self.layered_windows)
 		self.setCentralWidget(self.central_window)
-		self.setFixedSize(920, 500)
+
+		#intended original size for the app = (920, 500)
+		self.setFixedSize(920*self.adjusted_width, 500*self.adjusted_height)
+		#self.resize()
 
 
 	def setup_first_window(self):
-		#FIRST WINDOW
+		#FIRST WINDOW - List Entry
 		self.FirstWindow = QWidget()
 		self.ui = Ui_trialwindow()
 		self.ui.setupUi(self.FirstWindow)
+		#self.ui.input_list.resize(self.adjusted_width*self.ui.input_list.width(), self.adjusted_height*self.ui.input_list.height())
 
 		#nihal mods
 		self.ui.semester_combobox.setEnabled(False)
@@ -57,12 +69,12 @@ class ParentWindow(QMainWindow):
 		self.ui.addBtn.clicked.connect(self.add_btn_event)
 		self.ui.removeBtn.clicked.connect(self.remove_btn_event)
 		self.ui.nextBtn.clicked.connect(self.next_btn_event)
-		self.ui.sections_spinbox.valueChanged.connect(self.section_val)
+		self.ui.sections_spinbox.valueChanged.connect(self.section_combobox_event)
 		self.ui.inputType_combobox.addItem("Faculty")
 		self.ui.inputType_combobox.addItem("Subjects")
 		self.ui.inputType_combobox.setCurrentIndex(-1)
-		self.ui.inputType_combobox.activated[str].connect(self.inpType)
-		self.ui.semester_combobox.activated[str].connect(self.semester)
+		self.ui.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
+		self.ui.semester_combobox.activated[str].connect(self.semester_combobox_event)
 		self.sem_list = ['III', 'IV', 'V', 'VI', 'VII', 'VIII']
 		for sem in self.sem_list:
 			self.ui.semester_combobox.addItem(sem)
@@ -79,7 +91,7 @@ class ParentWindow(QMainWindow):
 		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('E:\The Usual\WaRbxZN.png'))
 
 	def setup_second_window(self):
-		#SECOND WINDOW
+		#SECOND WINDOW - Faculty assignment
 		self.SecondWindow = QWidget()
 		self.ui2 = Ui_trialwindow2()
 		self.ui2.setupUi(self.SecondWindow)
@@ -88,66 +100,123 @@ class ParentWindow(QMainWindow):
 		self.ui2.backBtn.clicked.connect(self.back_btn_event)
 
 	def setup_third_window(self):
-		#THIRD WINDOW
+		#THIRD WINDOW - Subject Constraints
 		self.ThirdWindow = QWidget()
 		self.ui3 = Ui_trialwindow3()
 		self.ui3.setupUi(self.ThirdWindow)
 
 		self.ui3.nextBtn.clicked.connect(self.next_btn_event)
 		self.ui3.backBtn.clicked.connect(self.back_btn_event)
+		for sem in self.sem_list:
+			self.ui3.semester_combobox.addItem(sem)
+		self.ui3.semester_combobox.setCurrentIndex(-1)
+		for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
+			self.ui3.section_combobox.addItem(sec)
+			print(sec)
+		self.ui3.section_combobox.setCurrentIndex(-1)
+		for slot in ['Maths','ESC','DAA/UNIX Lab','CG/CN Lab','CCIM/MBD','MCC/MCAP','EM','Project Lab']:
+			self.ui3.slotType_combobox.addItem(slot)
+		self.ui3.slotType_combobox.setCurrentIndex(-1)
+
+		#table widget events
+		slotType = self.ui3.slotType_combobox.currentText()
+		
+		'''if self.ui3.subject_table.itemPressed():
+			self.ui3.subject_table.setItem(0,0,slotType)
+			cellitem = self.ui3.subject_table.takeItem()
+			print(cellitem)'''
+
+
+
+
 
 	def setup_fourth_window(self):
-		#FOURTH WINDOW
+		#FOURTH WINDOW - Faculty Constraints
 		self.FourthWindow = QWidget()
 		self.ui4 = Ui_trialwindow4()
 		self.ui4.setupUi(self.FourthWindow)
 
 		self.ui4.generateBtn.clicked.connect(self.next_btn_event)	
 		self.ui4.backBtn.clicked.connect(self.back_btn_event)
+		for faculty in self.faculty_list_value:
+			self.ui4.faculty_combobox.addItem(faculty)
+		self.ui4.faculty_combobox.setCurrentIndex(-1)
 
 	def setup_fifth_window(self):
-		#FIFTH WINDOW
+		#FIFTH WINDOW - Generated timetable
 		self.FifthWindow = QWidget()
 		self.ui5 = Ui_trialwindow5()
 		self.ui5.setupUi(self.FifthWindow)
 
 		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
+		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
+		self.ui5.faculty_combobox.setEnabled(False)
+		self.ui5.inputType_combobox.addItem('Students')
+		self.ui5.inputType_combobox.addItem('Faculty')
+		for sem in self.sem_list:
+			self.ui5.semester_combobox.addItem(sem)
+		self.ui5.semester_combobox.setCurrentIndex(-1)
+		for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
+			self.ui5.section_combobox.addItem(sec)
+		self.ui5.section_combobox.setCurrentIndex(-1)
+		for faculty in self.faculty_list_value:
+			self.ui5.faculty_combobox.addItem(faculty)
+		self.ui5.faculty_combobox.setCurrentIndex(-1)
+
+
 
 
 	#nihal mods ----------
 
-	def inpType(self):    #function for input type combobox
-		self.inputType = self.ui.inputType_combobox.currentText()
-		print(self.inputType)
-		#print(dir(self.ui.inputType_combobox))
-		if self.inputType == "Faculty":
-			self.ui.semester_combobox.setEnabled(False)
-			self.ui.sections_spinbox.setEnabled(False)
-			self.ui.title_combobox.setEnabled(True)
-			self.ui.input_textbox.setEnabled(True)
-			self.ui.input_textbox.returnPressed.connect(self.ui.addBtn.click)
-			self.ui.subject_short_input.setEnabled(False)
-			self.ui.input_list.clear()
-			for values in self.faculty_list_value:
-				self.ui.input_list.addItem(values)
-		else:
-			self.ui.semester_combobox.setEnabled(True)
-			self.ui.sections_spinbox.setEnabled(True)
-			self.ui.input_textbox.setEnabled(True)
-			self.ui.title_combobox.setEnabled(False)
-			self.ui.subject_short_input.setEnabled(True)
-			#self.ui.input_textbox.returnPressed.
-			self.ui.subject_short_input.returnPressed.connect(self.ui.addBtn.click)
-			self.ui.input_list.clear()
-			for values in self.subject_list_value:
-				self.ui.input_list.addItem(values)
+	def inputType_combobox_event(self):    #function for input type combobox
+		if self.FirstWindow.isVisible():
+			self.inputType = self.ui.inputType_combobox.currentText()
+			print(self.inputType)
+			#print(dir(self.ui.inputType_combobox))
+			if self.inputType == "Faculty":
+				self.ui.semester_combobox.setEnabled(False)
+				self.ui.sections_spinbox.setEnabled(False)
+				self.ui.title_combobox.setEnabled(True)
+				self.ui.input_textbox.setEnabled(True)
+				self.ui.input_textbox.returnPressed.connect(self.ui.addBtn.click)
+				self.ui.subject_short_input.setEnabled(False)
+				self.ui.input_list.clear()
+				for values in self.faculty_list_value:
+					self.ui.input_list.addItem(values)
+			else:
+				self.ui.semester_combobox.setEnabled(True)
+				self.ui.sections_spinbox.setEnabled(True)
+				self.ui.input_textbox.setEnabled(True)
+				self.ui.title_combobox.setEnabled(False)
+				self.ui.subject_short_input.setEnabled(True)
+				#self.ui.input_textbox.returnPressed.
+				self.ui.subject_short_input.returnPressed.connect(self.ui.addBtn.click)
+				self.ui.input_list.clear()
+				for values in self.subject_list_value:
+					self.ui.input_list.addItem(values)
 
-	def semester(self):   #function for semester combobox
+		#	sanjan mods - same method is used for fifth window. Do This in other combobox for other windows
+		if self.FifthWindow.isVisible():
+			self.inputType = self.ui5.inputType_combobox.currentText()
+			print(self.inputType)
+			if self.inputType == "Faculty":
+				self.ui5.semester_combobox.setEnabled(False)
+				self.ui5.section_combobox.setEnabled(False)
+				self.ui5.faculty_combobox.setEnabled(True)
+
+			else:
+				self.ui5.semester_combobox.setEnabled(True)
+				self.ui5.section_combobox.setEnabled(True)
+				self.ui5.faculty_combobox.setEnabled(False)
+
+
+
+	def semester_combobox_event(self):   #function for semester combobox
 		self.sem = self.ui.semester_combobox.currentText()
 		print(self.sem)
 
-	def section_val(self):    #function for sections spinbox
+	def section_combobox_event(self):    #function for sections spinbox
 		self.sections = self.ui.sections_spinbox.value()  #saves the number of sections when "add" button is clicked
 		print(self.sections)
 
@@ -239,17 +308,17 @@ class ParentWindow(QMainWindow):
 		if self.SecondWindow.isVisible():
 			self.SecondWindow.hide()
 			self.FirstWindow.show()
-		if self.ThirdWindow.isVisible():
+		elif self.ThirdWindow.isVisible():
 			self.ThirdWindow.hide()
 			self.SecondWindow.show()
-		if self.FourthWindow.isVisible():
+		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.ThirdWindow.show()
-		if self.FifthWindow.isVisible():
+		elif self.FifthWindow.isVisible():
 			self.FifthWindow.hide()
 			self.FourthWindow.show()
 		
-		
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

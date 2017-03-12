@@ -1,16 +1,4 @@
 css = '''
-QComboBox{
-
-}
-
-QSpinBox{
-
-}
-
-QListWidget{
-	
-}
-
 QPushButton{
 	background-color: white;
 	border: 2px solid gray;
@@ -33,7 +21,6 @@ QLineEdit:clicked{
 #trialwindow, #trialwindow2, #trialwindow3, #trialwindow4, #trialwindow5{
 	background-color:white;
 }
-
 
 #addBtn:hover, #assignBtn:hover, #printBtn:hover, #saveBtn:hover{
 	border-color:cyan;
