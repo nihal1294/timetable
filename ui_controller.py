@@ -132,6 +132,8 @@ class ParentWindow(QMainWindow):
 			self.ui3.semester_combobox.addItem(sem)
 		self.ui3.semester_combobox.setCurrentIndex(-1)
 
+		self.section_fixed_slots = dict()
+
 		#table widget events
 		'''slotType = self.ui3.slotType_combobox.currentText()
 		cellrow = self.ui3.subject_table.currentRow()
@@ -260,6 +262,11 @@ class ParentWindow(QMainWindow):
 		self.text = self.ui.input_textbox.text()
 		if self.text != '':
 			if self.inputType == "Subjects":
+				self.sem = self.ui.semester_combobox.currentText()
+				if not self.sem:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+					return
 				short_sub = self.ui.subject_short_input.text()
 				if short_sub != '':
 					t = self.text + " - " + short_sub
@@ -466,6 +473,17 @@ class ParentWindow(QMainWindow):
 		item = QtWidgets.QTableWidgetItem()
 		item.setText(str(self.slot))
 		self.ui3.subject_table.setItem(row, column, item)
+
+		sem = self.ui3.semester_combobox.currentText()
+		section = self.ui3.section_combobox.currentText()
+		if sem not in self.section_fixed_slots:
+			self.section_fixed_slots[sem] = dict()
+		if section not in self.section_fixed_slots[sem]:
+			self.section_fixed_slots[sem][section] = dict()
+		if row not in self.section_fixed_slots[sem][section]:
+			self.section_fixed_slots[sem][section][row] = dict()
+		self.section_fixed_slots[sem][section][row][column] = item
+		print(self.section_fixed_slots)
 		#print(dir(self.ui3.subject_table))
 		#self.ui3.subject_table.setText(row, column, self.slot)
 
