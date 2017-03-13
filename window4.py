@@ -12,7 +12,7 @@ import ui_stylesheet
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
-        window4.resize(916, 460)
+        window4.resize(920, 460)
         window4.setStyleSheet(ui_stylesheet.css)
         self.centralwidget = QtWidgets.QWidget(window4)
         self.centralwidget.setObjectName("centralwidget")
@@ -39,7 +39,7 @@ class Ui_window4(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.faculty_table.sizePolicy().hasHeightForWidth())
         self.faculty_table.setSizePolicy(sizePolicy)
-        self.faculty_table.setMinimumSize(QtCore.QSize(896, 283))
+        self.faculty_table.setMinimumSize(QtCore.QSize(900, 292))
         self.faculty_table.setObjectName("faculty_table")
         self.faculty_table.setColumnCount(8)
         self.faculty_table.setRowCount(6)
@@ -95,6 +95,7 @@ class Ui_window4(object):
         self.faculty_table.verticalHeader().setMinimumSectionSize(27)
         self.gridLayout.addWidget(self.faculty_table, 2, 0, 1, 2, QtCore.Qt.AlignHCenter)
         self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setMinimumSize(QtCore.QSize(0, 43))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)
@@ -132,7 +133,7 @@ class Ui_window4(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         window4.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(window4)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 916, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 920, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -150,6 +151,10 @@ class Ui_window4(object):
 
         self.retranslateUi(window4)
         QtCore.QMetaObject.connectSlotsByName(window4)
+        window4.setTabOrder(self.faculty_combobox, self.faculty_table)
+        window4.setTabOrder(self.faculty_table, self.printBtn)
+        window4.setTabOrder(self.printBtn, self.backBtn)
+        window4.setTabOrder(self.backBtn, self.generateBtn)
 
     def retranslateUi(self, window4):
         _translate = QtCore.QCoreApplication.translate

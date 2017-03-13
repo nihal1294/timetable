@@ -12,7 +12,7 @@ import ui_stylesheet
 class Ui_window3(object):
     def setupUi(self, window3):
         window3.setObjectName("window3")
-        window3.resize(916, 460)
+        window3.resize(920, 460)
         window3.setStyleSheet(ui_stylesheet.css)
         self.centralwidget = QtWidgets.QWidget(window3)
         self.centralwidget.setObjectName("centralwidget")
@@ -52,7 +52,7 @@ class Ui_window3(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.subject_table.sizePolicy().hasHeightForWidth())
         self.subject_table.setSizePolicy(sizePolicy)
-        self.subject_table.setMinimumSize(QtCore.QSize(896, 283))
+        self.subject_table.setMinimumSize(QtCore.QSize(900, 292))
         self.subject_table.setObjectName("subject_table")
         self.subject_table.setColumnCount(8)
         self.subject_table.setRowCount(6)
@@ -160,7 +160,7 @@ class Ui_window3(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         window3.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(window3)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 916, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 920, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -178,6 +178,12 @@ class Ui_window3(object):
 
         self.retranslateUi(window3)
         QtCore.QMetaObject.connectSlotsByName(window3)
+        window3.setTabOrder(self.semester_combobox, self.section_combobox)
+        window3.setTabOrder(self.section_combobox, self.slotType_combobox)
+        window3.setTabOrder(self.slotType_combobox, self.subject_table)
+        window3.setTabOrder(self.subject_table, self.printBtn)
+        window3.setTabOrder(self.printBtn, self.backBtn)
+        window3.setTabOrder(self.backBtn, self.nextBtn)
 
     def retranslateUi(self, window3):
         _translate = QtCore.QCoreApplication.translate
