@@ -19,16 +19,17 @@ class ParentWindow(QMainWindow):
 
 	def __init__(self, parent = None):
 		super(ParentWindow,self).__init__(parent)
-		self.central_window = QWidget()
+		self.central_window = QMainWindow()
 		self.layered_windows = QStackedLayout()
 
 		#code to resize the main window ...does NOT resize the widgets !
 		screen_width = QDesktopWidget().screenGeometry().width()
 		screen_height = QDesktopWidget().screenGeometry().height()
 		print('current screen res: ',screen_width, screen_height)
-		self.adjusted_width = (screen_width/1366)
-		self.adjusted_height = (screen_height/768)
-		print('resize ratio: ',self.adjusted_width, self.adjusted_height)
+		#self.adjusted_width = (screen_width/1366)
+		#self.adjusted_height = (screen_height/768)
+		self.resize_ratio = (screen_height/screen_width)
+		print('resize ratio: ',self.resize_ratio)
 
 		self.setup_first_window()
 		self.setup_second_window()
@@ -46,7 +47,7 @@ class ParentWindow(QMainWindow):
 		self.setCentralWidget(self.central_window)
 
 		#intended original size for the app = (920, 500)
-		self.resize(916*self.adjusted_width, 460*self.adjusted_height)
+		#self.resize(916*self.adjusted_width, 460*self.adjusted_height)
 		#self.resize()
 
 	# setup functions

@@ -12,7 +12,7 @@ import ui_stylesheet
 class Ui_window5(object):
     def setupUi(self, window5):
         window5.setObjectName("window5")
-        window5.resize(916, 460)
+        window5.resize(920, 460)
         window5.setStyleSheet(ui_stylesheet.css)
         self.centralwidget = QtWidgets.QWidget(window5)
         self.centralwidget.setObjectName("centralwidget")
@@ -52,7 +52,7 @@ class Ui_window5(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.generated_table.sizePolicy().hasHeightForWidth())
         self.generated_table.setSizePolicy(sizePolicy)
-        self.generated_table.setMinimumSize(QtCore.QSize(896, 283))
+        self.generated_table.setMinimumSize(QtCore.QSize(900, 292))
         self.generated_table.setObjectName("generated_table")
         self.generated_table.setColumnCount(8)
         self.generated_table.setRowCount(6)
@@ -171,7 +171,7 @@ class Ui_window5(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         window5.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(window5)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 916, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 920, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -189,6 +189,13 @@ class Ui_window5(object):
 
         self.retranslateUi(window5)
         QtCore.QMetaObject.connectSlotsByName(window5)
+        window5.setTabOrder(self.inputType_combobox, self.semester_combobox)
+        window5.setTabOrder(self.semester_combobox, self.section_combobox)
+        window5.setTabOrder(self.section_combobox, self.faculty_combobox)
+        window5.setTabOrder(self.faculty_combobox, self.generated_table)
+        window5.setTabOrder(self.generated_table, self.printBtn)
+        window5.setTabOrder(self.printBtn, self.backBtn)
+        window5.setTabOrder(self.backBtn, self.nextBtn)
 
     def retranslateUi(self, window5):
         _translate = QtCore.QCoreApplication.translate
@@ -226,7 +233,7 @@ class Ui_window5(object):
         self.label_3.setText(_translate("window5", "Semester:"))
         self.printBtn.setText(_translate("window5", "Print"))
         self.backBtn.setText(_translate("window5", "< Back"))
-        self.nextBtn.setText(_translate("window5", "Next >"))
+        self.nextBtn.setText(_translate("window5", "Finish"))
         self.label_2.setText(_translate("window5", "Input Type:"))
         self.label.setText(_translate("window5", "Generated Timetable"))
         self.menuFile.setTitle(_translate("window5", "File"))

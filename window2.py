@@ -12,7 +12,7 @@ import ui_stylesheet
 class Ui_window2(object):
     def setupUi(self, window2):
         window2.setObjectName("window2")
-        window2.resize(916, 460)
+        window2.resize(920, 460)
         window2.setStyleSheet(ui_stylesheet.css)
         self.centralwidget = QtWidgets.QWidget(window2)
         self.centralwidget.setObjectName("centralwidget")
@@ -74,7 +74,7 @@ class Ui_window2(object):
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 1, 3, 1, 1, QtCore.Qt.AlignHCenter)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(0, 0))
+        self.label.setMinimumSize(QtCore.QSize(0, 22))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)
@@ -92,7 +92,7 @@ class Ui_window2(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.assigned_list.sizePolicy().hasHeightForWidth())
         self.assigned_list.setSizePolicy(sizePolicy)
-        self.assigned_list.setMinimumSize(QtCore.QSize(600, 289))
+        self.assigned_list.setMinimumSize(QtCore.QSize(596, 290))
         self.assigned_list.setAlternatingRowColors(True)
         self.assigned_list.setObjectName("assigned_list")
         self.gridLayout.addWidget(self.assigned_list, 3, 0, 1, 4)
@@ -115,7 +115,7 @@ class Ui_window2(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         window2.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(window2)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 916, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 920, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -133,6 +133,14 @@ class Ui_window2(object):
 
         self.retranslateUi(window2)
         QtCore.QMetaObject.connectSlotsByName(window2)
+        window2.setTabOrder(self.faculty_combobox, self.semester_combobox)
+        window2.setTabOrder(self.semester_combobox, self.section_combobox)
+        window2.setTabOrder(self.section_combobox, self.subject_combobox)
+        window2.setTabOrder(self.subject_combobox, self.assignBtn)
+        window2.setTabOrder(self.assignBtn, self.undoBtn)
+        window2.setTabOrder(self.undoBtn, self.assigned_list)
+        window2.setTabOrder(self.assigned_list, self.backBtn)
+        window2.setTabOrder(self.backBtn, self.nextBtn)
 
     def retranslateUi(self, window2):
         _translate = QtCore.QCoreApplication.translate
