@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QStackedLayout
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
 from PyQt5 import Qt
 from collections import OrderedDict
-
+from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 #import notification
 
@@ -120,18 +120,17 @@ class ParentWindow(QMainWindow):
 		self.ui3 = Ui_window3()
 		self.ui3.setupUi(self.ThirdWindow)
 
+		self.ui3.section_combobox.setCurrentIndex(-1)
+		self.ui3.slotType_combobox.setCurrentIndex(-1)
 		self.ui3.nextBtn.clicked.connect(self.next_btn_event)
 		self.ui3.backBtn.clicked.connect(self.back_btn_event)
+		self.ui3.semester_combobox.activated[str].connect(self.semester_combobox3_event)
+		self.ui3.section_combobox.activated[str].connect(self.section_combobox3_event)
+		self.ui3.slotType_combobox.activated[str].connect(self.slotType_combobox3_event)
+		self.ui3.subject_table.cellClicked.connect(self.cellClick_event)
 		for sem in self.sem_list:
 			self.ui3.semester_combobox.addItem(sem)
 		self.ui3.semester_combobox.setCurrentIndex(-1)
-		for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
-			self.ui3.section_combobox.addItem(sec)
-			print(sec)
-		self.ui3.section_combobox.setCurrentIndex(-1)
-		for slot in ['Maths','ESC','DAA/UNIX Lab','CG/CN Lab','CCIM/MBD','MCC/MCAP','EM','Project Lab']:
-			self.ui3.slotType_combobox.addItem(slot)
-		self.ui3.slotType_combobox.setCurrentIndex(-1)
 
 		#table widget events
 		'''slotType = self.ui3.slotType_combobox.currentText()
@@ -196,6 +195,8 @@ class ParentWindow(QMainWindow):
 				self.ui.sections_spinbox.setEnabled(False)
 				self.ui.title_combobox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
+				self.ui.lab_checkbox.setEnabled(False)
+				self.ui.credits_spinbox.setEnabled(False)
 				self.ui.input_textbox.returnPressed.connect(self.ui.addBtn.click)
 				self.ui.subject_short_input.setEnabled(False)
 				self.ui.input_list.clear()
@@ -205,6 +206,8 @@ class ParentWindow(QMainWindow):
 				self.ui.semester_combobox.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
+				self.ui.lab_checkbox.setEnabled(True)
+				self.ui.credits_spinbox.setEnabled(True)
 				self.ui.title_combobox.setEnabled(False)
 				self.ui.subject_short_input.setEnabled(True)
 				self.ui.lab_checkbox.setEnabled(True)
@@ -401,7 +404,7 @@ class ParentWindow(QMainWindow):
 		self.subjects_assigned[sem][section].append(sub)
 		self.faculty_subjects[faculty].append(subject + ' - ' + sem + ' - ' + section)
 		#self.ui2.assigned_list.addItem(sub)
-		self.section_combobox_event()
+		self.section_combobox2_event()
 
 		print(self.subjects_assigned)
 		print(self.faculty_subjects)
@@ -434,6 +437,39 @@ class ParentWindow(QMainWindow):
 					self.faculty_subjects[faculty].remove(subject + ' - ' + sem + ' - ' + section)
 					pass
 		pass
+
+	#third form functions
+	def semester_combobox3_event(self):
+		self.ui3.subject_table.clearContents()
+		self.sem = self.ui3.semester_combobox.currentText()
+		self.ui3.slotType_combobox.clear()
+		for subject in self.subjects[self.sem]:
+			self.ui3.slotType_combobox.addItem(subject)
+		self.ui3.section_combobox.clear()
+		for section in self.sections[self.sem]:
+			self.ui3.section_combobox.addItem(section)
+
+
+	def section_combobox3_event(self):
+		self.ui3.subject_table.clearContents()
+
+
+	def slotType_combobox3_event(self):
+		self.slot = self.ui3.slotType_combobox.currentText()
+
+
+	def cellClick_event(self, row, column):
+		#row = self.ui3.subject_table.currentRow()
+		#column = self.ui3.subject_table.currentColumn()
+		self.slot = self.ui3.slotType_combobox.currentText()
+		print (str(row), str(column))
+		item = QtWidgets.QTableWidgetItem()
+		item.setText(str(self.slot))
+		self.ui3.subject_table.setItem(row, column, item)
+		#print(dir(self.ui3.subject_table))
+		#self.ui3.subject_table.setText(row, column, self.slot)
+
+
 
 	#sanjan mods ------------------------
 
