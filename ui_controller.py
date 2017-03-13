@@ -167,7 +167,7 @@ class ParentWindow(QMainWindow):
 		self.ui5 = Ui_window5()
 		self.ui5.setupUi(self.FifthWindow)
 
-		#self.ui5.finishBtn.clicked.connect(self.next_btn_event)
+		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
 		self.ui5.faculty_combobox.setEnabled(False)
@@ -507,7 +507,7 @@ class ParentWindow(QMainWindow):
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
 		elif self.FifthWindow.isVisible():
-			self.close()
+			sys.exit(app.exec_())
 
 	def back_btn_event(self):
 		if self.SecondWindow.isVisible():
