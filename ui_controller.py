@@ -453,13 +453,21 @@ class ParentWindow(QMainWindow):
 	#third form functions
 	def semester_combobox3_event(self):
 		self.ui3.subject_table.clearContents()
-		self.sem = self.ui3.semester_combobox.currentText()
+		sem = self.ui3.semester_combobox.currentText()
 		self.ui3.slotType_combobox.clear()
-		for subject in self.subjects[self.sem]:
+		for subject in self.subjects[sem]:
 			self.ui3.slotType_combobox.addItem(subject)
 		self.ui3.section_combobox.clear()
-		for section in self.sections[self.sem]:
+		for section in self.sections[sem]:
 			self.ui3.section_combobox.addItem(section)
+		section = self.ui3.semester_combobox.currentText()
+		row = self.ui3.subject_table.currentRow()
+		column = self.ui3.subject_table.currentColumn()
+		for sem in self.section_fixed_slots:
+			for section in self.section_fixed_slots[sem]:
+				for row in self.section_fixed_slots[sem][section]:
+					for column in self.section_fixed_slots[sem][section][row]:
+						self.ui3.subject_table.setItem(row, column, self.section_fixed_slots[sem][section][row][column])
 
 
 	def section_combobox3_event(self):
