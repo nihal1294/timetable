@@ -18,7 +18,7 @@ QLineEdit:clicked{
 	border:2px solid blue;
 }
 
-#trialwindow, #trialwindow2, #trialwindow3, #trialwindow4, #trialwindow5{
+#window, #trialwindow2, #trialwindow3, #trialwindow4, #trialwindow5{
 	background-color:white;
 }
 

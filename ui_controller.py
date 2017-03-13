@@ -10,6 +10,12 @@ from PyQt5 import Qt
 import sys
 #import notification
 
+from window import Ui_window
+from window2 import Ui_window2
+from window3 import Ui_window3
+from window4 import Ui_window4
+from window5 import Ui_window5
+
 from trialwindow import Ui_trialwindow
 from trialwindow2 import Ui_trialwindow2
 from trialwindow3 import Ui_trialwindow3
@@ -49,14 +55,14 @@ class ParentWindow(QMainWindow):
 		self.setCentralWidget(self.central_window)
 
 		#intended original size for the app = (920, 500)
-		self.setFixedSize(920*self.adjusted_width, 500*self.adjusted_height)
+		self.resize(916*self.adjusted_width, 460*self.adjusted_height)
 		#self.resize()
 
 
 	def setup_first_window(self):
 		#FIRST WINDOW - List Entry
-		self.FirstWindow = QWidget()
-		self.ui = Ui_trialwindow()
+		self.FirstWindow = QMainWindow()
+		self.ui = Ui_window()
 		self.ui.setupUi(self.FirstWindow)
 		#self.ui.input_list.resize(self.adjusted_width*self.ui.input_list.width(), self.adjusted_height*self.ui.input_list.height())
 
@@ -66,10 +72,12 @@ class ParentWindow(QMainWindow):
 		self.ui.input_textbox.setEnabled(False)
 		self.ui.title_combobox.setEnabled(False)
 		self.ui.subject_short_input.setEnabled(False)
+		self.ui.lab_checkbox.setEnabled(False)
+		self.ui.credits_spinbox.setEnabled(False)
 		self.ui.addBtn.clicked.connect(self.add_btn_event)
 		self.ui.removeBtn.clicked.connect(self.remove_btn_event)
 		self.ui.nextBtn.clicked.connect(self.next_btn_event)
-		self.ui.sections_spinbox.valueChanged.connect(self.section_combobox_event)
+		self.ui.sections_spinbox.valueChanged.connect(self.section_spinbox_event)
 		self.ui.inputType_combobox.addItem("Faculty")
 		self.ui.inputType_combobox.addItem("Subjects")
 		self.ui.inputType_combobox.setCurrentIndex(-1)
@@ -85,6 +93,8 @@ class ParentWindow(QMainWindow):
 		self.inputType = ""
 		self.text = ""
 		self.sem = ""
+		self.lab = 0
+		self.credits = 1
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
 		for value in self.titles_list:
 			self.ui.title_combobox.addItem(value)
@@ -92,8 +102,8 @@ class ParentWindow(QMainWindow):
 
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
-		self.SecondWindow = QWidget()
-		self.ui2 = Ui_trialwindow2()
+		self.SecondWindow = QMainWindow()
+		self.ui2 = Ui_window2()
 		self.ui2.setupUi(self.SecondWindow)
 
 		self.ui2.nextBtn.clicked.connect(self.next_btn_event)
@@ -101,8 +111,8 @@ class ParentWindow(QMainWindow):
 
 	def setup_third_window(self):
 		#THIRD WINDOW - Subject Constraints
-		self.ThirdWindow = QWidget()
-		self.ui3 = Ui_trialwindow3()
+		self.ThirdWindow = QMainWindow()
+		self.ui3 = Ui_window3()
 		self.ui3.setupUi(self.ThirdWindow)
 
 		self.ui3.nextBtn.clicked.connect(self.next_btn_event)
@@ -119,12 +129,15 @@ class ParentWindow(QMainWindow):
 		self.ui3.slotType_combobox.setCurrentIndex(-1)
 
 		#table widget events
-		slotType = self.ui3.slotType_combobox.currentText()
+		'''slotType = self.ui3.slotType_combobox.currentText()
+		cellrow = self.ui3.subject_table.currentRow()
+		cellcolumn = self.ui3.subject_table.currentColumn()
+
 		
-		'''if self.ui3.subject_table.itemPressed():
-			self.ui3.subject_table.setItem(0,0,slotType)
-			cellitem = self.ui3.subject_table.takeItem()
-			print(cellitem)'''
+		#if self.ui3.subject_table.itemPressed():
+		self.ui3.subject_table.setItem(cellrow,cellcolumn,slotType)
+		cellitem = self.ui3.subject_table.takeItem()
+		print(cellitem)'''
 
 
 
@@ -132,8 +145,8 @@ class ParentWindow(QMainWindow):
 
 	def setup_fourth_window(self):
 		#FOURTH WINDOW - Faculty Constraints
-		self.FourthWindow = QWidget()
-		self.ui4 = Ui_trialwindow4()
+		self.FourthWindow = QMainWindow()
+		self.ui4 = Ui_window4()
 		self.ui4.setupUi(self.FourthWindow)
 
 		self.ui4.generateBtn.clicked.connect(self.next_btn_event)	
@@ -144,11 +157,11 @@ class ParentWindow(QMainWindow):
 
 	def setup_fifth_window(self):
 		#FIFTH WINDOW - Generated timetable
-		self.FifthWindow = QWidget()
-		self.ui5 = Ui_trialwindow5()
+		self.FifthWindow = QMainWindow()
+		self.ui5 = Ui_window5()
 		self.ui5.setupUi(self.FifthWindow)
 
-		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
+		#self.ui5.finishBtn.clicked.connect(self.next_btn_event)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
 		self.ui5.faculty_combobox.setEnabled(False)
@@ -190,6 +203,8 @@ class ParentWindow(QMainWindow):
 				self.ui.input_textbox.setEnabled(True)
 				self.ui.title_combobox.setEnabled(False)
 				self.ui.subject_short_input.setEnabled(True)
+				self.ui.lab_checkbox.setEnabled(True)
+				self.ui.credits_spinbox.setEnabled(True)
 				#self.ui.input_textbox.returnPressed.
 				self.ui.subject_short_input.returnPressed.connect(self.ui.addBtn.click)
 				self.ui.input_list.clear()
@@ -216,7 +231,7 @@ class ParentWindow(QMainWindow):
 		self.sem = self.ui.semester_combobox.currentText()
 		print(self.sem)
 
-	def section_combobox_event(self):    #function for sections spinbox
+	def section_spinbox_event(self):    #function for sections spinbox
 		self.sections = self.ui.sections_spinbox.value()  #saves the number of sections when "add" button is clicked
 		print(self.sections)
 
