@@ -460,14 +460,14 @@ class ParentWindow(QMainWindow):
 		self.ui3.section_combobox.clear()
 		for section in self.sections[sem]:
 			self.ui3.section_combobox.addItem(section)
-		section = self.ui3.semester_combobox.currentText()
-		row = self.ui3.subject_table.currentRow()
-		column = self.ui3.subject_table.currentColumn()
-		for sem in self.section_fixed_slots:
-			for section in self.section_fixed_slots[sem]:
-				for row in self.section_fixed_slots[sem][section]:
-					for column in self.section_fixed_slots[sem][section][row]:
-						self.ui3.subject_table.setItem(row, column, self.section_fixed_slots[sem][section][row][column])
+		section = self.ui3.section_combobox.currentText()
+		#row = self.ui3.subject_table.currentRow()
+		#column = self.ui3.subject_table.currentColumn()
+		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]:
+			for row in self.section_fixed_slots[sem][section]:
+				for column in self.section_fixed_slots[sem][section][row]:
+					print(sem, section, row, column)
+					self.ui3.subject_table.setItem(row, column, self.section_fixed_slots[sem][section][row][column])
 
 
 	def section_combobox3_event(self):
