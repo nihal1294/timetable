@@ -115,6 +115,10 @@ class ParentWindow(QMainWindow):
 		self.ui2.section_combobox.activated[str].connect(self.section_combobox2_event)
 		self.ui2.faculty_combobox.activated[str].connect(self.faculty_combobox2_event)
 
+		self.sections = dict()
+		self.subjects_assigned = dict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
+		self.faculty_subjects = dict() # stores subjects assigned to each faculty
+
 	def setup_third_window(self):
 		#THIRD WINDOW - Subject Constraints
 		self.ThirdWindow = QMainWindow()
@@ -134,6 +138,7 @@ class ParentWindow(QMainWindow):
 		self.ui3.semester_combobox.setCurrentIndex(-1)
 
 		self.section_fixed_slots = dict()
+		
 
 		#table widget events
 		'''slotType = self.ui3.slotType_combobox.currentText()
@@ -176,8 +181,8 @@ class ParentWindow(QMainWindow):
 		for sem in self.sem_list:
 			self.ui5.semester_combobox.addItem(sem)
 		self.ui5.semester_combobox.setCurrentIndex(-1)
-		for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
-			self.ui5.section_combobox.addItem(sec)
+		#for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
+		#	self.ui5.section_combobox.addItem(sec)
 		self.ui5.section_combobox.setCurrentIndex(-1)
 		for faculty in self.faculty_list_value:
 			self.ui5.faculty_combobox.addItem(faculty)
@@ -342,19 +347,18 @@ class ParentWindow(QMainWindow):
 		self.ui2.faculty_combobox.setCurrentIndex(-1)
 		self.ui2.semester_combobox.setCurrentIndex(-1)
 
-		self.sections = dict()
 		for sem in self.sem_list:
 			self.sections[sem] = list(map(chr, range(65, 65+26)))[:self.num_sections[sem]]
+			if sem not in self.subjects_assigned:
+				self.subjects_assigned[sem] = dict()
+			for section in self.sections[sem]:
+				if section not in self.subjects_assigned[sem]:
+					self.subjects_assigned[sem][section] = []
 
-		self.subjects_assigned = dict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
-		for sem in self.sem_list:
-			self.subjects_assigned[sem] = dict()
-			for section in self.sections[sem]: 
-				self.subjects_assigned[sem][section] = []
-
-		self.faculty_subjects = dict() # stores subjects assigned to each faculty
+		
 		for faculty in self.faculty_list_value:
-			self.faculty_subjects[faculty] = []
+			if faculty not in self.faculty_subjects:
+				self.faculty_subjects[faculty] = []
 		print(self.subjects_assigned)
 		
 
