@@ -534,6 +534,7 @@ if __name__ == "__main__":
     app.setApplicationName('TimeTable Scheduler')
     main = ParentWindow()
     main.show()
+    main.hide()
     sys.exit(app.exec_())
 
 
