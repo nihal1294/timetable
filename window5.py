@@ -7,13 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
 
 class Ui_window5(object):
     def setupUi(self, window5):
         window5.setObjectName("window5")
-        window5.resize(920, 460)
-        window5.setStyleSheet(ui_stylesheet.css)
+        window5.resize(920, 469)
         self.centralwidget = QtWidgets.QWidget(window5)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -47,12 +45,12 @@ class Ui_window5(object):
         self.inputType_combobox.setObjectName("inputType_combobox")
         self.gridLayout.addWidget(self.inputType_combobox, 2, 0, 1, 1)
         self.generated_table = QtWidgets.QTableWidget(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.generated_table.sizePolicy().hasHeightForWidth())
         self.generated_table.setSizePolicy(sizePolicy)
-        self.generated_table.setMinimumSize(QtCore.QSize(900, 292))
+        self.generated_table.setMinimumSize(QtCore.QSize(596, 290))
         self.generated_table.setObjectName("generated_table")
         self.generated_table.setColumnCount(8)
         self.generated_table.setRowCount(6)
@@ -106,7 +104,7 @@ class Ui_window5(object):
         self.generated_table.horizontalHeader().setMinimumSectionSize(37)
         self.generated_table.verticalHeader().setDefaultSectionSize(43)
         self.generated_table.verticalHeader().setMinimumSectionSize(27)
-        self.gridLayout.addWidget(self.generated_table, 3, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.generated_table, 3, 0, 1, 4)
         self.faculty_combobox = QtWidgets.QComboBox(self.centralwidget)
         self.faculty_combobox.setMinimumSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
@@ -161,6 +159,7 @@ class Ui_window5(object):
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1, QtCore.Qt.AlignHCenter)
         self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setMinimumSize(QtCore.QSize(0, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)

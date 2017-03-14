@@ -7,13 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
 
 class Ui_window3(object):
     def setupUi(self, window3):
         window3.setObjectName("window3")
-        window3.resize(920, 460)
-        window3.setStyleSheet(ui_stylesheet.css)
+        window3.resize(920, 469)
         self.centralwidget = QtWidgets.QWidget(window3)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -47,12 +45,12 @@ class Ui_window3(object):
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 1, 3, 1, 1, QtCore.Qt.AlignHCenter)
         self.subject_table = QtWidgets.QTableWidget(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.subject_table.sizePolicy().hasHeightForWidth())
         self.subject_table.setSizePolicy(sizePolicy)
-        self.subject_table.setMinimumSize(QtCore.QSize(900, 292))
+        self.subject_table.setMinimumSize(QtCore.QSize(596, 290))
         self.subject_table.setObjectName("subject_table")
         self.subject_table.setColumnCount(8)
         self.subject_table.setRowCount(6)
@@ -106,7 +104,7 @@ class Ui_window3(object):
         self.subject_table.horizontalHeader().setMinimumSectionSize(37)
         self.subject_table.verticalHeader().setDefaultSectionSize(43)
         self.subject_table.verticalHeader().setMinimumSectionSize(27)
-        self.gridLayout.addWidget(self.subject_table, 3, 0, 1, 4, QtCore.Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.subject_table, 3, 0, 1, 4, QtCore.Qt.AlignVCenter)
         self.slotType_combobox = QtWidgets.QComboBox(self.centralwidget)
         self.slotType_combobox.setMinimumSize(QtCore.QSize(270, 30))
         font = QtGui.QFont()
@@ -123,6 +121,8 @@ class Ui_window3(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 2, 2, 1, 1)
         self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setMinimumSize(QtCore.QSize(0, 25))
+        self.label.setBaseSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)
