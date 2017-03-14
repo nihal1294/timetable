@@ -93,6 +93,7 @@ class ParentWindow(QMainWindow):
 		self.ui.semester_combobox.activated[str].connect(self.semester_combobox_event)
 		self.ui.input_textbox.returnPressed.connect(self.ui.addBtn.click)
 		self.ui.subject_short_input.returnPressed.connect(self.ui.addBtn.click)
+		self.ui.addBtn.setAutoDefault(True)
 		self.sem_list = ['III', 'IV', 'V', 'VI', 'VII', 'VIII']
 		for sem in self.sem_list:
 			self.ui.semester_combobox.addItem(sem)
@@ -297,13 +298,13 @@ class ParentWindow(QMainWindow):
 	def add_btn_event(self):   #function for add button
 		#print(dir(self.ui.input_textbox))
 		text = self.ui.input_textbox.text()
-		if text != '':
-			if self.inputType == "Subjects":
-				sem = self.ui.semester_combobox.currentText()
-				if not sem:
-					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Input', 'Please select the semester.')
-					return
+		if self.inputType == "Subjects":
+			sem = self.ui.semester_combobox.currentText()
+			if not sem:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+				return
+			if text != '':
 				short_sub = self.ui.subject_short_input.text()
 				if not short_sub:
 					self.systemtray_icon.show()
@@ -316,20 +317,23 @@ class ParentWindow(QMainWindow):
 				self.ui.input_list.addItem(t)
 				sub = subject(text, short_sub, credits, lab)
 				self.subjects[sem].append(sub)
+			else:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
 					
-			else: # input type is Faculty
+		elif self.inputType == "Faculty": # input type is Faculty
+			if text != '':
 				self.title = self.ui.title_combobox.currentText()
 				t = self.title + " " + text
 				self.faculty_list_value.append(t)
 				self.ui.input_list.addItem(t)
+			else:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
 		else:
 			self.systemtray_icon.show()
-			if self.inputType == "Subjects":
-				#notification.Notify("Please enter the subject name.")
-				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
-			else:
-				#notification.Notify("Please enter the faculty name.")
-				self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
+			self.systemtray_icon.showMessage('Input', 'Please select the input type.')
+				
 		self.ui.input_list.sortItems()
 		self.ui.subject_short_input.clear()
 		self.ui.input_textbox.clear()
