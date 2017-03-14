@@ -7,13 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
 
 class Ui_window2(object):
     def setupUi(self, window2):
         window2.setObjectName("window2")
-        window2.resize(920, 460)
-        window2.setStyleSheet(ui_stylesheet.css)
+        window2.resize(920, 469)
         self.centralwidget = QtWidgets.QWidget(window2)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -22,7 +20,7 @@ class Ui_window2(object):
         self.gridLayout.setContentsMargins(0, 0, -1, -1)
         self.gridLayout.setObjectName("gridLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(-1, 3, -1, 0)
+        self.horizontalLayout.setContentsMargins(-1, 9, -1, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.assignBtn = QtWidgets.QPushButton(self.centralwidget)
         self.assignBtn.setMinimumSize(QtCore.QSize(120, 35))
@@ -74,7 +72,7 @@ class Ui_window2(object):
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 1, 3, 1, 1, QtCore.Qt.AlignHCenter)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(0, 22))
+        self.label.setMinimumSize(QtCore.QSize(0, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)

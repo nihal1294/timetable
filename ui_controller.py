@@ -39,12 +39,12 @@ class ParentWindow(QMainWindow):
 		self.layered_windows = QStackedLayout()
 
 		#code to resize the main window ...does NOT resize the widgets !
-		screen_width = QDesktopWidget().screenGeometry().width()
-		screen_height = QDesktopWidget().screenGeometry().height()
-		print('current screen res: ',screen_width, screen_height)
+		self.screen_width = QDesktopWidget().screenGeometry().width()
+		self.screen_height = QDesktopWidget().screenGeometry().height()
+		print('current screen res: ',self.screen_width, self.screen_height)
 		#self.adjusted_width = (screen_width/1366)
 		#self.adjusted_height = (screen_height/768)
-		self.resize_ratio = (screen_height/screen_width)
+		self.resize_ratio = (self.screen_height/self.screen_width) #need a more accurate resize ratio than this.
 		print('resize ratio: ',self.resize_ratio)
 
 		self.setup_first_window()
@@ -114,6 +114,9 @@ class ParentWindow(QMainWindow):
 			self.ui.title_combobox.addItem(value)
 		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('E:\The Usual\WaRbxZN.png'))
 
+		self.FirstWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
+		self.FirstWindow.updateGeometry()
+
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
 		self.SecondWindow = QMainWindow()
@@ -137,6 +140,9 @@ class ParentWindow(QMainWindow):
 		self.subjects_assigned = dict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
 		self.faculty_subjects = dict() # stores subjects assigned to each faculty
 
+		self.SecondWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
+		self.SecondWindow.updateGeometry()
+
 	def setup_third_window(self):
 		#THIRD WINDOW - Subject Constraints
 		self.ThirdWindow = QMainWindow()
@@ -156,7 +162,10 @@ class ParentWindow(QMainWindow):
 		self.ui3.semester_combobox.setCurrentIndex(-1)
 
 		self.section_fixed_slots = dict()
-		
+
+
+		self.ThirdWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
+		self.ThirdWindow.updateGeometry()
 
 		#table widget events
 		'''slotType = self.ui3.slotType_combobox.currentText()
@@ -184,6 +193,9 @@ class ParentWindow(QMainWindow):
 			self.ui4.faculty_combobox.addItem(faculty)
 		self.ui4.faculty_combobox.setCurrentIndex(-1)
 
+		self.FourthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
+		self.FourthWindow.updateGeometry()
+
 	def setup_fifth_window(self):
 		#FIFTH WINDOW - Generated timetable
 		self.FifthWindow = QMainWindow()
@@ -206,7 +218,8 @@ class ParentWindow(QMainWindow):
 			self.ui5.faculty_combobox.addItem(faculty)
 		self.ui5.faculty_combobox.setCurrentIndex(-1)
 
-
+		self.FifthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
+		self.FifthWindow.updateGeometry()
 
 
 	#nihal mods ----------
@@ -563,7 +576,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setApplicationName('TimeTable Scheduler')
     main = ParentWindow()
-    main.show()
+    #main.show()
     sys.exit(app.exec_())
 
 

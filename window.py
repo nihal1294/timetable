@@ -7,13 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
 
 class Ui_window(object):
     def setupUi(self, window):
         window.setObjectName("window")
         window.resize(726, 480)
-        window.setStyleSheet(ui_stylesheet.css)
         self.centralWidget = QtWidgets.QWidget(window)
         self.centralWidget.setObjectName("centralWidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralWidget)
@@ -76,6 +74,7 @@ class Ui_window(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.subject_short_input.setFont(font)
+        self.subject_short_input.setInputMethodHints(QtCore.Qt.ImhPreferUppercase|QtCore.Qt.ImhUppercaseOnly)
         self.subject_short_input.setObjectName("subject_short_input")
         self.gridLayout.addWidget(self.subject_short_input, 11, 1, 1, 1)
         self.label_7 = QtWidgets.QLabel(self.centralWidget)
@@ -102,7 +101,7 @@ class Ui_window(object):
         self.lab_checkbox.setObjectName("lab_checkbox")
         self.gridLayout.addWidget(self.lab_checkbox, 11, 2, 1, 1, QtCore.Qt.AlignHCenter)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(11, 3, 11, 11)
+        self.horizontalLayout.setContentsMargins(11, 11, 11, 11)
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.addBtn = QtWidgets.QPushButton(self.centralWidget)
@@ -193,6 +192,7 @@ class Ui_window(object):
         sizePolicy.setHeightForWidth(self.input_list.sizePolicy().hasHeightForWidth())
         self.input_list.setSizePolicy(sizePolicy)
         self.input_list.setMinimumSize(QtCore.QSize(300, 0))
+        self.input_list.setAlternatingRowColors(True)
         self.input_list.setObjectName("input_list")
         self.gridLayout.addWidget(self.input_list, 1, 5, 12, 1)
         self.label = QtWidgets.QLabel(self.centralWidget)

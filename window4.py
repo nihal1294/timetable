@@ -7,13 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
 
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
-        window4.resize(920, 460)
-        window4.setStyleSheet(ui_stylesheet.css)
+        window4.resize(920, 469)
         self.centralwidget = QtWidgets.QWidget(window4)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -34,12 +32,12 @@ class Ui_window4(object):
         self.faculty_combobox.setObjectName("faculty_combobox")
         self.gridLayout.addWidget(self.faculty_combobox, 1, 1, 1, 1)
         self.faculty_table = QtWidgets.QTableWidget(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.faculty_table.sizePolicy().hasHeightForWidth())
         self.faculty_table.setSizePolicy(sizePolicy)
-        self.faculty_table.setMinimumSize(QtCore.QSize(900, 292))
+        self.faculty_table.setMinimumSize(QtCore.QSize(596, 290))
         self.faculty_table.setObjectName("faculty_table")
         self.faculty_table.setColumnCount(8)
         self.faculty_table.setRowCount(6)
@@ -93,9 +91,9 @@ class Ui_window4(object):
         self.faculty_table.horizontalHeader().setMinimumSectionSize(37)
         self.faculty_table.verticalHeader().setDefaultSectionSize(43)
         self.faculty_table.verticalHeader().setMinimumSectionSize(27)
-        self.gridLayout.addWidget(self.faculty_table, 2, 0, 1, 2, QtCore.Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.faculty_table, 2, 0, 1, 2)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(0, 43))
+        self.label.setMinimumSize(QtCore.QSize(0, 45))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)
