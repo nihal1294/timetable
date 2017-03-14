@@ -257,7 +257,7 @@ class ParentWindow(QMainWindow):
 				self.ui.input_list.clear()
 				if self.sem in self.subjects:
 					for subject in self.subjects[self.sem]:
-						self.ui.input_list.addItem(subject)
+						self.ui.input_list.addItem(subject.both_names)
 
 		#	sanjan mods - same method is used for fifth window. Do This in other combobox for other windows
 		if self.FifthWindow.isVisible():
@@ -287,7 +287,7 @@ class ParentWindow(QMainWindow):
 		self.ui.input_list.clear()
 		if self.sem in self.subjects:
 			for subject in self.subjects[self.sem]:
-				self.ui.input_list.addItem(subject)
+				self.ui.input_list.addItem(subject.both_names)
 
 	def section_spinbox_event(self):    #function for sections spinbox
 		if self.sem != '':
@@ -314,9 +314,14 @@ class ParentWindow(QMainWindow):
 				lab = self.ui.lab_checkbox.isChecked()
 				print(text, short_sub, credits, lab)
 				t = text + " - " + short_sub
-				self.ui.input_list.addItem(t)
-				sub = subject(text, short_sub, credits, lab)
-				self.subjects[sem].append(sub)
+				for x in self.subjects[sem]:
+					sub = subject(text, short_sub, credits, lab)
+					if sub not in x:
+						self.ui.input_list.addItem(t)
+						self.subjects[sem].append(sub)
+					else:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
 			else:
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
@@ -325,8 +330,12 @@ class ParentWindow(QMainWindow):
 			if text != '':
 				self.title = self.ui.title_combobox.currentText()
 				t = self.title + " " + text
-				self.faculty_list_value.append(t)
-				self.ui.input_list.addItem(t)
+				if t not in self.faculty_list_value:
+					self.faculty_list_value.append(t)
+					self.ui.input_list.addItem(t)
+				else:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
 			else:
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
