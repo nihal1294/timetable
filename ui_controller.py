@@ -333,6 +333,7 @@ class ParentWindow(QMainWindow):
 		self.ui.input_list.sortItems()
 		self.ui.subject_short_input.clear()
 		self.ui.input_textbox.clear()
+		self.ui.lab_checkbox.setChecked(False)
 		self.ui.input_textbox.setFocus()
 		
 		print('faculty list: ', self.faculty_list_value)
@@ -490,8 +491,8 @@ class ParentWindow(QMainWindow):
 		self.ui3.subject_table.clearContents()
 		sem = self.ui3.semester_combobox.currentText()
 		self.ui3.slotType_combobox.clear()
-		for subject in self.subjects[sem]:
-			self.ui3.slotType_combobox.addItem(subject)
+		for sub in self.subjects[sem]:
+			self.ui3.slotType_combobox.addItem(sub.both_names)
 		self.ui3.section_combobox.clear()
 		for section in self.sections[sem]:
 			self.ui3.section_combobox.addItem(section)
@@ -516,10 +517,10 @@ class ParentWindow(QMainWindow):
 	def cellClick_event(self, row, column):
 		#row = self.ui3.subject_table.currentRow()
 		#column = self.ui3.subject_table.currentColumn()
-		self.slot = self.ui3.slotType_combobox.currentText()
+		slot = self.ui3.slotType_combobox.currentText()
 		print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
-		item.setText(str(self.slot))
+		item.setText(slot.split(' - ')[1])
 		self.ui3.subject_table.setItem(row, column, item)
 
 		sem = self.ui3.semester_combobox.currentText()
