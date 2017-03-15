@@ -7,6 +7,7 @@ from collections import OrderedDict
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 #import notification
+import pickle
 
 from window import Ui_window
 from window2 import Ui_window2
@@ -121,6 +122,8 @@ class ParentWindow(QMainWindow):
 		self.FirstWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FirstWindow.updateGeometry()
 
+		self.ui.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
 		self.SecondWindow = QMainWindow()
@@ -147,6 +150,8 @@ class ParentWindow(QMainWindow):
 		self.SecondWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.SecondWindow.updateGeometry()
 
+		self.ui2.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+
 	def setup_third_window(self):
 		#THIRD WINDOW - Subject Constraints
 		self.ThirdWindow = QMainWindow()
@@ -170,6 +175,8 @@ class ParentWindow(QMainWindow):
 
 		self.ThirdWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.ThirdWindow.updateGeometry()
+
+		self.ui3.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
 		#table widget events
 		'''slotType = self.ui3.slotType_combobox.currentText()
@@ -200,6 +207,8 @@ class ParentWindow(QMainWindow):
 		self.FourthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FourthWindow.updateGeometry()
 
+		self.ui4.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+
 	def setup_fifth_window(self):
 		#FIFTH WINDOW - Generated timetable
 		self.FifthWindow = QMainWindow()
@@ -225,6 +234,19 @@ class ParentWindow(QMainWindow):
 		self.FifthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FifthWindow.updateGeometry()
 
+		self.ui5.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+
+	def reset_first_window(self):
+		self.ui.semester_combobox.setEnabled(False)
+		self.ui.sections_spinbox.setEnabled(False)
+		self.ui.input_textbox.setEnabled(False)
+		self.ui.title_combobox.setEnabled(False)
+		self.ui.subject_short_input.setEnabled(False)
+		self.ui.lab_checkbox.setEnabled(False)
+		self.ui.credits_spinbox.setEnabled(False)
+		self.ui.inputType_combobox.setCurrentIndex(-1)
+		self.ui.semester_combobox.setCurrentIndex(-1)
+		self.ui.input_list.clear()
 
 	#nihal mods ----------
 	# first form functions
@@ -536,6 +558,7 @@ class ParentWindow(QMainWindow):
 		for section in self.sections[sem]:
 			self.ui3.section_combobox.addItem(section)
 		section = self.ui3.section_combobox.currentText()
+		print(self.section_fixed_slots)
 		#row = self.ui3.subject_table.currentRow()
 		#column = self.ui3.subject_table.currentColumn()
 		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]:
@@ -610,7 +633,57 @@ class ParentWindow(QMainWindow):
 			self.FifthWindow.hide()
 			self.FourthWindow.show()
 		
+	def filemenuevent(self, option):
+		option = option.text()
+		print(option)
+		if option == "Exit":
+			sys.exit(app.exec_())
+		elif option == "Save":
+			dialog = QtWidgets.QFileDialog(caption = "Choose save file")
+			dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
+			if dialog.exec_():
+				fname = dialog.selectedFiles()[0]
+				print(fname)
+				self.save_state(fname)
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
+			pass
+		elif option == "Load":
+			dialog = QtWidgets.QFileDialog(caption = "Choose file to load")
+			dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+			if dialog.exec_():
+				fname = dialog.selectedFiles()[0]
+				print(fname)
+				self.load_state(fname)
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
+				self.populate_second_window()
+				self.reset_first_window()
+			pass
 
+	def save_state(self, fname):
+		file = open(fname, "wb")
+		state = (self.faculty_list_value,
+			     self.subjects,
+			     self.num_sections,
+			     self.sections,
+			     self.subjects_assigned,
+			     self.faculty_subjects)
+		pickle.dump(state, file)
+		file.close()
+		pass
+
+	def load_state(self, fname):
+		file = open(fname, "rb")
+		state = pickle.load(file)
+		self.faculty_list_value, \
+	    self.subjects, \
+	    self.num_sections, \
+	    self.sections, \
+	    self.subjects_assigned, \
+	    self.faculty_subjects = state
+		file.close()
+		pass
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
