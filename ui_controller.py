@@ -547,8 +547,9 @@ class ParentWindow(QMainWindow):
 					pass
 		pass
 
+
 	#third form functions
-	def semester_combobox3_event(self):
+	def semester_combobox3_event(self):	#load the number of sections in sec combobox and load the slot allotments made when semester is changed
 		self.ui3.subject_table.clearContents()
 		sem = self.ui3.semester_combobox.currentText()
 		self.ui3.slotType_combobox.clear()
@@ -559,17 +560,29 @@ class ParentWindow(QMainWindow):
 			self.ui3.section_combobox.addItem(section)
 		section = self.ui3.section_combobox.currentText()
 		print(self.section_fixed_slots)
-		#row = self.ui3.subject_table.currentRow()
-		#column = self.ui3.subject_table.currentColumn()
 		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]:
 			for row in self.section_fixed_slots[sem][section]:
 				for column in self.section_fixed_slots[sem][section][row]:
 					print(sem, section, row, column)
-					self.ui3.subject_table.setItem(row, column, self.section_fixed_slots[sem][section][row][column])
+					a = self.section_fixed_slots[sem][section][row][column]
+					item = QtWidgets.QTableWidgetItem()
+					item.setText(a)
+					self.ui3.subject_table.setItem(row, column, item)
 
 
-	def section_combobox3_event(self):
+	def section_combobox3_event(self):	#load the slot allotments made when section is changed
 		self.ui3.subject_table.clearContents()
+		sem = self.ui3.semester_combobox.currentText()
+		section = self.ui3.section_combobox.currentText()
+		print(self.section_fixed_slots)
+		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]:
+			for row in self.section_fixed_slots[sem][section]:
+				for column in self.section_fixed_slots[sem][section][row]:
+					print(sem, section, row, column)
+					a = self.section_fixed_slots[sem][section][row][column]
+					item = QtWidgets.QTableWidgetItem()
+					item.setText(a)
+					self.ui3.subject_table.setItem(row, column, item)
 
 
 	def slotType_combobox3_event(self):
@@ -577,8 +590,6 @@ class ParentWindow(QMainWindow):
 
 
 	def cellClick_event(self, row, column):
-		#row = self.ui3.subject_table.currentRow()
-		#column = self.ui3.subject_table.currentColumn()
 		slot = self.ui3.slotType_combobox.currentText()
 		print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
@@ -593,11 +604,8 @@ class ParentWindow(QMainWindow):
 			self.section_fixed_slots[sem][section] = dict()
 		if row not in self.section_fixed_slots[sem][section]:
 			self.section_fixed_slots[sem][section][row] = dict()
-		self.section_fixed_slots[sem][section][row][column] = item
+		self.section_fixed_slots[sem][section][row][column] = item.text()
 		print(self.section_fixed_slots)
-		#print(dir(self.ui3.subject_table))
-		#self.ui3.subject_table.setText(row, column, self.slot)
-
 
 
 	#sanjan mods ------------------------
