@@ -25,8 +25,10 @@ class subject:
 			self.both_names = name + ' - ' + short_name
 		self.credits = credits
 		self.lab = lab
+
 	def __eq__(self, obj):
 		return self.name == obj.name and self.short_name == obj.short_name
+		
 	def __repr__(self):
 		return 'subject({}, {}, {}, {})'.format(self.name, self.short_name, self.credits, self.lab) 
 
@@ -286,8 +288,8 @@ class ParentWindow(QMainWindow):
 			self.ui.sections_spinbox.setValue(0)
 		self.ui.input_list.clear()
 		if self.sem in self.subjects:
-			for subject in self.subjects[self.sem]:
-				self.ui.input_list.addItem(subject.both_names)
+			for sub in self.subjects[self.sem]:
+				self.ui.input_list.addItem(sub.both_names)
 
 	def section_spinbox_event(self):    #function for sections spinbox
 		if self.sem != '':
@@ -312,16 +314,17 @@ class ParentWindow(QMainWindow):
 					return
 				credits = self.ui.credits_spinbox.value()
 				lab = self.ui.lab_checkbox.isChecked()
+				sub = subject(text, short_sub, credits, lab)
 				print(text, short_sub, credits, lab)
 				t = text + " - " + short_sub
 				for x in self.subjects[sem]:
-					sub = subject(text, short_sub, credits, lab)
-					if sub not in x:
-						self.ui.input_list.addItem(t)
-						self.subjects[sem].append(sub)
-					else:
+					if sub == x:
 						self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+						break
+				else: # loop completed without finding duplicates
+					self.ui.input_list.addItem(t)
+					self.subjects[sem].append(sub)
 			else:
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
