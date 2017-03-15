@@ -95,6 +95,7 @@ class ParentWindow(QMainWindow):
 		self.ui.semester_combobox.activated[str].connect(self.semester_combobox_event)
 		self.ui.input_textbox.returnPressed.connect(self.ui.addBtn.click)
 		self.ui.subject_short_input.returnPressed.connect(self.ui.addBtn.click)
+		self.ui.input_list.itemClicked.connect(self.handle_listclick_event)
 		self.ui.addBtn.setAutoDefault(True)
 		self.sem_list = ['III', 'IV', 'V', 'VI', 'VII', 'VIII']
 		for sem in self.sem_list:
@@ -239,7 +240,7 @@ class ParentWindow(QMainWindow):
 				self.ui.input_textbox.setEnabled(True)
 				self.ui.lab_checkbox.setEnabled(False)
 				self.ui.credits_spinbox.setEnabled(False)
-				
+				self.ui.input_textbox.setPlaceholderText("Please enter faculty name")
 				self.ui.subject_short_input.setEnabled(False)
 				self.ui.input_list.clear()
 				for values in self.faculty_list_value:
@@ -248,6 +249,7 @@ class ParentWindow(QMainWindow):
 				self.ui.semester_combobox.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
+				self.ui.input_textbox.setPlaceholderText("Please enter subject name")
 				self.ui.lab_checkbox.setEnabled(True)
 				self.ui.credits_spinbox.setEnabled(True)
 				self.ui.title_combobox.setEnabled(False)
@@ -354,6 +356,14 @@ class ParentWindow(QMainWindow):
 		
 		print('faculty list: ', self.faculty_list_value)
 		print('subjects list: ', self.subjects)
+
+
+	def handle_listclick_event(self):
+		row = self.ui.input_list.selectedItems()
+		if self.inputType == "Subjects":
+			for x in row:
+				print(x.text())
+
 
 
 	def remove_btn_event(self):    #function for remove button
@@ -465,8 +475,21 @@ class ParentWindow(QMainWindow):
 			return
 
 		sub_faculty = sub + ' - ' + faculty
-		self.subjects_assigned[sem][section].append(sub_faculty)
-		self.faculty_subjects[faculty].append(sub + ' - ' + sem + ' - ' + section)
+		for x in self.subjects_assigned[sem][section]:
+			if x == sub_faculty:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+				break
+		else:
+			self.subjects_assigned[sem][section].append(sub_faculty)
+		fac_subject = sub + ' - ' + sem + ' - ' + section
+		for x in self.faculty_subjects[faculty]:
+			if x == fac_subject:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+				break
+		else:
+			self.faculty_subjects[faculty].append(fac_subject)
 		#self.ui2.assigned_list.addItem(sub)
 		self.section_combobox2_event()
 
