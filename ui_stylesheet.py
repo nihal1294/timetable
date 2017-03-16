@@ -1,37 +1,43 @@
 css = '''
 QPushButton{
-	background-color: white;
-	border: 2px solid gray;
-	border-radius:4px;
+	background-color: #3a3a3a ;
+	border-radius:5px;
+	color: white;
 }
 
-QPushButton:hover{
-	border-width:4px;
+QPushButton:pressed{
+	color:black;
 }
 
-QPushButton:clicked{
-	border-width:2px;
-	background-color:gray;
+#window, #window2, #window3, #window4, #window5{
+	background-color:#217cbc;
 }
 
-QLineEdit:clicked{
-	border:2px solid blue;
+QMenuBar,QMenu{
+	background-color:#3a3a3a;
+	color:white;
 }
 
-#window, #trialwindow2, #trialwindow3, #trialwindow4, #trialwindow5{
-	background-color:white;
+QMenuBar:selected{
+	color:black;
+}
+
+QMenu:selected{
+	background-color:#217cbc;
+	color:black;
+	padding:0 10px 0 10px;
 }
 
 #addBtn:hover, #assignBtn:hover, #printBtn:hover, #saveBtn:hover{
-	border-color:cyan;
+	background-color:#0261ce;
 }
 
 #removeBtn:hover, #backBtn:hover{
-	border-color:red;
+	background-color:#ff3030;
 }
 
 #nextBtn:hover, #generateBtn:hover, #finishBtn:hover{
-	border-color:green;
+	background-color:#30ce00;
 }
 
 '''

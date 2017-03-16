@@ -7,11 +7,14 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import ui_stylesheet
+import darkstyle
 
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
         window4.resize(920, 469)
+        window4.setStyleSheet(darkstyle.css)
         self.centralwidget = QtWidgets.QWidget(window4)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -142,8 +145,11 @@ class Ui_window4(object):
         self.actionLoad.setObjectName("actionLoad")
         self.actionExit = QtWidgets.QAction(window4)
         self.actionExit.setObjectName("actionExit")
+        self.actionAbout = QtWidgets.QAction(window4)
+        self.actionAbout.setObjectName("actionAbout")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
+        self.menuFile.addAction(self.actionAbout)
         self.menuFile.addAction(self.actionExit)
         self.menubar.addAction(self.menuFile.menuAction())
 
@@ -194,6 +200,7 @@ class Ui_window4(object):
         self.actionSave.setText(_translate("window4", "Save"))
         self.actionLoad.setText(_translate("window4", "Load"))
         self.actionExit.setText(_translate("window4", "Exit"))
+        self.actionAbout.setText(_translate("window4", "About"))
 
 
 if __name__ == "__main__":
