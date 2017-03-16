@@ -69,6 +69,7 @@ class ParentWindow(QMainWindow):
 		#self.resize(916*self.adjusted_width, 460*self.adjusted_height)
 		#self.resize()
 
+
 	# setup functions
 	def setup_first_window(self):
 		#FIRST WINDOW - List Entry
@@ -206,14 +207,17 @@ class ParentWindow(QMainWindow):
 		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
+		self.ui5.semester_combobox.activated[str].connect(self.semester_combobox5_event)
+		self.ui5.section_combobox.activated[str].connect(self.section_combobox5_event)
+		self.ui5.faculty_combobox.activated[str].connect(self.faculty_combobox5_event)
+		self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
 		self.ui5.faculty_combobox.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
 		self.ui5.inputType_combobox.addItem('Faculty')
 		for sem in self.sem_list:
 			self.ui5.semester_combobox.addItem(sem)
 		self.ui5.semester_combobox.setCurrentIndex(-1)
-		#for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
-		#	self.ui5.section_combobox.addItem(sec)
+		
 		self.ui5.section_combobox.setCurrentIndex(-1)
 		
 		self.ui5.faculty_combobox.setCurrentIndex(-1)
@@ -236,7 +240,6 @@ class ParentWindow(QMainWindow):
 		self.ui.input_list.clear()
 
 
-	#nihal mods ----------
 	# first form functions
 	def inputType_combobox_event(self):    #function for input type combobox in first form
 		if self.FirstWindow.isVisible():
@@ -278,14 +281,22 @@ class ParentWindow(QMainWindow):
 			self.inputType = self.ui5.inputType_combobox.currentText()
 			print(self.inputType)
 			if self.inputType == "Faculty":
+				self.ui5.semester_combobox.setCurrentIndex(-1)
+				self.ui5.section_combobox.setCurrentIndex(-1)
 				self.ui5.semester_combobox.setEnabled(False)
 				self.ui5.section_combobox.setEnabled(False)
 				self.ui5.faculty_combobox.setEnabled(True)
+				self.ui5.faculty_combobox.setCurrentIndex(-1)
+				self.ui5.generated_table.clearContents()
 
 			else:
 				self.ui5.semester_combobox.setEnabled(True)
+				self.ui5.semester_combobox.setCurrentIndex(-1)
 				self.ui5.section_combobox.setEnabled(True)
+				self.ui5.section_combobox.setCurrentIndex(-1)
+				self.ui5.faculty_combobox.setCurrentIndex(-1)
 				self.ui5.faculty_combobox.setEnabled(False)
+				self.ui5.generated_table.clearContents()
 
 	def semester_combobox_event(self):   #function for semester combobox
 		if self.sem != '' and self.sem not in self.num_sections:
@@ -587,7 +598,6 @@ class ParentWindow(QMainWindow):
 		print(self.section_fixed_slots)
 
 
-
 	#fourth form functions
 	def faculty_combobox4_event(self):
 		faculty = self.ui4.faculty_combobox.currentText()
@@ -615,7 +625,70 @@ class ParentWindow(QMainWindow):
 		self.faculty_fixed_slots[faculty][row][column] = item.text()
 		print(self.section_fixed_slots)
 
-	#sanjan mods ------------------------
+
+	#fifth form functions
+	def semester_combobox5_event(self):
+		self.ui5.generated_table.clearContents()
+		sem = self.ui5.semester_combobox.currentText()
+		self.ui5.section_combobox.clear()
+		for section in self.sections[sem]:
+			self.ui5.section_combobox.addItem(section)
+		section = self.ui5.section_combobox.currentText()
+		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]: #replace with generated table stuff
+			for row in self.section_fixed_slots[sem][section]:
+				for column in self.section_fixed_slots[sem][section][row]:
+					a = self.section_fixed_slots[sem][section][row][column]
+					item = QtWidgets.QTableWidgetItem()
+					item.setText(a)
+					self.ui5.generated_table.setItem(row, column, item)
+
+	def section_combobox5_event(self):
+		self.ui5.generated_table.clearContents()
+		sem = self.ui5.semester_combobox.currentText()
+		section = self.ui5.section_combobox.currentText()
+		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]: #replace with generated table stuff
+			for row in self.section_fixed_slots[sem][section]:
+				for column in self.section_fixed_slots[sem][section][row]:
+					a = self.section_fixed_slots[sem][section][row][column]
+					item = QtWidgets.QTableWidgetItem()
+					item.setText(a)
+					self.ui5.generated_table.setItem(row, column, item)
+
+	def faculty_combobox5_event(self):
+		faculty = self.ui5.faculty_combobox.currentText()
+		self.ui5.generated_table.clearContents()
+		if faculty in self.faculty_fixed_slots: #replace with generated table stuff
+			for row in self.faculty_fixed_slots[faculty]:
+				for column in self.faculty_fixed_slots[faculty][row]:
+					a = self.faculty_fixed_slots[faculty][row][column]
+					item = QtWidgets.QTableWidgetItem()
+					item.setText(a)
+					self.ui5.generated_table.setItem(row, column, item)
+
+	def cellClick5_event(self, row, column):
+		print (str(row), str(column))
+		item = QtWidgets.QTableWidgetItem()
+		item.setText('-')
+		self.ui5.generated_table.setItem(row, column, item)
+
+		if self.inputType == "Faculty":
+			faculty = self.ui4.faculty_combobox.currentText()
+			if faculty not in self.faculty_fixed_slots: #replace with generated table stuff
+				self.faculty_fixed_slots[faculty] = dict()
+			if row not in self.faculty_fixed_slots[faculty]:
+				self.faculty_fixed_slots[faculty][row] = dict()
+			self.faculty_fixed_slots[faculty][row][column] = item.text()
+		else:
+			sem = self.ui3.semester_combobox.currentText()
+			section = self.ui3.section_combobox.currentText()
+			if sem not in self.section_fixed_slots: #replace with generated table stuff
+				self.section_fixed_slots[sem] = dict()
+			if section not in self.section_fixed_slots[sem]:
+				self.section_fixed_slots[sem][section] = dict()
+			if row not in self.section_fixed_slots[sem][section]:
+				self.section_fixed_slots[sem][section][row] = dict()
+			self.section_fixed_slots[sem][section][row][column] = item.text()
+
 
 	def next_btn_event(self):
 		if self.FirstWindow.isVisible():
@@ -705,6 +778,7 @@ class ParentWindow(QMainWindow):
 	    self.faculty_subjects = state
 		file.close()
 		pass
+
 
 
 if __name__ == "__main__":
