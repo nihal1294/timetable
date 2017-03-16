@@ -166,7 +166,7 @@ class ParentWindow(QMainWindow):
 		self.ui3.section_combobox.activated[str].connect(self.section_combobox3_event)
 		self.ui3.slotType_combobox.activated[str].connect(self.slotType_combobox3_event)
 		self.ui3.subject_table.cellClicked.connect(self.cellClick3_event)
-		
+
 		for sem in self.sem_list:
 			self.ui3.semester_combobox.addItem(sem)
 		self.ui3.semester_combobox.setCurrentIndex(-1)
@@ -189,8 +189,7 @@ class ParentWindow(QMainWindow):
 		self.ui4.backBtn.clicked.connect(self.back_btn_event)
 
 		self.faculty_fixed_slots = dict()
-		for faculty in self.faculty_list_value:
-			self.ui4.faculty_combobox.addItem(faculty)
+		
 		self.ui4.faculty_combobox.setCurrentIndex(-1)
 
 		self.FourthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
@@ -216,8 +215,7 @@ class ParentWindow(QMainWindow):
 		#for sec in map(str,range(self.sections)):	#make this work...im not sure how to.
 		#	self.ui5.section_combobox.addItem(sec)
 		self.ui5.section_combobox.setCurrentIndex(-1)
-		for faculty in self.faculty_list_value:
-			self.ui5.faculty_combobox.addItem(faculty)
+		
 		self.ui5.faculty_combobox.setCurrentIndex(-1)
 
 		self.FifthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
@@ -592,7 +590,6 @@ class ParentWindow(QMainWindow):
 
 	#fourth form functions
 	def faculty_combobox4_event(self):
-		print(self.faculty_list_value)
 		faculty = self.ui4.faculty_combobox.currentText()
 		self.ui4.faculty_table.clearContents()
 		if faculty in self.faculty_fixed_slots:
@@ -607,7 +604,7 @@ class ParentWindow(QMainWindow):
 	def cellClick4_event(self, row, column):
 		print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
-		item.setText(' ')
+		item.setText(' - ')
 		self.ui4.faculty_table.setItem(row, column, item)
 
 		faculty = self.ui4.faculty_combobox.currentText()
@@ -616,6 +613,7 @@ class ParentWindow(QMainWindow):
 		if row not in self.faculty_fixed_slots[faculty]:
 			self.faculty_fixed_slots[faculty][row] = dict()
 		self.faculty_fixed_slots[faculty][row][column] = item.text()
+		print(self.section_fixed_slots)
 
 	#sanjan mods ------------------------
 
@@ -630,9 +628,15 @@ class ParentWindow(QMainWindow):
 		elif self.ThirdWindow.isVisible():
 			self.ThirdWindow.hide()
 			self.FourthWindow.show()
+			for faculty in self.faculty_list_value:
+				self.ui4.faculty_combobox.addItem(faculty)
+			self.ui4.faculty_combobox.setCurrentIndex(-1)
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
+			for faculty in self.faculty_list_value:
+				self.ui5.faculty_combobox.addItem(faculty)
+			self.ui5.faculty_combobox.setCurrentIndex(-1)
 		elif self.FifthWindow.isVisible():
 			sys.exit(app.exec_())
 
