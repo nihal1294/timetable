@@ -7,6 +7,7 @@ from collections import OrderedDict
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import pickle
+import tt
 
 from window import Ui_window
 from window2 import Ui_window2
@@ -105,6 +106,7 @@ class ParentWindow(QMainWindow):
 		self.ui.semester_combobox.setCurrentIndex(-1)
 		self.faculty_list_value = []
 		self.subjects = OrderedDict()
+		self.subs = dict() # store link between subject name and its object
 		self.num_sections = dict()
 		for sem in self.sem_list:
 			self.subjects[sem] = []
@@ -188,6 +190,7 @@ class ParentWindow(QMainWindow):
 		self.ui4.faculty_table.cellClicked.connect(self.cellClick4_event)
 		self.ui4.generateBtn.clicked.connect(self.next_btn_event)	
 		self.ui4.backBtn.clicked.connect(self.back_btn_event)
+		self.ui4.generateBtn.clicked.connect(self.generate_event)
 
 		self.faculty_fixed_slots = dict()
 		
@@ -210,17 +213,18 @@ class ParentWindow(QMainWindow):
 		self.ui5.semester_combobox.activated[str].connect(self.semester_combobox5_event)
 		self.ui5.section_combobox.activated[str].connect(self.section_combobox5_event)
 		self.ui5.faculty_combobox.activated[str].connect(self.faculty_combobox5_event)
-		self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
+		#self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
 		self.ui5.faculty_combobox.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
 		self.ui5.inputType_combobox.addItem('Faculty')
 		for sem in self.sem_list:
 			self.ui5.semester_combobox.addItem(sem)
 		self.ui5.semester_combobox.setCurrentIndex(-1)
-		
 		self.ui5.section_combobox.setCurrentIndex(-1)
-		
 		self.ui5.faculty_combobox.setCurrentIndex(-1)
+
+		self.timetables = ''
+		self.faculty_timetables = ''
 
 		self.FifthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FifthWindow.updateGeometry()
@@ -345,6 +349,7 @@ class ParentWindow(QMainWindow):
 				else: # loop completed without finding duplicates
 					self.ui.input_list.addItem(t)
 					self.subjects[sem].append(sub)
+					self.subs[sub.short_name] = sub
 			else:
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
@@ -548,6 +553,7 @@ class ParentWindow(QMainWindow):
 		self.ui3.slotType_combobox.clear()
 		for sub in self.subjects[sem]:
 			self.ui3.slotType_combobox.addItem(sub.both_names)
+		self.ui3.slotType_combobox.addItem('-')
 		self.ui3.section_combobox.clear()
 		for section in self.sections[sem]:
 			self.ui3.section_combobox.addItem(section)
@@ -583,7 +589,10 @@ class ParentWindow(QMainWindow):
 		slot = self.ui3.slotType_combobox.currentText()
 		print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
-		item.setText(slot.split(' - ')[1])
+		if slot == '-':
+			item.setText('-')
+		else:
+			item.setText(slot.split(' - ')[1])
 		self.ui3.subject_table.setItem(row, column, item)
 
 		sem = self.ui3.semester_combobox.currentText()
@@ -614,7 +623,7 @@ class ParentWindow(QMainWindow):
 	def cellClick4_event(self, row, column):
 		print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
-		item.setText(' - ')
+		item.setText('-')
 		self.ui4.faculty_table.setItem(row, column, item)
 
 		faculty = self.ui4.faculty_combobox.currentText()
@@ -623,8 +632,11 @@ class ParentWindow(QMainWindow):
 		if row not in self.faculty_fixed_slots[faculty]:
 			self.faculty_fixed_slots[faculty][row] = dict()
 		self.faculty_fixed_slots[faculty][row][column] = item.text()
-		print(self.section_fixed_slots)
+		print(self.faculty_fixed_slots)
 
+	def generate_event(self):
+		self.timetables, self.faculty_timetables = tt.produce_timetable(self)
+		self.section_combobox5_event()
 
 	#fifth form functions
 	def semester_combobox5_event(self):
@@ -634,35 +646,42 @@ class ParentWindow(QMainWindow):
 		for section in self.sections[sem]:
 			self.ui5.section_combobox.addItem(section)
 		section = self.ui5.section_combobox.currentText()
-		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]: #replace with generated table stuff
-			for row in self.section_fixed_slots[sem][section]:
-				for column in self.section_fixed_slots[sem][section][row]:
-					a = self.section_fixed_slots[sem][section][row][column]
-					item = QtWidgets.QTableWidgetItem()
-					item.setText(a)
-					self.ui5.generated_table.setItem(row, column, item)
+		self.section_combobox5_event()
 
 	def section_combobox5_event(self):
 		self.ui5.generated_table.clearContents()
 		sem = self.ui5.semester_combobox.currentText()
 		section = self.ui5.section_combobox.currentText()
-		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]: #replace with generated table stuff
-			for row in self.section_fixed_slots[sem][section]:
-				for column in self.section_fixed_slots[sem][section][row]:
-					a = self.section_fixed_slots[sem][section][row][column]
+		if sem in self.timetables and section in self.timetables[sem]:
+			for day in self.timetables[sem][section]:
+				for timeslot in self.timetables[sem][section][day]:
+					sub = self.timetables[sem][section][day][timeslot]
+					if sub == '':
+						a = '-'
+					else:
+						a = sub[3] # 3rd field is subject short name
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
+					row = tt.day_row_num[day]
+					column = timeslot-1
 					self.ui5.generated_table.setItem(row, column, item)
 
 	def faculty_combobox5_event(self):
 		faculty = self.ui5.faculty_combobox.currentText()
 		self.ui5.generated_table.clearContents()
-		if faculty in self.faculty_fixed_slots: #replace with generated table stuff
-			for row in self.faculty_fixed_slots[faculty]:
-				for column in self.faculty_fixed_slots[faculty][row]:
-					a = self.faculty_fixed_slots[faculty][row][column]
+		if faculty in self.faculty_timetables:
+			for day in self.faculty_timetables[faculty]:
+				for timeslot in self.faculty_timetables[faculty][day]:
+					if self.faculty_timetables[faculty][day][timeslot] == '':
+						a = '-'
+					else:
+						section = self.faculty_timetables[faculty][day][timeslot][0]
+						sub = self.faculty_timetables[faculty][day][timeslot][1]
+						a = '{} ({})'.format(sub[3], section)
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
+					row = tt.day_row_num[day]
+					column = timeslot-1
 					self.ui5.generated_table.setItem(row, column, item)
 
 	def cellClick5_event(self, row, column):
@@ -759,10 +778,13 @@ class ParentWindow(QMainWindow):
 		file = open(fname, "wb")
 		state = (self.faculty_list_value,
 			     self.subjects,
+			     self.subs,
 			     self.num_sections,
 			     self.sections,
 			     self.subjects_assigned,
-			     self.faculty_subjects)
+			     self.faculty_subjects,
+			     self.section_fixed_slots,
+			     self.faculty_fixed_slots)
 		pickle.dump(state, file)
 		file.close()
 		pass
@@ -772,10 +794,13 @@ class ParentWindow(QMainWindow):
 		state = pickle.load(file)
 		self.faculty_list_value, \
 	    self.subjects, \
+	    self.subs, \
 	    self.num_sections, \
 	    self.sections, \
 	    self.subjects_assigned, \
-	    self.faculty_subjects = state
+	    self.faculty_subjects, \
+	    self.section_fixed_slots, \
+	    self.faculty_fixed_slots = state
 		file.close()
 		pass
 
