@@ -691,15 +691,15 @@ class ParentWindow(QMainWindow):
 		self.ui5.generated_table.setItem(row, column, item)
 
 		if self.inputType == "Faculty":
-			faculty = self.ui4.faculty_combobox.currentText()
+			faculty = self.ui5.faculty_combobox.currentText()
 			if faculty not in self.faculty_fixed_slots: #replace with generated table stuff
 				self.faculty_fixed_slots[faculty] = dict()
 			if row not in self.faculty_fixed_slots[faculty]:
 				self.faculty_fixed_slots[faculty][row] = dict()
 			self.faculty_fixed_slots[faculty][row][column] = item.text()
 		else:
-			sem = self.ui3.semester_combobox.currentText()
-			section = self.ui3.section_combobox.currentText()
+			sem = self.ui5.semester_combobox.currentText()
+			section = self.ui5.section_combobox.currentText()
 			if sem not in self.section_fixed_slots: #replace with generated table stuff
 				self.section_fixed_slots[sem] = dict()
 			if section not in self.section_fixed_slots[sem]:
