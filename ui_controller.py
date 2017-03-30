@@ -257,6 +257,7 @@ class ParentWindow(QMainWindow):
 				self.ui.input_textbox.setEnabled(True)
 				self.ui.lab_checkbox.setEnabled(False)
 				self.ui.credits_spinbox.setEnabled(False)
+				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter faculty name")
 				self.ui.subject_short_input.setEnabled(False)
 				self.ui.input_list.clear()
@@ -266,14 +267,15 @@ class ParentWindow(QMainWindow):
 				self.ui.semester_combobox.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
+				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter subject name")
 				self.ui.lab_checkbox.setEnabled(True)
+				self.ui.lab_checkbox.setChecked(False)
 				self.ui.credits_spinbox.setEnabled(True)
+				self.ui.credits_spinbox.setValue(1)
 				self.ui.title_combobox.setEnabled(False)
 				self.ui.subject_short_input.setEnabled(True)
-				self.ui.lab_checkbox.setEnabled(True)
-				self.ui.credits_spinbox.setEnabled(True)
-				#self.ui.input_textbox.returnPressed.
+				self.ui.subject_short_input.clear()
 				
 				self.ui.input_list.clear()
 				if self.sem in self.subjects:
