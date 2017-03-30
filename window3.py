@@ -7,14 +7,14 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
+import lightstyle
 import darkstyle
 
 class Ui_window3(object):
     def setupUi(self, window3):
         window3.setObjectName("window3")
         window3.resize(920, 469)
-        window3.setStyleSheet(darkstyle.css)
+        window3.setStyleSheet(lightstyle.css)
         self.centralwidget = QtWidgets.QWidget(window3)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -109,7 +109,7 @@ class Ui_window3(object):
         self.subject_table.verticalHeader().setMinimumSectionSize(27)
         self.gridLayout.addWidget(self.subject_table, 3, 0, 1, 4, QtCore.Qt.AlignVCenter)
         self.slotType_combobox = QtWidgets.QComboBox(self.centralwidget)
-        self.slotType_combobox.setMinimumSize(QtCore.QSize(270, 30))
+        self.slotType_combobox.setMinimumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.slotType_combobox.setFont(font)
@@ -167,6 +167,8 @@ class Ui_window3(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         window3.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window3)
         self.actionSave.setObjectName("actionSave")
@@ -176,11 +178,15 @@ class Ui_window3(object):
         self.actionExit.setObjectName("actionExit")
         self.actionAbout = QtWidgets.QAction(window3)
         self.actionAbout.setObjectName("actionAbout")
+        self.actionManual = QtWidgets.QAction(window3)
+        self.actionManual.setObjectName("actionManual")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
-        self.menuFile.addAction(self.actionAbout)
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionManual)
+        self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window3)
         QtCore.QMetaObject.connectSlotsByName(window3)
@@ -230,10 +236,12 @@ class Ui_window3(object):
         self.backBtn.setText(_translate("window3", "< Back"))
         self.nextBtn.setText(_translate("window3", "Next >"))
         self.menuFile.setTitle(_translate("window3", "File"))
+        self.menuHelp.setTitle(_translate("window3", "Help"))
         self.actionSave.setText(_translate("window3", "Save"))
         self.actionLoad.setText(_translate("window3", "Load"))
         self.actionExit.setText(_translate("window3", "Exit"))
         self.actionAbout.setText(_translate("window3", "About"))
+        self.actionManual.setText(_translate("window3", "Manual"))
 
 
 if __name__ == "__main__":

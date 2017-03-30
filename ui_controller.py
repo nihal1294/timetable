@@ -14,6 +14,7 @@ from window2 import Ui_window2
 from window3 import Ui_window3
 from window4 import Ui_window4
 from window5 import Ui_window5
+from elective_window import Ui_elective_window
 
 class subject:
 	def __init__(self, name, short_name = '', credits = 0, lab = False):
@@ -88,6 +89,7 @@ class ParentWindow(QMainWindow):
 		self.ui.lab_checkbox.setEnabled(False)
 		self.ui.credits_spinbox.setEnabled(False)
 		self.ui.addBtn.clicked.connect(self.add_btn_event)
+		self.ui.electiveBtn.clicked.connect(self.elective_btn_event)
 		self.ui.removeBtn.clicked.connect(self.remove_btn_event)
 		self.ui.nextBtn.clicked.connect(self.next_btn_event)
 		self.ui.sections_spinbox.valueChanged.connect(self.section_spinbox_event)
@@ -126,6 +128,17 @@ class ParentWindow(QMainWindow):
 		self.FirstWindow.updateGeometry()
 
 		self.ui.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+
+		#setting up elective window during first window setup
+		self.setup_elective_window()
+
+	def setup_elective_window(self):
+		#ELECTIVE WINDOW - Elective Entry
+		self.ElectiveWindow = QWidget()
+		self.ui_elec = Ui_elective_window()
+		self.ui_elec.setupUi(self.ElectiveWindow)
+
+		self.ui_elec.backBtn.clicked.connect(self.elective_btn_event)
 
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
@@ -399,6 +412,12 @@ class ParentWindow(QMainWindow):
 							self.ui.lab_checkbox.setChecked(True)
 						else:
 							self.ui.lab_checkbox.setChecked(False)
+
+	def elective_btn_event(self):
+		if self.ElectiveWindow.isVisible():
+			self.ElectiveWindow.hide()
+		else:
+			self.ElectiveWindow.show()
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()

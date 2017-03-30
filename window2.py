@@ -7,14 +7,14 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
+import lightstyle
 import darkstyle
 
 class Ui_window2(object):
     def setupUi(self, window2):
         window2.setObjectName("window2")
         window2.resize(920, 469)
-        window2.setStyleSheet(darkstyle.css)
+        window2.setStyleSheet(lightstyle.css)
         self.centralwidget = QtWidgets.QWidget(window2)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -120,6 +120,8 @@ class Ui_window2(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         window2.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window2)
         self.actionSave.setObjectName("actionSave")
@@ -129,11 +131,17 @@ class Ui_window2(object):
         self.actionExit.setObjectName("actionExit")
         self.actionAbout = QtWidgets.QAction(window2)
         self.actionAbout.setObjectName("actionAbout")
+        self.actionManual = QtWidgets.QAction(window2)
+        self.actionManual.setObjectName("actionManual")
+        self.actionAbout_2 = QtWidgets.QAction(window2)
+        self.actionAbout_2.setObjectName("actionAbout_2")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
-        self.menuFile.addAction(self.actionAbout)
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionManual)
+        self.menuHelp.addAction(self.actionAbout_2)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window2)
         QtCore.QMetaObject.connectSlotsByName(window2)
@@ -159,10 +167,13 @@ class Ui_window2(object):
         self.label.setText(_translate("window2", "Faculty Assignment"))
         self.label_2.setText(_translate("window2", "Faculty:"))
         self.menuFile.setTitle(_translate("window2", "File"))
+        self.menuHelp.setTitle(_translate("window2", "Help"))
         self.actionSave.setText(_translate("window2", "Save"))
         self.actionLoad.setText(_translate("window2", "Load"))
         self.actionExit.setText(_translate("window2", "Exit"))
         self.actionAbout.setText(_translate("window2", "About"))
+        self.actionManual.setText(_translate("window2", "Manual"))
+        self.actionAbout_2.setText(_translate("window2", "About"))
 
 
 if __name__ == "__main__":
