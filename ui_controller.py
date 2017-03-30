@@ -350,6 +350,7 @@ class ParentWindow(QMainWindow):
 					self.ui.input_list.addItem(t)
 					self.subjects[sem].append(sub)
 					self.subs[sub.short_name] = sub
+					self.ui.credits_spinbox.setValue(1)
 			else:
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
@@ -382,9 +383,20 @@ class ParentWindow(QMainWindow):
 
 	def handle_listclick_event(self):
 		row = self.ui.input_list.selectedItems()
+		sem = self.ui.semester_combobox.currentText()
 		if self.inputType == "Subjects":
 			for x in row:
-				print(x.text())
+				#print(x.text())
+				subj = subject(x.text())
+				for y in self.subjects[sem]:
+					if subj.name == y.name:
+						self.ui.input_textbox.setText(subj.name)
+						self.ui.subject_short_input.setText(subj.short_name)
+						self.ui.credits_spinbox.setValue(y.credits)
+						if y.lab == True:
+							self.ui.lab_checkbox.setChecked(True)
+						else:
+							self.ui.lab_checkbox.setChecked(False)
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()
