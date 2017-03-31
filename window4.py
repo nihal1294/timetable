@@ -7,14 +7,14 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import ui_stylesheet
+import lightstyle
 import darkstyle
 
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
         window4.resize(920, 469)
-        window4.setStyleSheet(darkstyle.css)
+        window4.setStyleSheet(lightstyle.css)
         self.centralwidget = QtWidgets.QWidget(window4)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -138,6 +138,8 @@ class Ui_window4(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         window4.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window4)
         self.actionSave.setObjectName("actionSave")
@@ -147,11 +149,15 @@ class Ui_window4(object):
         self.actionExit.setObjectName("actionExit")
         self.actionAbout = QtWidgets.QAction(window4)
         self.actionAbout.setObjectName("actionAbout")
+        self.actionManual = QtWidgets.QAction(window4)
+        self.actionManual.setObjectName("actionManual")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
-        self.menuFile.addAction(self.actionAbout)
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionManual)
+        self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window4)
         QtCore.QMetaObject.connectSlotsByName(window4)
@@ -197,10 +203,12 @@ class Ui_window4(object):
         self.backBtn.setText(_translate("window4", "< Back"))
         self.generateBtn.setText(_translate("window4", "Generate >"))
         self.menuFile.setTitle(_translate("window4", "File"))
+        self.menuHelp.setTitle(_translate("window4", "Help"))
         self.actionSave.setText(_translate("window4", "Save"))
         self.actionLoad.setText(_translate("window4", "Load"))
         self.actionExit.setText(_translate("window4", "Exit"))
         self.actionAbout.setText(_translate("window4", "About"))
+        self.actionManual.setText(_translate("window4", "Manual"))
 
 
 if __name__ == "__main__":
