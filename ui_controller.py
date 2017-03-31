@@ -138,6 +138,13 @@ class ParentWindow(QMainWindow):
 		self.ui_elec = Ui_elective_window()
 		self.ui_elec.setupUi(self.ElectiveWindow)
 
+		self.ui_elec.elective_spinbox.setEnabled(False)
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.lab_checkbox.setEnabled(False)
+
 		self.ui_elec.backBtn.clicked.connect(self.elective_btn_event)
 
 	def setup_second_window(self):
