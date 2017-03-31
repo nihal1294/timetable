@@ -34,6 +34,35 @@ class subject:
 	def __repr__(self):
 		return 'subject({}, {}, {}, {})'.format(self.name, self.short_name, self.credits, self.lab) 
 
+class faculty_class:
+	def __init__(self, name, title = ''):
+		if title == '':
+			name = name.split(' ')
+			if len(name) > 1:
+				title = name[0]
+				name = ' '.join(name[1:])
+			else:
+				name = name[0]
+		self.name = name
+		self.title = title
+
+	def __repr__(self):
+		return 'faculty_class({}, {})'.format(self.name, self.title)
+
+	def __str__(self):
+		return self.title + ' ' + self.name
+
+	def __eq__(self, string):
+		if str(string) == str(self) or string == self.name:
+			return True
+		else:
+			return False
+
+	def __lt__(self, obj):
+		return self.name < obj.name
+
+	def __hash__(self):
+		return self.name.__hash__()
 
 #new singular class implementing QStackedLayout
 class ParentWindow(QMainWindow):
@@ -282,7 +311,7 @@ class ParentWindow(QMainWindow):
 				self.ui.subject_short_input.setEnabled(False)
 				self.ui.input_list.clear()
 				for values in self.faculty_list_value:
-					self.ui.input_list.addItem(values)
+					self.ui.input_list.addItem(values.name)
 			else: # input type subjects
 				self.ui.semester_combobox.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
@@ -382,8 +411,8 @@ class ParentWindow(QMainWindow):
 				self.title = self.ui.title_combobox.currentText()
 				t = self.title + " " + text
 				if t not in self.faculty_list_value:
-					self.faculty_list_value.append(t)
-					self.ui.input_list.addItem(t)
+					self.faculty_list_value.append(faculty_class(t))
+					self.ui.input_list.addItem(text)
 				else:
 					self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
@@ -463,8 +492,8 @@ class ParentWindow(QMainWindow):
 		self.ui2.section_combobox.clear()
 		self.ui2.subject_combobox.clear()
 		self.ui2.assigned_list.clear()
-		for name in self.faculty_list_value:
-			self.ui2.faculty_combobox.addItem(name)
+		for value in self.faculty_list_value:
+			self.ui2.faculty_combobox.addItem(value.name)
 		for sem in self.sem_list:
 			self.ui2.semester_combobox.addItem(sem)
 		self.ui2.faculty_combobox.setCurrentIndex(-1)
@@ -482,7 +511,7 @@ class ParentWindow(QMainWindow):
 		for faculty in self.faculty_list_value:
 			if faculty not in self.faculty_subjects:
 				self.faculty_subjects[faculty] = []
-		print(self.subjects_assigned)
+		#print(self.subjects_assigned)
 		
 	def semester_combobox2_event(self): # semester combobox in second form
 		self.sem = self.ui2.semester_combobox.currentText()
@@ -761,13 +790,13 @@ class ParentWindow(QMainWindow):
 			self.ThirdWindow.hide()
 			self.FourthWindow.show()
 			for faculty in self.faculty_list_value:
-				self.ui4.faculty_combobox.addItem(faculty)
+				self.ui4.faculty_combobox.addItem(faculty.name)
 			self.ui4.faculty_combobox.setCurrentIndex(-1)
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
 			for faculty in self.faculty_list_value:
-				self.ui5.faculty_combobox.addItem(faculty)
+				self.ui5.faculty_combobox.addItem(faculty.name)
 			self.ui5.faculty_combobox.setCurrentIndex(-1)
 		elif self.FifthWindow.isVisible():
 			sys.exit(app.exec_())
@@ -844,7 +873,7 @@ class ParentWindow(QMainWindow):
 		file.close()
 		pass
 
-
+	
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
