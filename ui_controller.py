@@ -146,6 +146,7 @@ class ParentWindow(QMainWindow):
 		self.inputType = ""
 		self.text = ""
 		self.sem = ""
+		self.row = self.ui.input_list.selectedItems()
 		self.lab = 0
 		self.credits = 1
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
@@ -375,53 +376,100 @@ class ParentWindow(QMainWindow):
 	def add_btn_event(self):   #function for add button
 		#print(dir(self.ui.input_textbox))
 		text = self.ui.input_textbox.text()
-		if self.inputType == "Subjects":
-			sem = self.ui.semester_combobox.currentText()
-			if not sem:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Input', 'Please select the semester.')
-				return
-			if text != '':
-				short_sub = self.ui.subject_short_input.text()
-				if not short_sub:
-					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
-					return
-				credits = self.ui.credits_spinbox.value()
-				lab = self.ui.lab_checkbox.isChecked()
-				sub = subject(text, short_sub, credits, lab)
-				print(text, short_sub, credits, lab)
-				t = text + " - " + short_sub
-				for x in self.subjects[sem]:
-					if sub == x:
-						self.systemtray_icon.show()
-						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
-						break
-				else: # loop completed without finding duplicates
-					self.ui.input_list.addItem(t)
-					self.subjects[sem].append(sub)
-					self.subs[sub.short_name] = sub
-					self.ui.credits_spinbox.setValue(1)
+
+		if self.row:   #when editing a currently selected value in list
+			if self.inputType == "Subjects":
+				for x in self.row:
+					#print(x.text())
+					subj = subject(x.text())
+					sem = self.ui.semester_combobox.currentText()
+					for y in self.subjects[sem]:
+						if subj.name == y.name:
+							if not sem:
+								self.systemtray_icon.show()
+								self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+								return
+							if text != '':
+								short_sub = self.ui.subject_short_input.text()
+								if not short_sub:
+									self.systemtray_icon.show()
+									self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
+									return
+								credits = self.ui.credits_spinbox.value()
+								lab = self.ui.lab_checkbox.isChecked()
+								y.name = text
+								y.short_name = short_sub
+								y.credits = credits
+								y.lab = lab
+								print(text, short_sub, credits, lab)
+								t = text + " - " + short_sub
+								self.ui.input_list.takeItem(self.ui.input_list.row(x))
+								self.ui.input_list.addItem(t)
+								self.subs[y.short_name] = y
+								self.ui.credits_spinbox.setValue(1)
 			else:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
-					
-		elif self.inputType == "Faculty": # input type is Faculty
-			if text != '':
-				self.title = self.ui.title_combobox.currentText()
-				t = self.title + " " + text
-				if t not in self.faculty_list_value:
-					self.faculty_list_value.append(faculty_class(t))
-					self.ui.input_list.addItem(text)
+				for x in self.row:
+					fac = x.text()
+					for y in self.faculty_list_value:
+						if fac == y.name:
+							y.title = self.ui.title_combobox.currentText()
+							y.name = text
+							self.ui.input_list.takeItem(self.ui.input_list.row(x))
+							self.ui.input_list.addItem(text)
+			self.ui.input_list.clearSelection()
+			del self.row[0]
+			print(self.row)
+			self.ui.input_list.repaint()
+		else: #when adding a new item
+
+			if self.inputType == "Subjects":
+				sem = self.ui.semester_combobox.currentText()
+				if not sem:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+					return
+				if text != '':
+					short_sub = self.ui.subject_short_input.text()
+					if not short_sub:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
+						return
+					credits = self.ui.credits_spinbox.value()
+					lab = self.ui.lab_checkbox.isChecked()
+					sub = subject(text, short_sub, credits, lab)
+					print(text, short_sub, credits, lab)
+					t = text + " - " + short_sub
+					for x in self.subjects[sem]:
+						if sub == x:
+							self.systemtray_icon.show()
+							self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+							break
+					else: # loop completed without finding duplicates
+						self.ui.input_list.addItem(t)
+						self.subjects[sem].append(sub)
+						self.subs[sub.short_name] = sub
+						self.ui.credits_spinbox.setValue(1)
 				else:
 					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+					self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
+					
+			elif self.inputType == "Faculty": # input type is Faculty
+				if text != '':
+					title = self.ui.title_combobox.currentText()
+					t = title + " " + text
+					if t not in self.faculty_list_value:
+						self.faculty_list_value.append(faculty_class(t))
+						self.ui.input_list.addItem(text)
+					else:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+				else:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
+				self.ui.title_combobox.setCurrentIndex(0)
 			else:
 				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
-		else:
-			self.systemtray_icon.show()
-			self.systemtray_icon.showMessage('Input', 'Please select the input type.')
+				self.systemtray_icon.showMessage('Input', 'Please select the input type.')
 				
 		self.ui.input_list.sortItems()
 		self.ui.subject_short_input.clear()
@@ -433,10 +481,11 @@ class ParentWindow(QMainWindow):
 		print('subjects list: ', self.subjects)
 
 	def handle_listclick_event(self):
-		row = self.ui.input_list.selectedItems()
+		self.row = self.ui.input_list.selectedItems()
+		print(self.row)
 		sem = self.ui.semester_combobox.currentText()
 		if self.inputType == "Subjects":
-			for x in row:
+			for x in self.row:
 				#print(x.text())
 				subj = subject(x.text())
 				for y in self.subjects[sem]:
@@ -448,6 +497,15 @@ class ParentWindow(QMainWindow):
 							self.ui.lab_checkbox.setChecked(True)
 						else:
 							self.ui.lab_checkbox.setChecked(False)
+		else:
+			for x in self.row:
+				fac = x.text()
+				for y in self.faculty_list_value:
+					if fac == y.name:
+						self.ui.input_textbox.setText(y.name)
+						index = self.ui.title_combobox.findText(y.title)
+						if index >= 0:
+							self.ui.title_combobox.setCurrentIndex(index)
 
 	def elective_btn_event(self):
 		if self.ElectiveWindow.isVisible():
