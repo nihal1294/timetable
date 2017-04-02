@@ -176,9 +176,9 @@ def adjust_clash(timetables, faculty):
 			rehabilitate(day, clash_ele[0], clash_ele[1], faculty)
 		
 
-def finalize_lab(section, day, time, subject):
+def finalize_lab(section, day, time, subject, hours = 3):
 	global faculty
-	for i in range(time, time+3): # finalize 3 hours
+	for i in range(time, time+hours): 
 		section[day][i] = subject
 		section.final[day][i] = True
 		for teacher in subject[2]:
@@ -238,9 +238,12 @@ def produce_timetable(ui):
 		for section in ui.subjects_assigned[sem]:
 			for sub in ui.subjects_assigned[sem][section]:
 				sub_long, sub_short, staff = sub.split(' - ')
+				staff = staff.split(', ')
+				if ui.subs[sub_short].lab == False:
+					staff = staff[0]
 				print(sub_long, sub_short, staff)
 				print(ui.subs)
-				sub = ui.subs[sem][sub_short]
+				sub = ui.subs[sub_short]
 				s = [sub_long, sub.credits, staff, sub_short]
 				subjects[sem][section].append(s)
 				subjects_ref[sem][section][sub_short] = s
@@ -257,11 +260,11 @@ def produce_timetable(ui):
 					else:
 						sub = subjects_ref[sem][section][sub_short]
 						print(sub, row, col)
-						if ui.subs[sem][sub_short].lab == True:
-							#finalize_lab(timetables[sem][section], day, hour, sub)
-							finalize_theory(timetables[sem][section], day, hour, sub)
+						if ui.subs[sub_short].lab == True:
+							finalize_lab(timetables[sem][section], day, hour, sub, 1)
+							#finalize_theory(timetables[sem][section], day, hour, sub)
 						else:
-							finalize_theory(timetables[sem][section], day, hour, sub)
+							finalize_theory(timetables[sem][section], day, hour, sub, 1)
 			print_timetable(timetables[sem][section])
 	for staff in ui.faculty_fixed_slots:
 		for row in ui.faculty_fixed_slots[staff]:

@@ -19,14 +19,18 @@ from elective_window import Ui_elective_window
 class subject:
 	def __init__(self, name, short_name = '', credits = 0, lab = False):
 		if short_name == '': # if both names are provided together in name
-			self.both_names = name
-			self.name, self.short_name = self.both_names.split(' - ')
+			both_names = name
+			self.name, self.short_name = both_names.split(' - ')
 		else: # short name is provided separately
 			self.name = name
 			self.short_name = short_name
-			self.both_names = name + ' - ' + short_name
 		self.credits = credits
 		self.lab = lab
+
+	@property
+	def both_names(self):
+		both_names = self.name + ' - ' + self.short_name
+		return both_names
 
 	def __eq__(self, obj):
 		return self.name == obj.name and self.short_name == obj.short_name
@@ -297,6 +301,8 @@ class ParentWindow(QMainWindow):
 	# first form functions
 	def inputType_combobox_event(self):    #function for input type combobox in first form
 		if self.FirstWindow.isVisible():
+			self.row = []
+
 			self.inputType = self.ui.inputType_combobox.currentText()
 			print(self.inputType)
 			#print(dir(self.ui.inputType_combobox))
@@ -355,6 +361,7 @@ class ParentWindow(QMainWindow):
 				self.ui5.generated_table.clearContents()
 
 	def semester_combobox_event(self):   #function for semester combobox
+		self.row = []
 		if self.sem != '' and self.sem not in self.num_sections:
 			self.num_sections[self.sem] = self.ui.sections_spinbox.value()
 			print(self.sem, self.num_sections[self.sem])
@@ -384,7 +391,7 @@ class ParentWindow(QMainWindow):
 					subj = subject(x.text())
 					sem = self.ui.semester_combobox.currentText()
 					for y in self.subjects[sem]:
-						if subj.name == y.name:
+						if subj == y:
 							if not sem:
 								self.systemtray_icon.show()
 								self.systemtray_icon.showMessage('Input', 'Please select the semester.')
@@ -405,8 +412,9 @@ class ParentWindow(QMainWindow):
 								t = text + " - " + short_sub
 								self.ui.input_list.takeItem(self.ui.input_list.row(x))
 								self.ui.input_list.addItem(t)
-								self.subs[y.short_name] = y
+								self.update_subject_changes(subj, y)
 								self.ui.credits_spinbox.setValue(1)
+								break
 			else:
 				for x in self.row:
 					fac = x.text()
@@ -416,10 +424,13 @@ class ParentWindow(QMainWindow):
 							y.name = text
 							self.ui.input_list.takeItem(self.ui.input_list.row(x))
 							self.ui.input_list.addItem(text)
+							self.update_faculty_changes(fac, y)
+							break
 			self.ui.input_list.clearSelection()
-			del self.row[0]
+			self.row = []
 			print(self.row)
 			self.ui.input_list.repaint()
+
 		else: #when adding a new item
 
 			if self.inputType == "Subjects":
@@ -480,6 +491,53 @@ class ParentWindow(QMainWindow):
 		print('faculty list: ', self.faculty_list_value)
 		print('subjects list: ', self.subjects)
 
+	def update_subject_changes(self, old_sub, new_sub):
+		# changes in subs, section_fixed_slots, subjects_assigned, faculty_subjects
+		if old_sub.short_name != new_sub.short_name:
+			del self.subs[old_sub.short_name]
+			self.subs[new_sub.short_name] = new_sub
+			for sem in self.section_fixed_slots:
+				for section in self.section_fixed_slots[sem]:
+					for row in self.section_fixed_slots[sem][section]:
+						for col in self.section_fixed_slots[sem][section][row]:
+							if self.section_fixed_slots[sem][section][row][col] == old_sub.short_name:
+								self.section_fixed_slots[sem][section][row][col] = new_sub.short_name
+								
+		
+		self.subs[old_sub.short_name] = new_sub
+		for sem in self.subjects_assigned:
+			for section in self.subjects_assigned[sem]:
+				for i, sub in enumerate(self.subjects_assigned[sem][section]):
+					sub = sub.split(' - ')
+					if sub[0] == old_sub.name and sub[1] == old_sub.short_name:
+						self.subjects_assigned[sem][section][i] = new_sub.both_names + ' - ' + sub[2]
+						teachers = sub[2].split(', ')
+						for teacher in teachers:
+							
+							for i, sub in enumerate(self.faculty_subjects[teacher]):
+								sub = sub.split(' - ')
+								if sub[0] == old_sub.name and sub[1] == old_sub.short_name:
+									self.faculty_subjects[teacher][i] = new_sub.both_names + ' - ' + sub[2]
+						break # move to next section
+		pass
+
+	def update_faculty_changes(self, old_fac, new_fac):
+		# changes in subjects_assigned, faculty_subjects, faculty_fixed_slots
+		if old_fac != new_fac:
+			for sem in self.subjects_assigned:
+				for section in self.subjects_assigned[sem]:
+					for i, sub in enumerate(self.subjects_assigned[sem][section]):
+						sub = sub.split(' - ')
+						
+						if sub[2] == old_fac:
+							self.subjects_assigned[sem][section][i] = ' - '.join(sub[:2]) + ' - ' + new_fac.name
+
+			if old_fac in self.faculty_subjects:
+				self.faculty_subjects[new_fac] = self.faculty_subjects.pop(old_fac)
+			if old_fac in self.faculty_fixed_slots:
+				self.faculty_fixed_slots[new_fac] = self.faculty_fixed_slots.pop(old_fac)
+		pass
+
 	def handle_listclick_event(self):
 		self.row = self.ui.input_list.selectedItems()
 		print(self.row)
@@ -515,6 +573,7 @@ class ParentWindow(QMainWindow):
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()
+		self.row = []
 		if not row:
 			self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
@@ -537,7 +596,6 @@ class ParentWindow(QMainWindow):
 					pass
 			self.ui.input_list.clearSelection()
 			self.ui.input_list.repaint()
-
 		print('faculty list: ', self.faculty_list_value)
 		print('subjects list: ', self.subjects)
 
@@ -621,21 +679,27 @@ class ParentWindow(QMainWindow):
 			self.systemtray_icon.showMessage('Input', 'Please select a subject')
 			return
 
-		sub_faculty = sub + ' - ' + faculty
-		for x in self.subjects_assigned[sem][section]:
-			if x == sub_faculty:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+		for i, x in enumerate(self.subjects_assigned[sem][section]):
+			x = x.split(' - ')
+			subj = ' - '.join(x[:2])
+			teachers = x[2].split(', ')
+			if subj == sub:
+				try:
+					if self.subs[x[1]].lab == False or faculty in teachers: # if theory subject or teacher already assigned to subject
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+					else: # assigned additional teachers
+						self.subjects_assigned[sem][section][i] += ', ' + faculty
+						fac_subject = sub + ' - ' + sem + ' ' + section
+						self.faculty_subjects[faculty].append(fac_subject)
+				except KeyError as e:
+					print(self.subs)
+					raise
 				break
-		else:
+		else: # assigning a subject for the first time
+			sub_faculty = sub + ' - ' + faculty
 			self.subjects_assigned[sem][section].append(sub_faculty)
-		fac_subject = sub + ' - ' + sem + ' - ' + section
-		for x in self.faculty_subjects[faculty]:
-			if x == fac_subject:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
-				break
-		else:
+			fac_subject = sub + ' - ' + sem + ' ' + section
 			self.faculty_subjects[faculty].append(fac_subject)
 		#self.ui2.assigned_list.addItem(sub)
 		self.section_combobox2_event()
@@ -660,7 +724,7 @@ class ParentWindow(QMainWindow):
 					section = self.ui2.section_combobox.currentText()
 					sem = self.ui2.semester_combobox.currentText()
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
-					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' - ' + section)
+					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
 				else: # deleting from faculty view
 					sub = x[0] + ' - ' + x[1]
@@ -668,7 +732,7 @@ class ParentWindow(QMainWindow):
 					section = x[3]
 					faculty = self.ui2.faculty_combobox.currentText()
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
-					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' - ' + section)
+					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
 		pass
 
@@ -941,9 +1005,3 @@ if __name__ == "__main__":
     sys.exit(app.exec_())
 
 
-'''
-
-faculty - subject - section assignments should persist when moving between windows
-show a message indicaating which list of assignments you are showing eg faculty or section
-
-'''
