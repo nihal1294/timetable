@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_window5(object):
     def setupUi(self, window5):
         window5.setObjectName("window5")
         window5.resize(920, 469)
         window5.setStyleSheet(lightstyle.css)
+        window5.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window5)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)

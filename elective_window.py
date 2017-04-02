@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_elective_window(object):
     def setupUi(self, elective_window):
         elective_window.setObjectName("elective_window")
         elective_window.resize(661, 491)
         elective_window.setStyleSheet(lightstyle.css)
+        elective_window.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_window(object):
     def setupUi(self, window):
         window.setObjectName("window")
         window.resize(726, 480)
         window.setStyleSheet(lightstyle.css)
+        window.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralWidget = QtWidgets.QWidget(window)
         self.centralWidget.setObjectName("centralWidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralWidget)
@@ -166,6 +166,9 @@ class Ui_window(object):
         sizePolicy.setHeightForWidth(self.input_list.sizePolicy().hasHeightForWidth())
         self.input_list.setSizePolicy(sizePolicy)
         self.input_list.setMinimumSize(QtCore.QSize(300, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.input_list.setFont(font)
         self.input_list.setAlternatingRowColors(True)
         self.input_list.setObjectName("input_list")
         self.gridLayout.addWidget(self.input_list, 1, 5, 12, 1)

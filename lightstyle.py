@@ -43,7 +43,7 @@ QWidget
     border: 0px transparent black;
     outline: 0;
     background-image:url("wallpapers/img4.jpg");
-    background-position: center;
+    background-position: left;
 }
 
 QWidget:item:hover
@@ -64,11 +64,6 @@ QCheckBox
     outline: none;
     color: #161616;
     margin-bottom: 2px;
-}
-
-QCheckBox:disabled
-{
-    color: #76797C;
 }
 
 QCheckBox::indicator,
@@ -330,7 +325,7 @@ QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
 QLineEdit
 {
     background:none;
-    background-color: #cccccc;
+    background:rgba(255,255,255,0.5);
     padding: 5px;
     border-style: solid;
     border: 1px solid #76797C;
@@ -610,6 +605,7 @@ QPushButton
 QPushButton:disabled
 {
     background-color: #ededed;
+    background:none;
     border-width: 1px;
     border-color: #454545;
     border-style: solid;
@@ -635,7 +631,7 @@ QPushButton:pressed
 
 QComboBox
 {
-    background:rgba(255,255,255,0.3);
+    background:rgba(255,255,255,0.35);
     selection-background-color: #3daee9;
     border-style: solid;
     border: 1px solid #76797C;
@@ -664,7 +660,7 @@ QComboBox:on
 
 QComboBox QAbstractItemView
 {
-    background-color: #cccccc;
+    background-color: white;
     border-radius: 2px;
     border: 1px solid #76797C;
     selection-background-color: #3daee9;
@@ -1277,11 +1273,21 @@ QDateEdit::down-arrow:focus
 }
 
 QSpinBox{
-    background:rgba(255,255,255,0.3);
+    background:rgba(255,255,255,0.35);
 }
 
 QListWidget{
-    background:rgba(255,255,255,0.3)
+    background:rgba(255,255,255,0.5)
+}
+
+QTableWidget{
+    background:rgba(255,255,255,0.5)
+}
+
+
+QComboBox:disabled, QLineEdit:disabled, QCheckBox:disabled, QSpinBox:disabled{
+    background:transparent;
+    color: #76797C;
 }
 
 '''

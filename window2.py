@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_window2(object):
     def setupUi(self, window2):
         window2.setObjectName("window2")
-        window2.resize(920, 469)
+        window2.resize(920, 463)
         window2.setStyleSheet(lightstyle.css)
+        window2.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window2)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -23,7 +23,7 @@ class Ui_window2(object):
         self.gridLayout.setContentsMargins(0, 0, -1, -1)
         self.gridLayout.setObjectName("gridLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(-1, 9, -1, 0)
+        self.horizontalLayout.setContentsMargins(-1, 3, -1, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.assignBtn = QtWidgets.QPushButton(self.centralwidget)
         self.assignBtn.setMinimumSize(QtCore.QSize(120, 35))

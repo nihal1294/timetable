@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
         window4.resize(920, 469)
         window4.setStyleSheet(lightstyle.css)
+        window4.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window4)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -28,7 +28,12 @@ class Ui_window4(object):
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1, QtCore.Qt.AlignRight)
         self.faculty_combobox = QtWidgets.QComboBox(self.centralwidget)
-        self.faculty_combobox.setMinimumSize(QtCore.QSize(0, 30))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.faculty_combobox.sizePolicy().hasHeightForWidth())
+        self.faculty_combobox.setSizePolicy(sizePolicy)
+        self.faculty_combobox.setMinimumSize(QtCore.QSize(305, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.faculty_combobox.setFont(font)
