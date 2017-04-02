@@ -109,7 +109,7 @@ class Ui_window3(object):
         self.subject_table.verticalHeader().setMinimumSectionSize(27)
         self.gridLayout.addWidget(self.subject_table, 3, 0, 1, 4, QtCore.Qt.AlignVCenter)
         self.slotType_combobox = QtWidgets.QComboBox(self.centralwidget)
-        self.slotType_combobox.setMinimumSize(QtCore.QSize(120, 30))
+        self.slotType_combobox.setMinimumSize(QtCore.QSize(405, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.slotType_combobox.setFont(font)

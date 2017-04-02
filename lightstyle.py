@@ -42,6 +42,8 @@ QWidget
     border-image: none;
     border: 0px transparent black;
     outline: 0;
+    background-image:url("wallpapers/img4.jpg");
+    background-position: center;
 }
 
 QWidget:item:hover
@@ -57,6 +59,7 @@ QWidget:item:selected
 
 QCheckBox
 {
+    background:none;
     spacing: 5px;
     outline: none;
     color: #161616;
@@ -326,6 +329,7 @@ QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
 
 QLineEdit
 {
+    background:none;
     background-color: #cccccc;
     padding: 5px;
     border-style: solid;
@@ -490,6 +494,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 
 QTextEdit
 {
+    background:none;
     background-color: #cccccc;
     color: #161616;
     border: 1px solid #76797C;
@@ -497,6 +502,7 @@ QTextEdit
 
 QPlainTextEdit
 {
+    background:none;
     background-color: #cccccc;;
     color: #161616;
     border-radius: 2px;
@@ -520,6 +526,7 @@ QSizeGrip {
 
 QMainWindow::separator
 {
+    background:none;
     background-color: #ededed;
     color: white;
     padding-left: 4px;
@@ -536,7 +543,6 @@ QMainWindow::separator:hover
     border: 1px solid #76797C;
     spacing: 2px;
 }
-
 
 QMenu::separator
 {
@@ -592,6 +598,7 @@ QPushButton
 {
     color: #161616;
     background-color: #ededed;
+    background:rgba(255,255,255,0.2);
     border-width: 1px;
     border-color: #76797C;
     border-style: solid;
@@ -628,6 +635,7 @@ QPushButton:pressed
 
 QComboBox
 {
+    background:rgba(255,255,255,0.3);
     selection-background-color: #3daee9;
     border-style: solid;
     border: 1px solid #76797C;
@@ -734,6 +742,7 @@ QAbstractSpinBox::down-arrow:hover
 
 QLabel
 {
+    background:none;
     border: 0px solid black;
 }
 
@@ -924,6 +933,7 @@ QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
 
 QTreeView, QListView
 {
+    background:none;
     border: 1px solid #76797C;
     background-color: #cccccc;
 }
@@ -1075,6 +1085,7 @@ QPushButton::menu-indicator  {
 
 QTableView
 {
+    background:none;
     border: 1px solid #76797C;
     gridline-color: #ededed;
     background-color: #cccccc;
@@ -1099,6 +1110,7 @@ QTableView::item:selected:active, QTreeView::item:selected:active, QListView::it
 
 QHeaderView
 {
+    background:none;
     background-color: #ededed;
     border: 1px transparent;
     border-radius: 0px;
@@ -1263,4 +1275,13 @@ QDateEdit::down-arrow:focus
 {
     image: url(icons/down_arrow.png);
 }
+
+QSpinBox{
+    background:rgba(255,255,255,0.3);
+}
+
+QListWidget{
+    background:rgba(255,255,255,0.3)
+}
+
 '''
