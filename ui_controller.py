@@ -8,6 +8,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import pickle
 import tt
+import msvcrt
 
 from window import Ui_window
 from window2 import Ui_window2
@@ -121,6 +122,7 @@ class ParentWindow(QMainWindow):
 		self.ui.subject_short_input.setEnabled(False)
 		self.ui.lab_checkbox.setEnabled(False)
 		self.ui.credits_spinbox.setEnabled(False)
+		self.ui.electiveBtn.setEnabled(False)
 		self.ui.addBtn.clicked.connect(self.add_btn_event)
 		self.ui.electiveBtn.clicked.connect(self.elective_btn_event)
 		self.ui.removeBtn.clicked.connect(self.remove_btn_event)
@@ -173,13 +175,31 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.setupUi(self.ElectiveWindow)
 
 		self.ui_elec.elective_spinbox.setEnabled(False)
+		self.ui_elec.elective_spinbox.setValue(0)
 		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
 		self.ui_elec.elective_input_textbox.setEnabled(False)
 		self.ui_elec.elective_short_input.setEnabled(False)
 		self.ui_elec.credits_spinbox.setEnabled(False)
 		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.semester_combobox.setEnabled(True)
 
+		self.electives = OrderedDict()
+		self.ele = dict()
+		for sem in self.sem_list:
+			self.ui_elec.semester_combobox.addItem(sem)
+			self.electives[sem] = []
+		self.ui_elec.semester_combobox.setCurrentIndex(-1)
+
+		self.ui_elec.semester_combobox.activated[str].connect(self.semester_combobox_elective_event)
+		self.ui_elec.elective_spinbox.valueChanged.connect(self.elective_spinbox_event)
 		self.ui_elec.backBtn.clicked.connect(self.elective_btn_event)
+		self.ui_elec.addBtn.setAutoDefault(True)
+		self.ui_elec.addBtn.clicked.connect(self.add_btn_elective_event)
+		self.ui_elec.elective_list.itemClicked.connect(self.handle_listclick_elective_event)
+		self.ui_elec.removeBtn.clicked.connect(self.remove_btn_elective_event)
+		self.ui_elec.electiveGroup_combobox.activated[str].connect(self.electivegroup_combobox_event)
+		self.ui_elec.resetBtn.clicked.connect(self.reset_Btn_event)
 
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
@@ -305,6 +325,9 @@ class ParentWindow(QMainWindow):
 
 			self.inputType = self.ui.inputType_combobox.currentText()
 			print(self.inputType)
+			if self.row:
+					del self.row[0]
+			print(self.row)
 			#print(dir(self.ui.inputType_combobox))
 			if self.inputType == "Faculty":
 				self.ui.semester_combobox.setEnabled(False)
@@ -323,6 +346,7 @@ class ParentWindow(QMainWindow):
 				self.ui.semester_combobox.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
+				self.ui.electiveBtn.setEnabled(True)
 				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter subject name")
 				self.ui.lab_checkbox.setEnabled(True)
@@ -374,6 +398,15 @@ class ParentWindow(QMainWindow):
 		if self.sem in self.subjects:
 			for sub in self.subjects[self.sem]:
 				self.ui.input_list.addItem(sub.both_names)
+		self.ui.input_list.clearSelection()
+		if self.row:
+			del self.row[0]
+			self.ui.input_textbox.clear()
+			self.ui.input_textbox.setPlaceholderText("Please enter subject name")
+			self.ui.subject_short_input.clear()
+			self.ui.credits_spinbox.setValue(1)
+		print(self.row)
+		#self.ui.input_list.repaint()
 
 	def section_spinbox_event(self):    #function for sections spinbox
 		if self.sem != '':
@@ -540,7 +573,7 @@ class ParentWindow(QMainWindow):
 
 	def handle_listclick_event(self):
 		self.row = self.ui.input_list.selectedItems()
-		print(self.row)
+		#print(dir(self.ui.input_list))
 		sem = self.ui.semester_combobox.currentText()
 		if self.inputType == "Subjects":
 			for x in self.row:
@@ -564,12 +597,38 @@ class ParentWindow(QMainWindow):
 						index = self.ui.title_combobox.findText(y.title)
 						if index >= 0:
 							self.ui.title_combobox.setCurrentIndex(index)
+		'''if msvcrt.kbhit() and ord(msvcrt.getch()) == 27:
+			self.ui.subject_short_input.clear()
+			self.ui.credits_spinbox.setValue(1)
+			self.ui.input_textbox.clear()
+			self.ui.lab_checkbox.setChecked(False)
+			self.ui.input_list.clearSelection()
+			del self.row[0]
+			print(self.row)
+			self.ui.input_list.repaint()'''
 
 	def elective_btn_event(self):
 		if self.ElectiveWindow.isVisible():
 			self.ElectiveWindow.hide()
 		else:
 			self.ElectiveWindow.show()
+			self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+			self.ui_elec.electiveGroup_combobox.clear()
+			self.ui_elec.elective_input_textbox.clear()
+			self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+			self.ui_elec.elective_input_textbox.setEnabled(False)
+			self.ui_elec.elective_spinbox.setValue(0)
+			self.ui_elec.elective_short_input.clear()
+			self.ui_elec.elective_short_input.setEnabled(False)
+			self.ui_elec.credits_spinbox.setValue(1)
+			self.ui_elec.credits_spinbox.setEnabled(False)
+			self.ui_elec.lab_checkbox.setChecked(False)
+			self.ui_elec.lab_checkbox.setEnabled(False)
+			self.ui_elec.elective_list.clear()
+			self.ui_elec.elective_spinbox.setEnabled(False)
+			self.ui_elec.semester_combobox.setCurrentIndex(-1)
+			self.ui_elec.semester_combobox.setFocus()
+			self.ui_elec.electiveGroup_combobox.setEnabled(False)
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()
@@ -599,7 +658,192 @@ class ParentWindow(QMainWindow):
 		print('faculty list: ', self.faculty_list_value)
 		print('subjects list: ', self.subjects)
 
+	'''def key_event(self, event):
+		print(event.key())
+		if self.FirstWindow.isVisible():
+			#if event.key() == Qt.Key_Escape:
+			self.ui.subject_short_input.clear()
+			self.ui.credits_spinbox.setValue(1)
+			self.ui.input_textbox.clear()
+			self.ui.lab_checkbox.setChecked(False)
+			self.ui.input_list.clearSelection()
+			del self.row[0]
+			print(self.row)
+			self.ui.input_list.repaint()'''
 
+
+	#elective form functions
+	def semester_combobox_elective_event(self):
+		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+		self.ui_elec.electiveGroup_combobox.clear()
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.elective_spinbox.setValue(0)
+		self.ui_elec.elective_short_input.clear()
+		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.credits_spinbox.setValue(1)
+		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.lab_checkbox.setChecked(False)
+		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.elective_list.clear()
+		self.ui_elec.elective_spinbox.setEnabled(True)
+		
+	def electivegroup_combobox_event(self):
+		self.ui_elec.elective_input_textbox.setEnabled(True)
+		self.ui_elec.elective_short_input.setEnabled(True)
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.credits_spinbox.setEnabled(True)
+		self.ui_elec.lab_checkbox.setEnabled(True)
+		self.ui_elec.elective_list.clear()
+		sem = self.ui_elec.semester_combobox.currentText()
+		if sem in self.electives:
+			for sub in self.electives[sem]:
+				self.ui_elec .elective_list.addItem(sub.both_names)
+		self.ui_elec.elective_list.clearSelection()
+
+	def elective_spinbox_event(self):
+		no_of_ele_grp = self.ui_elec.elective_spinbox.value()
+		print(no_of_ele_grp)
+		self.ui_elec.electiveGroup_combobox.setEnabled(True)
+		for i in range(0, no_of_ele_grp):
+			if self.ui_elec.electiveGroup_combobox.count() == no_of_ele_grp:
+				break
+			elif self.ui_elec.electiveGroup_combobox.count() > no_of_ele_grp:
+				self.ui_elec.electiveGroup_combobox.clear()
+				for x in range(1, no_of_ele_grp):
+					s = "Elective - " + str(i+1)
+					self.ui_elec.electiveGroup_combobox.addItem(s)
+			else:
+				s = "Elective - " + str(i+1)
+				self.ui_elec.electiveGroup_combobox.addItem(s)
+		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+
+	def add_btn_elective_event(self):
+		text = self.ui_elec.elective_input_textbox.text()
+		sem = self.ui_elec.semester_combobox.currentText()
+		row = self.ui_elec.elective_list.selectedItems()
+		if row:   #when editing a currently selected value in list
+			for x in row:
+				subj = subject(x.text())
+				sem = self.ui_elec.semester_combobox.currentText()
+				for y in self.electives[sem]:
+					if subj.name == y.name:
+						if not sem:
+							self.systemtray_icon.show()
+							self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+							return
+						if text != '':
+							short_sub = self.ui_elec.elective_short_input.text()
+							if not short_sub:
+								self.systemtray_icon.show()
+								self.systemtray_icon.showMessage('Input', 'Please enter the elective short form.')
+								return
+							credits = self.ui_elec.credits_spinbox.value()
+							lab = self.ui_elec.lab_checkbox.isChecked()
+							y.name = text
+							y.short_name = short_sub
+							y.credits = credits
+							y.lab = lab
+							print(text, short_sub, credits, lab)
+							t = text + " - " + short_sub
+							self.ui_elec.elective_list.takeItem(self.ui_elec.elective_list.row(x))
+							self.ui_elec.elective_list.addItem(t)
+							self.ele[y.short_name] = y
+							self.ui_elec.credits_spinbox.setValue(1)
+		else:
+			if not sem:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+				return
+			if text != "":
+				short_sub = self.ui_elec.elective_short_input.text()
+				if not short_sub:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Input', 'Please enter the elective short form.')
+					return
+				credits = self.ui_elec.credits_spinbox.value()
+				lab = self.ui_elec.lab_checkbox.isChecked()
+				sub = subject(text, short_sub, credits, lab)
+				print(text, short_sub, credits, lab)
+				t = text + " - " + short_sub
+				for x in self.electives[sem]:
+					if sub == x:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+						break
+				else:
+					self.ui_elec.elective_list.addItem(t)
+					self.electives[sem].append(sub)
+					self.ele[sub.short_name] = sub
+					self.ui_elec.credits_spinbox.setValue(1)
+			else:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Input', 'Please enter the elective name.')
+		self.ui_elec.elective_list.sortItems()
+		self.ui_elec.elective_short_input.clear()
+		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.lab_checkbox.setChecked(False)
+		self.ui_elec.elective_input_textbox.setFocus()
+		
+		print('electives list: ', self.electives)
+
+	def remove_btn_elective_event(self):
+		row = self.ui_elec.elective_list.selectedItems()
+		sem = self.ui_elec.semester_combobox.currentText()
+		if not row:
+			self.systemtray_icon.show()
+			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
+		else:
+			for x in row:
+				self.ui_elec.elective_list.takeItem(self.ui.input_list.row(x))
+				try:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Subjects', x.text() + ' removed from the subject list')
+					self.electives[sem].remove(subject(x.text()))
+				finally:
+					pass
+			self.ui_elec.elective_list.clearSelection()
+			self.ui_elec.elective_list.repaint()
+
+		print('electives list: ', self.electives)
+	
+	def handle_listclick_elective_event(self):
+		row = self.ui_elec.elective_list.selectedItems()
+		sem = self.ui_elec.semester_combobox.currentText()
+		for x in row:
+			subj = subject(x.text())
+			for y in self.electives[sem]:
+				if subj.name == y.name:
+					self.ui_elec.elective_input_textbox.setText(subj.name)
+					self.ui_elec.elective_short_input.setText(subj.short_name)
+					self.ui_elec.credits_spinbox.setValue(y.credits)
+					if y.lab == True:
+						self.ui_elec.lab_checkbox.setChecked(True)
+					else:
+						self.ui_elec.lab_checkbox.setChecked(False)
+
+	def reset_Btn_event(self):
+		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+		self.ui_elec.electiveGroup_combobox.clear()
+		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.elective_spinbox.setValue(0)
+		self.ui_elec.elective_short_input.clear()
+		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.credits_spinbox.setValue(1)
+		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.lab_checkbox.setChecked(False)
+		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.elective_list.clear()
+		self.ui_elec.elective_spinbox.setEnabled(False)
+		self.ui_elec.semester_combobox.setCurrentIndex(-1)
+		self.ui_elec.semester_combobox.setFocus()
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+
+	
 	# second form functions
 	def populate_second_window(self):
 		self.faculty_list_value.sort()
