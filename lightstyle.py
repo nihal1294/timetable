@@ -42,7 +42,7 @@ QWidget
     border-image: none;
     border: 0px transparent black;
     outline: 0;
-    background-image:url("wallpapers/img4.jpg");
+    background-image:url("wallpapers/img5.jpg");
     background-position: left;
 }
 
@@ -1289,5 +1289,6 @@ QComboBox:disabled, QLineEdit:disabled, QCheckBox:disabled, QSpinBox:disabled{
     background:transparent;
     color: #76797C;
 }
+
 
 '''
