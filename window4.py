@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
         window4.resize(920, 469)
         window4.setStyleSheet(lightstyle.css)
+        window4.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window4)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -23,12 +23,18 @@ class Ui_window4(object):
         self.gridLayout.setObjectName("gridLayout")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(9)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1, QtCore.Qt.AlignRight)
         self.faculty_combobox = QtWidgets.QComboBox(self.centralwidget)
-        self.faculty_combobox.setMinimumSize(QtCore.QSize(0, 30))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.faculty_combobox.sizePolicy().hasHeightForWidth())
+        self.faculty_combobox.setSizePolicy(sizePolicy)
+        self.faculty_combobox.setMinimumSize(QtCore.QSize(305, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.faculty_combobox.setFont(font)
@@ -98,6 +104,7 @@ class Ui_window4(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setMinimumSize(QtCore.QSize(0, 45))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(14)
         self.label.setFont(font)
         self.label.setObjectName("label")
@@ -108,6 +115,7 @@ class Ui_window4(object):
         self.printBtn = QtWidgets.QPushButton(self.centralwidget)
         self.printBtn.setMinimumSize(QtCore.QSize(120, 35))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(11)
         self.printBtn.setFont(font)
         self.printBtn.setObjectName("printBtn")
@@ -117,6 +125,7 @@ class Ui_window4(object):
         self.backBtn = QtWidgets.QPushButton(self.centralwidget)
         self.backBtn.setMinimumSize(QtCore.QSize(120, 35))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(11)
         self.backBtn.setFont(font)
         self.backBtn.setObjectName("backBtn")
@@ -124,6 +133,7 @@ class Ui_window4(object):
         self.generateBtn = QtWidgets.QPushButton(self.centralwidget)
         self.generateBtn.setMinimumSize(QtCore.QSize(120, 35))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(11)
         self.generateBtn.setFont(font)
         self.generateBtn.setObjectName("generateBtn")

@@ -1,0 +1,30 @@
+bugs and stuff:
+
+elective group combo box.
+elective input textboxes lack Enter key link.
+elective group shows the last option as Elective-2(rest remain elective-1) when the spinbox is cycled down.
+elective combobox and spinbox dont update when sem combo changes.
+after resetting, list only populates after setting spinbox and combobox again.
+
+in window 1 , faculty is sorted in list initially, but isnt sorted when faculty is chosen again in input combobox.
+
+clicking generate crashes with "max() arg is an empty sequence" error.
+buttons and few widgets need to be cleared after clicking,i.e., they stay selected.
+
+need to add confirming dialog box on closing with X button/File->Exit.
+
+better run program with an .exe file.
+
+**
+i feel if list widget displays all values entered for all combobox options, then the adding and editing experience would be more natural , 
+i.e., user enters new value - changes semester/section/elective group - adds more value which is shown in list with all entered values sorted - user clicks one list item and edits - clicks reset to clear widgets - continues the entry process.
+
+---------
+todo:
+
+autosave
+saving to doc file
+making changes to final solution
+what happens when you delete data in form1 that is used in later forms
+clear fixed slots in form3/4
+logs, displaying info

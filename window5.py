@@ -8,13 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
-import darkstyle
 
 class Ui_window5(object):
     def setupUi(self, window5):
         window5.setObjectName("window5")
         window5.resize(920, 469)
         window5.setStyleSheet(lightstyle.css)
+        window5.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window5)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -30,12 +30,14 @@ class Ui_window5(object):
         self.gridLayout.addWidget(self.semester_combobox, 2, 1, 1, 1)
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(9)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 1, 2, 1, 1, QtCore.Qt.AlignHCenter)
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(9)
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
@@ -124,6 +126,7 @@ class Ui_window5(object):
         self.gridLayout.addWidget(self.section_combobox, 2, 2, 1, 1)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(9)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
@@ -134,6 +137,7 @@ class Ui_window5(object):
         self.printBtn = QtWidgets.QPushButton(self.centralwidget)
         self.printBtn.setMinimumSize(QtCore.QSize(120, 35))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(11)
         self.printBtn.setFont(font)
         self.printBtn.setObjectName("printBtn")
@@ -143,6 +147,7 @@ class Ui_window5(object):
         self.backBtn = QtWidgets.QPushButton(self.centralwidget)
         self.backBtn.setMinimumSize(QtCore.QSize(120, 35))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(11)
         self.backBtn.setFont(font)
         self.backBtn.setObjectName("backBtn")
@@ -150,6 +155,7 @@ class Ui_window5(object):
         self.finishBtn = QtWidgets.QPushButton(self.centralwidget)
         self.finishBtn.setMinimumSize(QtCore.QSize(120, 35))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(11)
         self.finishBtn.setFont(font)
         self.finishBtn.setObjectName("finishBtn")
@@ -157,6 +163,7 @@ class Ui_window5(object):
         self.gridLayout.addLayout(self.horizontalLayout, 5, 0, 1, 4)
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(9)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
@@ -164,6 +171,7 @@ class Ui_window5(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setMinimumSize(QtCore.QSize(0, 25))
         font = QtGui.QFont()
+        font.setFamily("Century Gothic")
         font.setPointSize(14)
         self.label.setFont(font)
         self.label.setObjectName("label")

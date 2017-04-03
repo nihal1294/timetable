@@ -8,6 +8,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import pickle
 import tt
+import msvcrt
 
 from window import Ui_window
 from window2 import Ui_window2
@@ -19,14 +20,18 @@ from elective_window import Ui_elective_window
 class subject:
 	def __init__(self, name, short_name = '', credits = 0, lab = False):
 		if short_name == '': # if both names are provided together in name
-			self.both_names = name
-			self.name, self.short_name = self.both_names.split(' - ')
+			both_names = name
+			self.name, self.short_name = both_names.split(' - ')
 		else: # short name is provided separately
 			self.name = name
 			self.short_name = short_name
-			self.both_names = name + ' - ' + short_name
 		self.credits = credits
 		self.lab = lab
+
+	@property
+	def both_names(self):
+		both_names = self.name + ' - ' + self.short_name
+		return both_names
 
 	def __eq__(self, obj):
 		return self.name == obj.name and self.short_name == obj.short_name
@@ -34,6 +39,35 @@ class subject:
 	def __repr__(self):
 		return 'subject({}, {}, {}, {})'.format(self.name, self.short_name, self.credits, self.lab) 
 
+class faculty_class:
+	def __init__(self, name, title = ''):
+		if title == '':
+			name = name.split(' ')
+			if len(name) > 1:
+				title = name[0]
+				name = ' '.join(name[1:])
+			else:
+				name = name[0]
+		self.name = name
+		self.title = title
+
+	def __repr__(self):
+		return 'faculty_class({}, {})'.format(self.name, self.title)
+
+	def __str__(self):
+		return self.title + ' ' + self.name
+
+	def __eq__(self, string):
+		if str(string) == str(self) or string == self.name:
+			return True
+		else:
+			return False
+
+	def __lt__(self, obj):
+		return self.name < obj.name
+
+	def __hash__(self):
+		return self.name.__hash__()
 
 #new singular class implementing QStackedLayout
 class ParentWindow(QMainWindow):
@@ -88,6 +122,7 @@ class ParentWindow(QMainWindow):
 		self.ui.subject_short_input.setEnabled(False)
 		self.ui.lab_checkbox.setEnabled(False)
 		self.ui.credits_spinbox.setEnabled(False)
+		self.ui.electiveBtn.setEnabled(False)
 		self.ui.addBtn.clicked.connect(self.add_btn_event)
 		self.ui.electiveBtn.clicked.connect(self.elective_btn_event)
 		self.ui.removeBtn.clicked.connect(self.remove_btn_event)
@@ -117,6 +152,7 @@ class ParentWindow(QMainWindow):
 		self.inputType = ""
 		self.text = ""
 		self.sem = ""
+		self.row = self.ui.input_list.selectedItems()
 		self.lab = 0
 		self.credits = 1
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
@@ -138,7 +174,31 @@ class ParentWindow(QMainWindow):
 		self.ui_elec = Ui_elective_window()
 		self.ui_elec.setupUi(self.ElectiveWindow)
 
+		self.ui_elec.elective_spinbox.setEnabled(False)
+		self.ui_elec.elective_spinbox.setValue(0)
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.semester_combobox.setEnabled(True)
+
+		self.electives = OrderedDict()
+		for sem in self.sem_list:
+			self.ui_elec.semester_combobox.addItem(sem)
+			self.electives[sem] = dict()
+		self.ui_elec.semester_combobox.setCurrentIndex(-1)
+
+		self.ui_elec.semester_combobox.activated[str].connect(self.semester_combobox_elective_event)
+		self.ui_elec.elective_spinbox.valueChanged.connect(self.elective_spinbox_event)
 		self.ui_elec.backBtn.clicked.connect(self.elective_btn_event)
+		self.ui_elec.addBtn.setAutoDefault(True)
+		self.ui_elec.addBtn.clicked.connect(self.add_btn_elective_event)
+		self.ui_elec.elective_list.itemClicked.connect(self.handle_listclick_elective_event)
+		self.ui_elec.removeBtn.clicked.connect(self.remove_btn_elective_event)
+		self.ui_elec.electiveGroup_combobox.activated[str].connect(self.electivegroup_combobox_event)
+		self.ui_elec.resetBtn.clicked.connect(self.reset_Btn_event)
 
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
@@ -260,8 +320,13 @@ class ParentWindow(QMainWindow):
 	# first form functions
 	def inputType_combobox_event(self):    #function for input type combobox in first form
 		if self.FirstWindow.isVisible():
+			self.row = []
+
 			self.inputType = self.ui.inputType_combobox.currentText()
 			print(self.inputType)
+			if self.row:
+					del self.row[0]
+			print(self.row)
 			#print(dir(self.ui.inputType_combobox))
 			if self.inputType == "Faculty":
 				self.ui.semester_combobox.setEnabled(False)
@@ -275,11 +340,12 @@ class ParentWindow(QMainWindow):
 				self.ui.subject_short_input.setEnabled(False)
 				self.ui.input_list.clear()
 				for values in self.faculty_list_value:
-					self.ui.input_list.addItem(values)
+					self.ui.input_list.addItem(values.name)
 			else: # input type subjects
 				self.ui.semester_combobox.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
+				self.ui.electiveBtn.setEnabled(True)
 				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter subject name")
 				self.ui.lab_checkbox.setEnabled(True)
@@ -289,10 +355,10 @@ class ParentWindow(QMainWindow):
 				self.ui.title_combobox.setEnabled(False)
 				self.ui.subject_short_input.setEnabled(True)
 				self.ui.subject_short_input.clear()
-				
+				sem = self.ui.semester_combobox.currentText()
 				self.ui.input_list.clear()
-				if self.sem in self.subjects:
-					for subject in self.subjects[self.sem]:
+				if sem in self.subjects:
+					for subject in self.subjects[sem]:
 						self.ui.input_list.addItem(subject.both_names)
 
 		#	sanjan mods - same method is used for fifth window. Do This in other combobox for other windows
@@ -318,6 +384,7 @@ class ParentWindow(QMainWindow):
 				self.ui5.generated_table.clearContents()
 
 	def semester_combobox_event(self):   #function for semester combobox
+		self.row = []
 		if self.sem != '' and self.sem not in self.num_sections:
 			self.num_sections[self.sem] = self.ui.sections_spinbox.value()
 			print(self.sem, self.num_sections[self.sem])
@@ -330,6 +397,15 @@ class ParentWindow(QMainWindow):
 		if self.sem in self.subjects:
 			for sub in self.subjects[self.sem]:
 				self.ui.input_list.addItem(sub.both_names)
+		self.ui.input_list.clearSelection()
+		if self.row:
+			del self.row[0]
+			self.ui.input_textbox.clear()
+			self.ui.input_textbox.setPlaceholderText("Please enter subject name")
+			self.ui.subject_short_input.clear()
+			self.ui.credits_spinbox.setValue(1)
+		print(self.row)
+		#self.ui.input_list.repaint()
 
 	def section_spinbox_event(self):    #function for sections spinbox
 		if self.sem != '':
@@ -339,53 +415,104 @@ class ParentWindow(QMainWindow):
 	def add_btn_event(self):   #function for add button
 		#print(dir(self.ui.input_textbox))
 		text = self.ui.input_textbox.text()
-		if self.inputType == "Subjects":
-			sem = self.ui.semester_combobox.currentText()
-			if not sem:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Input', 'Please select the semester.')
-				return
-			if text != '':
-				short_sub = self.ui.subject_short_input.text()
-				if not short_sub:
-					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
-					return
-				credits = self.ui.credits_spinbox.value()
-				lab = self.ui.lab_checkbox.isChecked()
-				sub = subject(text, short_sub, credits, lab)
-				print(text, short_sub, credits, lab)
-				t = text + " - " + short_sub
-				for x in self.subjects[sem]:
-					if sub == x:
-						self.systemtray_icon.show()
-						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
-						break
-				else: # loop completed without finding duplicates
-					self.ui.input_list.addItem(t)
-					self.subjects[sem].append(sub)
-					self.subs[sub.short_name] = sub
-					self.ui.credits_spinbox.setValue(1)
+
+		if self.row:   #when editing a currently selected value in list
+			if self.inputType == "Subjects":
+				for x in self.row:
+					#print(x.text())
+					subj = subject(x.text())
+					sem = self.ui.semester_combobox.currentText()
+					for y in self.subjects[sem]:
+						if subj == y:
+							if not sem:
+								self.systemtray_icon.show()
+								self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+								return
+							if text != '':
+								short_sub = self.ui.subject_short_input.text()
+								if not short_sub:
+									self.systemtray_icon.show()
+									self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
+									return
+								credits = self.ui.credits_spinbox.value()
+								lab = self.ui.lab_checkbox.isChecked()
+								y.name = text
+								y.short_name = short_sub
+								y.credits = credits
+								y.lab = lab
+								print(text, short_sub, credits, lab)
+								t = text + " - " + short_sub
+								self.ui.input_list.takeItem(self.ui.input_list.row(x))
+								self.ui.input_list.addItem(t)
+								self.update_subject_changes(subj, y)
+								self.ui.credits_spinbox.setValue(1)
+								break
 			else:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
-					
-		elif self.inputType == "Faculty": # input type is Faculty
-			if text != '':
-				self.title = self.ui.title_combobox.currentText()
-				t = self.title + " " + text
-				if t not in self.faculty_list_value:
-					self.faculty_list_value.append(t)
-					self.ui.input_list.addItem(t)
+				for x in self.row:
+					fac = x.text()
+					for y in self.faculty_list_value:
+						if fac == y.name:
+							y.title = self.ui.title_combobox.currentText()
+							y.name = text
+							self.ui.input_list.takeItem(self.ui.input_list.row(x))
+							self.ui.input_list.addItem(text)
+							self.update_faculty_changes(fac, y)
+							break
+			self.ui.input_list.clearSelection()
+			self.row = []
+			print(self.row)
+			self.ui.input_list.repaint()
+
+		else: #when adding a new item
+
+			if self.inputType == "Subjects":
+				sem = self.ui.semester_combobox.currentText()
+				if not sem:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+					return
+				if text != '':
+					short_sub = self.ui.subject_short_input.text()
+					if not short_sub:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
+						return
+					credits = self.ui.credits_spinbox.value()
+					lab = self.ui.lab_checkbox.isChecked()
+					sub = subject(text, short_sub, credits, lab)
+					print(text, short_sub, credits, lab)
+					t = text + " - " + short_sub
+					for x in self.subjects[sem]:
+						if sub == x:
+							self.systemtray_icon.show()
+							self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+							break
+					else: # loop completed without finding duplicates
+						self.ui.input_list.addItem(t)
+						self.subjects[sem].append(sub)
+						self.subs[sub.short_name] = sub
+						self.ui.credits_spinbox.setValue(1)
 				else:
 					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+					self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
+					
+			elif self.inputType == "Faculty": # input type is Faculty
+				if text != '':
+					title = self.ui.title_combobox.currentText()
+					t = title + " " + text
+					if t not in self.faculty_list_value:
+						self.faculty_list_value.append(faculty_class(t))
+						self.ui.input_list.addItem(text)
+					else:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+				else:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
+				self.ui.title_combobox.setCurrentIndex(0)
 			else:
 				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
-		else:
-			self.systemtray_icon.show()
-			self.systemtray_icon.showMessage('Input', 'Please select the input type.')
+				self.systemtray_icon.showMessage('Input', 'Please select the input type.')
 				
 		self.ui.input_list.sortItems()
 		self.ui.subject_short_input.clear()
@@ -396,11 +523,59 @@ class ParentWindow(QMainWindow):
 		print('faculty list: ', self.faculty_list_value)
 		print('subjects list: ', self.subjects)
 
+	def update_subject_changes(self, old_sub, new_sub):
+		# changes in subs, section_fixed_slots, subjects_assigned, faculty_subjects
+		if old_sub.short_name != new_sub.short_name:
+			del self.subs[old_sub.short_name]
+			self.subs[new_sub.short_name] = new_sub
+			for sem in self.section_fixed_slots:
+				for section in self.section_fixed_slots[sem]:
+					for row in self.section_fixed_slots[sem][section]:
+						for col in self.section_fixed_slots[sem][section][row]:
+							if self.section_fixed_slots[sem][section][row][col] == old_sub.short_name:
+								self.section_fixed_slots[sem][section][row][col] = new_sub.short_name
+								
+		
+		self.subs[old_sub.short_name] = new_sub
+		for sem in self.subjects_assigned:
+			for section in self.subjects_assigned[sem]:
+				for i, sub in enumerate(self.subjects_assigned[sem][section]):
+					sub = sub.split(' - ')
+					if sub[0] == old_sub.name and sub[1] == old_sub.short_name:
+						self.subjects_assigned[sem][section][i] = new_sub.both_names + ' - ' + sub[2]
+						teachers = sub[2].split(', ')
+						for teacher in teachers:
+							
+							for i, sub in enumerate(self.faculty_subjects[teacher]):
+								sub = sub.split(' - ')
+								if sub[0] == old_sub.name and sub[1] == old_sub.short_name:
+									self.faculty_subjects[teacher][i] = new_sub.both_names + ' - ' + sub[2]
+						break # move to next section
+		pass
+
+	def update_faculty_changes(self, old_fac, new_fac):
+		# changes in subjects_assigned, faculty_subjects, faculty_fixed_slots
+		if old_fac != new_fac:
+			for sem in self.subjects_assigned:
+				for section in self.subjects_assigned[sem]:
+					for i, sub in enumerate(self.subjects_assigned[sem][section]):
+						sub = sub.split(' - ')
+						
+						if sub[2] == old_fac:
+							self.subjects_assigned[sem][section][i] = ' - '.join(sub[:2]) + ' - ' + new_fac.name
+
+			if old_fac in self.faculty_subjects:
+				self.faculty_subjects[new_fac] = self.faculty_subjects.pop(old_fac)
+			if old_fac in self.faculty_fixed_slots:
+				self.faculty_fixed_slots[new_fac] = self.faculty_fixed_slots.pop(old_fac)
+		pass
+
 	def handle_listclick_event(self):
-		row = self.ui.input_list.selectedItems()
+		self.row = self.ui.input_list.selectedItems()
+		#print(dir(self.ui.input_list))
 		sem = self.ui.semester_combobox.currentText()
 		if self.inputType == "Subjects":
-			for x in row:
+			for x in self.row:
 				#print(x.text())
 				subj = subject(x.text())
 				for y in self.subjects[sem]:
@@ -412,15 +587,53 @@ class ParentWindow(QMainWindow):
 							self.ui.lab_checkbox.setChecked(True)
 						else:
 							self.ui.lab_checkbox.setChecked(False)
+						break
+		else:
+			for x in self.row:
+				fac = x.text()
+				for y in self.faculty_list_value:
+					if fac == y.name:
+						self.ui.input_textbox.setText(y.name)
+						index = self.ui.title_combobox.findText(y.title)
+						if index >= 0:
+							self.ui.title_combobox.setCurrentIndex(index)
+						break
+		'''if msvcrt.kbhit() and ord(msvcrt.getch()) == 27:
+			self.ui.subject_short_input.clear()
+			self.ui.credits_spinbox.setValue(1)
+			self.ui.input_textbox.clear()
+			self.ui.lab_checkbox.setChecked(False)
+			self.ui.input_list.clearSelection()
+			del self.row[0]
+			print(self.row)
+			self.ui.input_list.repaint()'''
 
 	def elective_btn_event(self):
 		if self.ElectiveWindow.isVisible():
 			self.ElectiveWindow.hide()
 		else:
 			self.ElectiveWindow.show()
+			self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+			self.ui_elec.electiveGroup_combobox.clear()
+			self.ui_elec.elective_input_textbox.clear()
+			self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+			self.ui_elec.elective_input_textbox.setEnabled(False)
+			self.ui_elec.elective_spinbox.setValue(0)
+			self.ui_elec.elective_short_input.clear()
+			self.ui_elec.elective_short_input.setEnabled(False)
+			self.ui_elec.credits_spinbox.setValue(1)
+			self.ui_elec.credits_spinbox.setEnabled(False)
+			self.ui_elec.lab_checkbox.setChecked(False)
+			self.ui_elec.lab_checkbox.setEnabled(False)
+			self.ui_elec.elective_list.clear()
+			self.ui_elec.elective_spinbox.setEnabled(False)
+			self.ui_elec.semester_combobox.setCurrentIndex(-1)
+			self.ui_elec.semester_combobox.setFocus()
+			self.ui_elec.electiveGroup_combobox.setEnabled(False)
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()
+		self.row = []
 		if not row:
 			self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
@@ -443,11 +656,209 @@ class ParentWindow(QMainWindow):
 					pass
 			self.ui.input_list.clearSelection()
 			self.ui.input_list.repaint()
-
 		print('faculty list: ', self.faculty_list_value)
 		print('subjects list: ', self.subjects)
 
+	'''def key_event(self, event):
+		print(event.key())
+		if self.FirstWindow.isVisible():
+			#if event.key() == Qt.Key_Escape:
+			self.ui.subject_short_input.clear()
+			self.ui.credits_spinbox.setValue(1)
+			self.ui.input_textbox.clear()
+			self.ui.lab_checkbox.setChecked(False)
+			self.ui.input_list.clearSelection()
+			del self.row[0]
+			print(self.row)
+			self.ui.input_list.repaint()'''
 
+
+	#elective form functions
+	def semester_combobox_elective_event(self):
+		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+		self.ui_elec.electiveGroup_combobox.clear()
+		sem = self.ui_elec.semester_combobox.currentText()
+		for group in self.electives[sem].keys():
+			self.ui_elec.electiveGroup_combobox.addItem(group)
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.elective_spinbox.setValue(len(self.electives[sem]))
+		self.ui_elec.elective_short_input.clear()
+		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.credits_spinbox.setValue(1)
+		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.lab_checkbox.setChecked(False)
+		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.elective_list.clear()
+		self.ui_elec.elective_spinbox.setEnabled(True)
+		
+	def electivegroup_combobox_event(self):
+		self.ui_elec.elective_input_textbox.setEnabled(True)
+		self.ui_elec.elective_short_input.setEnabled(True)
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.credits_spinbox.setEnabled(True)
+		self.ui_elec.lab_checkbox.setEnabled(True)
+		self.ui_elec.elective_list.clear()
+		sem = self.ui_elec.semester_combobox.currentText()
+		electivegroup = self.ui_elec.electiveGroup_combobox.currentText()
+		if electivegroup in self.electives[sem]:
+			for sub in self.electives[sem][electivegroup]:
+				self.ui_elec.elective_list.addItem(sub.both_names)
+		self.ui_elec.elective_list.clearSelection()
+
+	def elective_spinbox_event(self):
+		no_of_ele_grp = self.ui_elec.elective_spinbox.value()
+		print(no_of_ele_grp)
+		self.ui_elec.electiveGroup_combobox.setEnabled(True)
+		self.ui_elec.electiveGroup_combobox.clear()
+		for i in range(0, no_of_ele_grp):
+			s = 'Elective ' + str(i+1)
+			self.ui_elec.electiveGroup_combobox.addItem(s)
+		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+
+	def add_btn_elective_event(self):
+		text = self.ui_elec.elective_input_textbox.text()
+		sem = self.ui_elec.semester_combobox.currentText()
+		row = self.ui_elec.elective_list.selectedItems()
+		elective_group = self.ui_elec.electiveGroup_combobox.currentText()
+		short_sub = self.ui_elec.elective_short_input.text()
+		if not sem:
+			self.systemtray_icon.show()
+			self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+			return
+		if not short_sub:
+			self.systemtray_icon.show()
+			self.systemtray_icon.showMessage('Input', 'Please enter the elective short form.')
+			return
+		if not elective_group:
+			self.systemtray_icon.show()
+			self.systemtray_icon.showMessage('Input', 'Please select the elective group.')
+			return
+
+		if row:   #when editing a currently selected value in list
+			for x in row:
+				subj = subject(x.text())
+				sem = self.ui_elec.semester_combobox.currentText()
+				for y in self.electives[sem][elective_group]:
+					if subj.name == y.name:
+						if text != '':
+							credits = self.ui_elec.credits_spinbox.value()
+							lab = self.ui_elec.lab_checkbox.isChecked()
+							y.name = text
+							y.short_name = short_sub
+							y.credits = credits
+							y.lab = lab
+							print(text, short_sub, credits, lab)
+							t = text + " - " + short_sub
+							self.ui_elec.elective_list.takeItem(self.ui_elec.elective_list.row(x))
+							self.ui_elec.elective_list.addItem(t)
+							if subj in self.subjects[sem]:
+								self.subjects[sem].remove(subj)
+								self.subjects[sem].append(y)
+							self.update_subject_changes(subj, y)
+							self.ui_elec.credits_spinbox.setValue(1)
+							break
+		else:
+			
+			if text != "":
+				credits = self.ui_elec.credits_spinbox.value()
+				lab = self.ui_elec.lab_checkbox.isChecked()
+				sub = subject(text, short_sub, credits, lab)
+				print(text, short_sub, credits, lab)
+				t = text + " - " + short_sub
+				#if elective_group in self.electives[sem]:
+				for group in self.electives[sem]:
+					if group == elective_group:
+						for x in self.electives[sem][group]:
+							if sub == x:
+								self.systemtray_icon.show()
+								self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+								break
+				else:
+					self.ui_elec.elective_list.addItem(t)
+					if elective_group not in self.electives[sem]:
+						self.electives[sem][elective_group] = []
+					self.electives[sem][elective_group].append(sub)
+					self.subjects[sem].append(sub)
+					self.subs[sub.short_name] = sub
+					self.ui_elec.credits_spinbox.setValue(1)
+			else:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Input', 'Please enter the elective name.')
+		self.ui_elec.elective_list.sortItems()
+		self.ui_elec.elective_short_input.clear()
+		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.lab_checkbox.setChecked(False)
+		self.ui_elec.elective_input_textbox.setFocus()
+		
+		print('electives list: ', self.electives)
+
+	def remove_btn_elective_event(self):
+		row = self.ui_elec.elective_list.selectedItems()
+		sem = self.ui_elec.semester_combobox.currentText()
+		elective_group = self.ui_elec.electiveGroup_combobox.currentText()
+		if not row:
+			self.systemtray_icon.show()
+			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
+		elif not elective_group:
+			self.systemtray_icon.show()
+			self.systemtray_icon.showMessage('Warning!', 'Select elective group.')
+		else:
+			for x in row:
+				self.ui_elec.elective_list.takeItem(self.ui_elec.elective_list.row(x))
+				try:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Subjects', x.text() + ' removed from the subject list')
+					sub = subject(x.text())
+					self.electives[sem][elective_group].remove(sub)
+					self.subjects[sem].remove(sub)
+
+				finally:
+					pass
+			self.ui_elec.elective_list.clearSelection()
+			self.ui_elec.elective_list.repaint()
+
+		print('electives list: ', self.electives)
+	
+	def handle_listclick_elective_event(self):
+		row = self.ui_elec.elective_list.selectedItems()
+		sem = self.ui_elec.semester_combobox.currentText()
+		for x in row:
+			subj = subject(x.text())
+			for group in self.electives[sem]:
+				for y in self.electives[sem][group]:
+					if subj.name == y.name:
+						self.ui_elec.elective_input_textbox.setText(subj.name)
+						self.ui_elec.elective_short_input.setText(subj.short_name)
+						self.ui_elec.credits_spinbox.setValue(y.credits)
+						if y.lab == True:
+							self.ui_elec.lab_checkbox.setChecked(True)
+						else:
+							self.ui_elec.lab_checkbox.setChecked(False)
+						break
+
+	def reset_Btn_event(self):
+		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
+		self.ui_elec.electiveGroup_combobox.clear()
+		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.elective_spinbox.setValue(0)
+		self.ui_elec.elective_short_input.clear()
+		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.credits_spinbox.setValue(1)
+		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.lab_checkbox.setChecked(False)
+		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.elective_list.clear()
+		self.ui_elec.elective_spinbox.setEnabled(False)
+		self.ui_elec.semester_combobox.setCurrentIndex(-1)
+		self.ui_elec.semester_combobox.setFocus()
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+
+	
 	# second form functions
 	def populate_second_window(self):
 		self.faculty_list_value.sort()
@@ -456,8 +867,8 @@ class ParentWindow(QMainWindow):
 		self.ui2.section_combobox.clear()
 		self.ui2.subject_combobox.clear()
 		self.ui2.assigned_list.clear()
-		for name in self.faculty_list_value:
-			self.ui2.faculty_combobox.addItem(name)
+		for value in self.faculty_list_value:
+			self.ui2.faculty_combobox.addItem(value.name)
 		for sem in self.sem_list:
 			self.ui2.semester_combobox.addItem(sem)
 		self.ui2.faculty_combobox.setCurrentIndex(-1)
@@ -475,7 +886,7 @@ class ParentWindow(QMainWindow):
 		for faculty in self.faculty_list_value:
 			if faculty not in self.faculty_subjects:
 				self.faculty_subjects[faculty] = []
-		print(self.subjects_assigned)
+		#print(self.subjects_assigned)
 		
 	def semester_combobox2_event(self): # semester combobox in second form
 		self.sem = self.ui2.semester_combobox.currentText()
@@ -527,21 +938,27 @@ class ParentWindow(QMainWindow):
 			self.systemtray_icon.showMessage('Input', 'Please select a subject')
 			return
 
-		sub_faculty = sub + ' - ' + faculty
-		for x in self.subjects_assigned[sem][section]:
-			if x == sub_faculty:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+		for i, x in enumerate(self.subjects_assigned[sem][section]):
+			x = x.split(' - ')
+			subj = ' - '.join(x[:2])
+			teachers = x[2].split(', ')
+			if subj == sub:
+				try:
+					if self.subs[x[1]].lab == False or faculty in teachers: # if theory subject or teacher already assigned to subject
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+					else: # assigned additional teachers
+						self.subjects_assigned[sem][section][i] += ', ' + faculty
+						fac_subject = sub + ' - ' + sem + ' ' + section
+						self.faculty_subjects[faculty].append(fac_subject)
+				except KeyError as e:
+					print(self.subs)
+					raise
 				break
-		else:
+		else: # assigning a subject for the first time
+			sub_faculty = sub + ' - ' + faculty
 			self.subjects_assigned[sem][section].append(sub_faculty)
-		fac_subject = sub + ' - ' + sem + ' - ' + section
-		for x in self.faculty_subjects[faculty]:
-			if x == fac_subject:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
-				break
-		else:
+			fac_subject = sub + ' - ' + sem + ' ' + section
 			self.faculty_subjects[faculty].append(fac_subject)
 		#self.ui2.assigned_list.addItem(sub)
 		self.section_combobox2_event()
@@ -566,7 +983,7 @@ class ParentWindow(QMainWindow):
 					section = self.ui2.section_combobox.currentText()
 					sem = self.ui2.semester_combobox.currentText()
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
-					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' - ' + section)
+					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
 				else: # deleting from faculty view
 					sub = x[0] + ' - ' + x[1]
@@ -574,7 +991,7 @@ class ParentWindow(QMainWindow):
 					section = x[3]
 					faculty = self.ui2.faculty_combobox.currentText()
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
-					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' - ' + section)
+					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
 		pass
 
@@ -754,13 +1171,13 @@ class ParentWindow(QMainWindow):
 			self.ThirdWindow.hide()
 			self.FourthWindow.show()
 			for faculty in self.faculty_list_value:
-				self.ui4.faculty_combobox.addItem(faculty)
+				self.ui4.faculty_combobox.addItem(faculty.name)
 			self.ui4.faculty_combobox.setCurrentIndex(-1)
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
 			for faculty in self.faculty_list_value:
-				self.ui5.faculty_combobox.addItem(faculty)
+				self.ui5.faculty_combobox.addItem(faculty.name)
 			self.ui5.faculty_combobox.setCurrentIndex(-1)
 		elif self.FifthWindow.isVisible():
 			sys.exit(app.exec_())
@@ -837,7 +1254,7 @@ class ParentWindow(QMainWindow):
 		file.close()
 		pass
 
-
+	
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -847,9 +1264,3 @@ if __name__ == "__main__":
     sys.exit(app.exec_())
 
 
-'''
-
-faculty - subject - section assignments should persist when moving between windows
-show a message indicaating which list of assignments you are showing eg faculty or section
-
-'''

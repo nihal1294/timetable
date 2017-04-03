@@ -42,6 +42,8 @@ QWidget
     border-image: none;
     border: 0px transparent black;
     outline: 0;
+    background-image:url("wallpapers/img5.jpg");
+    background-position: left;
 }
 
 QWidget:item:hover
@@ -57,15 +59,11 @@ QWidget:item:selected
 
 QCheckBox
 {
+    background:none;
     spacing: 5px;
     outline: none;
     color: #161616;
     margin-bottom: 2px;
-}
-
-QCheckBox:disabled
-{
-    color: #76797C;
 }
 
 QCheckBox::indicator,
@@ -326,7 +324,8 @@ QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
 
 QLineEdit
 {
-    background-color: #cccccc;
+    background:none;
+    background:rgba(255,255,255,0.5);
     padding: 5px;
     border-style: solid;
     border: 1px solid #76797C;
@@ -490,6 +489,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 
 QTextEdit
 {
+    background:none;
     background-color: #cccccc;
     color: #161616;
     border: 1px solid #76797C;
@@ -497,6 +497,7 @@ QTextEdit
 
 QPlainTextEdit
 {
+    background:none;
     background-color: #cccccc;;
     color: #161616;
     border-radius: 2px;
@@ -520,6 +521,7 @@ QSizeGrip {
 
 QMainWindow::separator
 {
+    background:none;
     background-color: #ededed;
     color: white;
     padding-left: 4px;
@@ -536,7 +538,6 @@ QMainWindow::separator:hover
     border: 1px solid #76797C;
     spacing: 2px;
 }
-
 
 QMenu::separator
 {
@@ -592,6 +593,7 @@ QPushButton
 {
     color: #161616;
     background-color: #ededed;
+    background:rgba(255,255,255,0.2);
     border-width: 1px;
     border-color: #76797C;
     border-style: solid;
@@ -603,6 +605,7 @@ QPushButton
 QPushButton:disabled
 {
     background-color: #ededed;
+    background:none;
     border-width: 1px;
     border-color: #454545;
     border-style: solid;
@@ -616,7 +619,8 @@ QPushButton:disabled
 
 QPushButton:focus {
     background-color: #3daee9;
-    color: white;
+    background:none;
+    color: #454545;
 }
 
 QPushButton:pressed
@@ -628,6 +632,7 @@ QPushButton:pressed
 
 QComboBox
 {
+    background:rgba(255,255,255,0.35);
     selection-background-color: #3daee9;
     border-style: solid;
     border: 1px solid #76797C;
@@ -656,7 +661,7 @@ QComboBox:on
 
 QComboBox QAbstractItemView
 {
-    background-color: #cccccc;
+    background-color: white;
     border-radius: 2px;
     border: 1px solid #76797C;
     selection-background-color: #3daee9;
@@ -734,6 +739,7 @@ QAbstractSpinBox::down-arrow:hover
 
 QLabel
 {
+    background:none;
     border: 0px solid black;
 }
 
@@ -924,6 +930,7 @@ QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
 
 QTreeView, QListView
 {
+    background:none;
     border: 1px solid #76797C;
     background-color: #cccccc;
 }
@@ -1075,6 +1082,7 @@ QPushButton::menu-indicator  {
 
 QTableView
 {
+    background:none;
     border: 1px solid #76797C;
     gridline-color: #ededed;
     background-color: #cccccc;
@@ -1099,6 +1107,7 @@ QTableView::item:selected:active, QTreeView::item:selected:active, QListView::it
 
 QHeaderView
 {
+    background:none;
     background-color: #ededed;
     border: 1px transparent;
     border-radius: 0px;
@@ -1263,4 +1272,24 @@ QDateEdit::down-arrow:focus
 {
     image: url(icons/down_arrow.png);
 }
+
+QSpinBox{
+    background:rgba(255,255,255,0.35);
+}
+
+QListWidget{
+    background:rgba(255,255,255,0.5)
+}
+
+QTableWidget{
+    background:rgba(255,255,255,0.5)
+}
+
+
+QComboBox:disabled, QLineEdit:disabled, QCheckBox:disabled, QSpinBox:disabled{
+    background:transparent;
+    color: #76797C;
+}
+
+
 '''
