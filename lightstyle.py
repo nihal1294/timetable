@@ -593,7 +593,7 @@ QPushButton
 {
     color: #161616;
     background-color: #ededed;
-    background:rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.3);
     border-width: 1px;
     border-color: #76797C;
     border-style: solid;
@@ -607,20 +607,20 @@ QPushButton:disabled
     background-color: #ededed;
     background:none;
     border-width: 1px;
-    border-color: #454545;
+    border-color: #76797C;
     border-style: solid;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 2px;
-    color: #454545;
+    color: #76797C;
 }
 
 QPushButton:focus {
-    background-color: #3daee9;
-    background:none;
-    color: #454545;
+    background:rgba(255,255,255,0.3);
+    color: #161616;
+    border-color: #76797C;
 }
 
 QPushButton:pressed
