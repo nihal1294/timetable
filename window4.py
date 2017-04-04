@@ -102,7 +102,7 @@ class Ui_window4(object):
         self.faculty_table.verticalHeader().setMinimumSectionSize(27)
         self.gridLayout.addWidget(self.faculty_table, 2, 0, 1, 2)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(0, 45))
+        self.label.setMinimumSize(QtCore.QSize(0, 48))
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
         font.setPointSize(14)

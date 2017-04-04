@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window2(object):
     def setupUi(self, window2):
         window2.setObjectName("window2")
-        window2.resize(920, 463)
+        window2.resize(920, 466)
         window2.setStyleSheet(lightstyle.css)
         window2.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window2)
@@ -103,6 +103,9 @@ class Ui_window2(object):
         sizePolicy.setHeightForWidth(self.assigned_list.sizePolicy().hasHeightForWidth())
         self.assigned_list.setSizePolicy(sizePolicy)
         self.assigned_list.setMinimumSize(QtCore.QSize(596, 290))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.assigned_list.setFont(font)
         self.assigned_list.setAlternatingRowColors(True)
         self.assigned_list.setObjectName("assigned_list")
         self.gridLayout.addWidget(self.assigned_list, 3, 0, 1, 4)
