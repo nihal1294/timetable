@@ -1,8 +1,10 @@
 bugs and stuff:
 
 elective group combo box.
-elective form has no input when saved file is loaded, need a new and proper set of inputs for EXPRO!
-after resetting, list only populates after setting spinbox and combobox again.(feature, not bug)
+elective input textboxes lack Enter key link.
+elective group shows the last option as Elective-2(rest remain elective-1) when the spinbox is cycled down.
+elective combobox and spinbox dont update when sem combo changes.
+after resetting, list only populates after setting spinbox and combobox again.
 
 in window 1 , faculty is sorted in list initially, but isnt sorted when faculty is chosen again in input combobox.
 
@@ -26,4 +28,3 @@ making changes to final solution
 what happens when you delete data in form1 that is used in later forms
 clear fixed slots in form3/4
 logs, displaying info
-clear list and input selections
