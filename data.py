@@ -4,12 +4,19 @@ class timetable(OrderedDict):
     def __init__(self, name, fixedslots = False):
         self.name = name
         self.final = OrderedDict()
-        for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
+        for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
             self[day] = OrderedDict({1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: ''})
             self.final[day] = OrderedDict({1: fixedslots, 2: fixedslots, 3: fixedslots, 4: fixedslots, 5: fixedslots, 6: fixedslots, 7: fixedslots, 8: fixedslots})
         self['saturday'] = {1: '', 2: '', 3: '', 4: ''}
         self.final['saturday'] = OrderedDict({1: fixedslots, 2: fixedslots, 3: fixedslots, 4: fixedslots})
 
+    def calc_flexibility(self):
+      flexibility = 0
+      for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday':
+        for timeslot in self[day]:
+          if self.final[day][timeslot] == False:
+            flexibility += 1
+      self.flexibility = flexibility/100.0
 
 faculty = { 'Mr. Venugopala P S': timetable('Mr. Venugopala P S'),
     'Mr. Ravi B': timetable('Mr. Ravi B'),
