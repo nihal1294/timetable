@@ -254,10 +254,13 @@ class Ui_elective_window(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         self.actionSave = QtWidgets.QAction(elective_window)
         self.actionSave.setObjectName("actionSave")
+        self.actionSave.setShortcut("Ctrl+S")
         self.actionLoad = QtWidgets.QAction(elective_window)
         self.actionLoad.setObjectName("actionLoad")
+        self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(elective_window)
         self.actionExit.setObjectName("actionExit")
+        self.actionSave.setShortcut("Ctrl+S")
         self.actionAbout = QtWidgets.QAction(elective_window)
         self.actionAbout.setObjectName("actionAbout")
 
