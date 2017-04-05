@@ -240,10 +240,13 @@ class Ui_window(object):
         window.setMenuBar(self.menuBar)
         self.actionSave = QtWidgets.QAction(window)
         self.actionSave.setObjectName("actionSave")
+        self.actionSave.setShortcut("Ctrl+S")
         self.actionLoad = QtWidgets.QAction(window)
         self.actionLoad.setObjectName("actionLoad")
+        self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window)
         self.actionExit.setObjectName("actionExit")
+        self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window)
@@ -302,6 +305,26 @@ class Ui_window(object):
         self.actionManual.setText(_translate("window", "Manual"))
         self.actionAbout_2.setText(_translate("window", "About"))
         self.actionClear_All.setText(_translate("window", "Clear All"))
+
+
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox()
+        close.setText("Are you sure you want to exit?")
+        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        close = close.exec()
+        if close == QtWidgets.QMessageBox.Yes:
+            app.quit()
+        else:
+            pass
+
+    '''def closeEvent(self, event):
+        print("event")
+        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()'''
+
 
 
 if __name__ == "__main__":
