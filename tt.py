@@ -120,18 +120,41 @@ def rehabilitate(day, section, subject, faculty):
 		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and getnumhours(section, subject, day)[0] < 1: # teacher is available
 			if section.final[day][timeslot] != True: # time slot for that section is not finalized
 				clashing_subject = section[day][timeslot]
-				if clashing_subject != '': # whatever subject has been allotted, move it to clash
+				if clashing_subject != '' and section.final[day][timeslot] < teacher.flexibility: # whatever subject has been allotted, move it to clash
 					clash.append((section, clashing_subject))
 					clashing_teacher = clashing_subject[2]
 					print(clashing_teacher)
 					faculty[clashing_teacher][day][timeslot] = ''
-				section.final[day][timeslot] = True # finalize the lecture by moving the new subject into the time slot
+				section.final[day][timeslot] = teacher.flexibility # finalize the lecture by moving the new subject into the time slot
 				section[day][timeslot] = subject
 				teacher[day][timeslot] = (section.name, subject)
-				teacher.final[day][timeslot] = True
-				return
+				#teacher.final[day][timeslot] = True
+				break
 	else: # teacher has no free time slots where the lecture can be scheduled, on that day
 		dayclash.append((section, subject))
+
+def utilize_free_hours(tt, faculty):
+	for day in tt:
+		timeslots = tt[day].keys()
+		t1 = min(timeslots)
+		t2 = max(timeslots)
+		for t in range(t1, t2+1): # t = current timeslot that is blank
+			if tt[day][t] == '' and tt.final[day][t] == False:
+				for i in range(t2, t, -1): # i = future timeslot that has a lecture
+					if tt[day][i] != '' and tt.final[day][i] != True:
+						subject = tt[day][i]
+						teacher = faculty[subject[2]]
+						if teacher[day][t] == '' and teacher.final[day][t] == False:
+							# if teacher is free at timeslot t, move subject from timeslot i to t
+							tt[day][t] = subject
+							tt.final[day][t] = tt.final[day][i]
+							teacher[day][i] = ''
+							teacher[day][t] = (tt.name, subject)
+							break # done filling timeslot t
+
+
+
+	pass
 
 def adjust_clash(timetables, faculty):
 	for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']:
@@ -141,7 +164,7 @@ def adjust_clash(timetables, faculty):
 		for i in range(n_dayclash):
 			dayclash_ele = dayclash.popleft()
 			rehabilitate(day, dayclash_ele[0], dayclash_ele[1], faculty)
-		
+	
 		timeslots = 8 if day != 'saturday' else 4
 		for timeslot in range(1, timeslots+1):
 #            print(timeslot)
@@ -151,21 +174,22 @@ def adjust_clash(timetables, faculty):
 					if section[day][timeslot] != '' and section.final[day][timeslot] == False: # if lecture has not been finalized
 						subject = section[day][timeslot]
 						teacher = faculty[subject[2]]
-						numhours, hours = getnumhours(section, subject, day)
+						#numhours, hours = getnumhours(section, subject, day)
 						
 						try:
 							if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True:
 								teacher[day][timeslot] = (section.name, subject)
-								section.final[day][timeslot] = True
-								teacher.final[day][timeslot] = True
+								section.final[day][timeslot] = teacher.flexibility
+								#teacher.final[day][timeslot] = True
 							elif teacher[day][timeslot] != '' and (teacher[day][timeslot][0] != section.name or teacher[day][timeslot][1] != subject): # teacher is not available, there is a clash
 								# teacher is not available
 								# what if teacher takes 2 subjects for same section? 2nd condition takes care of this
 								section[day][timeslot] = ''
+								section.final[day][timeslot] = False
 								rehabilitate(day, section, subject, faculty)
 							else: # if teacher is available, finalize the lecture 
-								section.final[day][timeslot] = True
-								teacher.final[day][timeslot] = True
+								section.final[day][timeslot] = teacher.flexibility
+								#teacher.final[day][timeslot] = True
 						except Exception as e:
 							print(section.name, subject, day, timeslot, faculty[subject[2]][day][timeslot])
 							print_timetable(faculty[subject[2]], style = 'staff')
@@ -468,8 +492,16 @@ if __name__ == '__main__':
 			'D': eightd
 		})
 	})
+	for sem in timetables:
+		for section in timetables[sem]:
+			timetables[sem][section].calc_flexibility()
+	for teacher in faculty:
+		faculty[teacher].calc_flexibility()
 	adjust_clash(timetables, faculty=faculty)
 	adjust_clash(timetables, faculty=faculty)
+	for sem in timetables:
+		for section in timetables[sem]:
+			utilize_free_hours(timetables[sem][section], faculty)
 
 	print_timetable(foura)
 	print_timetable(fourb)
