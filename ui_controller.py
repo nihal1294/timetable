@@ -8,7 +8,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import pickle
 import tt
-import msvcrt
+import os
+#import msvcrt
 
 from window import Ui_window
 from window2 import Ui_window2
@@ -1258,28 +1259,65 @@ class ParentWindow(QMainWindow):
 			
 
 	def print_btn_event(self):
-		if self.ui5.inputType_combobox.currentText() = "Students":
+		inputType = self.ui5.inputType_combobox.currentText()
+		if inputType == "Students":
 			sem = self.ui5.semester_combobox.currentText()
 			sec = self.ui5.section_combobox.currentText()
-			f = open(sem + ' ' + sec + '.txt','w')
-		'''if name == '':
-		name = tt.name
-		print(('%-20s ' * 9) % (name, '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'))
-		for day in tt:
-			print('%-20s' % day, end = ' ')
-			for timeslot in tt[day]:
-				if tt[day][timeslot] == '':
-					print('%-20s' % '-', end = ' ')
-				else:
+			if sem =='' or sec == '':
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Warning!', 'Select Semester and Section to print timetable')
+			else:
+				tt = self.timetables[sem][sec]
+				f = open('Output/Class Timetables/' + sem + ' ' + sec + '.txt','w')
+				filename = 'Output\Class Timetables\\' + sem + ' ' + sec + '.txt'
+				print('NMAM Institute of Technology, Nitte\nDept. of Computer Science & Engineering\nTime Table (Autonomy) Even Semester\n\n', file = f)
+				print('Semester:' + sem + '\nSection:' + sec + '\n\n', file = f)
+				print(('%-20s ' * 9) % ('', '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'), file = f)
+				print('\n', file = f)
+				for day in tt:
+					print('%-20s' % day, end = ' ', file = f)
+					for timeslot in tt[day]:
+						if tt[day][timeslot] == '':
+							print('%-20s' % '-', end = ' ', file = f)
+						else:
+							print('%-20s' % tt[day][timeslot][3], end = ' ', file = f)
+					print('\n', file = f)
+				print('\n', file = f)
+				print('Faculty Assigned\n', file = f)
+				fac = self.subjects_assigned[sem][sec]
+				print('%-50s %-15s %-30s'  % ('SUBJECT', 'SHORT-NAME', 'FACULTY'), file = f)
+				for s in fac:
+					sub_name, short_sub, faculty = s.split(' - ')
+					print('%-50s %-15s %-30s'  % (sub_name, short_sub, faculty), file = f)
+				f.close()
+				os.startfile(filename)
+		else:
+			faculty = self.ui5.faculty_combobox.currentText()
+			if faculty == '':
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Warning!', 'Select the Faculty to timetable')
+			else:
+				tt = self.faculty_timetables[faculty]
+				f = open('Output/Personal Timetables/' + faculty + '.txt','w')
+				filename = 'Output\Personal Timetables\\' + faculty + '.txt'
+				print('NMAM Institute of Technology, Nitte\nPersonal Time Table\n\n', file = f)
+				print('Department :  CSE\nStaff Name:' + faculty + '\n\n', file = f)
+				print(('%-20s ' * 9) % ('', '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'), file = f)
+				print('\n', file = f)
+				for day in tt:
+					print('%-20s' % day, end = ' ', file = f)
+					for timeslot in tt[day]:
+						if tt[day][timeslot] == '':
+							print('%-20s' % '-', end = ' ', file = f)
+						else:
+							section = tt[day][timeslot][0]
+							subject = tt[day][timeslot][1][3]
+							print('%-20s' % (subject + ' (' + section + ')') , end = ' ', file = f)
+					print('\n', file = f)
+				print('\n', file = f)
+				f.close()
+				os.startfile(filename)
 
-					if style == 'section':
-						print('%-20s' % tt[day][timeslot][3], end = ' ')
-					else:
-						section = tt[day][timeslot][0]
-						subject = tt[day][timeslot][1][3]
-						print('%-20s' % (subject + ' (' + section + ')') , end = ' ')
-			print()
-		print()'''
 
 
 	def next_btn_event(self):
