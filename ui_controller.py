@@ -9,6 +9,7 @@ import sys
 import pickle
 import tt
 import os
+import json
 #import msvcrt
 
 from window import Ui_window
@@ -38,7 +39,7 @@ class subject:
 		return self.name == obj.name and self.short_name == obj.short_name
 		
 	def __repr__(self):
-		return 'subject({}, {}, {}, {})'.format(self.name, self.short_name, self.credits, self.lab) 
+		return 'subject({}, {}, {}, {})'.format(self.name.__repr__(), self.short_name.__repr__(), self.credits, self.lab) 
 
 
 class faculty_class:
@@ -54,7 +55,7 @@ class faculty_class:
 		self.title = title
 
 	def __repr__(self):
-		return 'faculty_class({}, {})'.format(self.name, self.title)
+		return 'faculty_class({}, {})'.format(self.name.__repr__(), self.title.__repr__())
 
 	def __str__(self):
 		return self.title + ' ' + self.name
@@ -1444,7 +1445,10 @@ class ParentWindow(QMainWindow):
 			if dialog.exec_():
 				fname = dialog.selectedFiles()[0]
 				print(fname)
-				self.save_state(fname)
+				if fname.endswith('.json'):
+					self.save_state_json(fname)
+				else:
+					self.save_state(fname)
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
 			pass
@@ -1454,7 +1458,10 @@ class ParentWindow(QMainWindow):
 			if dialog.exec_():
 				fname = dialog.selectedFiles()[0]
 				print(fname)
-				self.load_state(fname)
+				if fname.endswith('.json'):
+					self.load_state_json(fname)
+				else:
+					self.load_state(fname)
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
 				self.populate_second_window()
@@ -1465,7 +1472,7 @@ class ParentWindow(QMainWindow):
 		file = open(fname, "wb")
 		state = (self.faculty_list_value,
 			     self.subjects,
-			     self.subs,
+			     #self.subs,
 			     self.num_sections,
 			     self.sections,
 			     self.subjects_assigned,
@@ -1481,7 +1488,6 @@ class ParentWindow(QMainWindow):
 		state = pickle.load(file)
 		self.faculty_list_value, \
 	    self.subjects, \
-	    self.subs, \
 	    self.num_sections, \
 	    self.sections, \
 	    self.subjects_assigned, \
@@ -1489,8 +1495,93 @@ class ParentWindow(QMainWindow):
 	    self.section_fixed_slots, \
 	    self.faculty_fixed_slots = state
 		file.close()
+
+		self.subs = dict()
+		for sem in self.subjects:
+			for sub in self.subjects[sem]:
+				self.subs[sub.short_name] = sub
+		#print(self.subs)
+
 		pass
 
+	def save_state_json(self, fname):
+		file = open(fname, 'w')
+		faculty_list_value = []
+		for teacher in self.faculty_list_value:
+			faculty_list_value.append(teacher.__repr__())
+		subjects = dict()
+		for sem in self.subjects:
+			subjects[sem] = []
+			for sub in self.subjects[sem]:
+				subjects[sem].append(sub.__repr__())
+		faculty_fixed_slots = dict()
+		for teacher in self.faculty_fixed_slots:
+			faculty_fixed_slots[str(teacher)] = self.faculty_fixed_slots[teacher]
+		faculty_subjects = dict()
+		for teacher in self.faculty_subjects:
+			faculty_subjects[str(teacher)] = self.faculty_subjects[teacher]
+		state = (
+			faculty_list_value,
+			subjects,
+			self.num_sections,
+			self.sections,
+			self.subjects_assigned,
+			faculty_subjects,
+			self.section_fixed_slots,
+			faculty_fixed_slots
+			)
+		
+		dump = json.dumps(state, indent = 4)
+		file.write(dump)
+		file.close()
+		pass
+
+	def load_state_json(self, fname):
+		file = open(fname, "r")
+		state = json.loads(file.read())
+		faculty_list_value, \
+		subjects, \
+		self.num_sections, \
+		self.sections, \
+		self.subjects_assigned, \
+		self.faculty_subjects, \
+		sfs, \
+		ffs = state
+
+		self.faculty_list_value = []
+		for teacher in faculty_list_value:
+			self.faculty_list_value.append(eval(teacher))
+		self.subjects = dict()
+		self.subs = dict()
+		for sem in subjects:
+			self.subjects[sem] = []
+			for sub in subjects[sem]:
+				s = eval(sub)
+				self.subjects[sem].append(s)
+				self.subs[s.short_name] = s
+
+		self.section_fixed_slots = dict()
+		self.faculty_fixed_slots = dict()
+		for sem in sfs:
+			self.section_fixed_slots[sem] = dict()
+			for sec in sfs[sem]:
+				self.section_fixed_slots[sem][sec] = dict()
+				for row in sfs[sem][sec]:
+					self.section_fixed_slots[sem][sec][int(row)] = dict()
+					for col in sfs[sem][sec][row]:
+						self.section_fixed_slots[sem][sec][int(row)][int(col)] = sfs[sem][sec][row][col]
+		for teacher in ffs:
+			self.faculty_fixed_slots[teacher] = dict()
+			for row in ffs[teacher]:
+				self.faculty_fixed_slots[teacher][int(row)] = dict()
+				for col in ffs[teacher][row]:
+					self.faculty_fixed_slots[teacher][int(row)][int(col)] = ffs[teacher][row][col]
+		'''
+		print(self.section_fixed_slots)
+		print()
+		print(self.faculty_fixed_slots)
+		'''
+		file.close()
 
 '''class Window(QtWidgets.QMainWindow):
     def __init__(self):
