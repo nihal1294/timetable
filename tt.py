@@ -147,7 +147,9 @@ def utilize_free_hours(tt, faculty):
 						if teacher[day][t] == '' and teacher.final[day][t] == False:
 							# if teacher is free at timeslot t, move subject from timeslot i to t
 							tt[day][t] = subject
+							tt[day][i] = ''
 							tt.final[day][t] = tt.final[day][i]
+							tt.final[day][i] = False
 							teacher[day][i] = ''
 							teacher[day][t] = (tt.name, subject)
 							break # done filling timeslot t
@@ -505,7 +507,7 @@ if __name__ == '__main__':
 	for teacher in faculty:
 		faculty[teacher].calc_flexibility()
 	adjust_clash(timetables, faculty=faculty)
-	adjust_clash(timetables, faculty=faculty)
+	#adjust_clash(timetables, faculty=faculty)
 	for sem in timetables:
 		for section in timetables[sem]:
 			utilize_free_hours(timetables[sem][section], faculty)

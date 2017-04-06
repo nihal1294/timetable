@@ -1169,6 +1169,7 @@ class ParentWindow(QMainWindow):
 					if sub == '':
 						a = '-'
 					else:
+						#print(sub)
 						a = sub[3] # 3rd field is subject short name
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
@@ -1202,60 +1203,135 @@ class ParentWindow(QMainWindow):
 			if r == row and c == column:
 				self.ui5.generated_table.clearSelection()
 				self.selected_cell = ''
-			else:
+			elif i == 1:
 				if self.ui5.inputType_combobox.currentText() == "Faculty":
 					faculty = self.ui5.faculty_combobox.currentText()
 					if faculty in self.faculty_timetables:
 						a = self.ui5.generated_table.currentItem()
-						x = a.text()
+						x = a.text() # x = current subject
 						for day, ro in tt.day_row_num.items():
 							if r == ro:
 								d = day
+							if row == ro:
+								cur_d = day
 						timeslot = c + 1
-						sec = self.faculty_timetables[faculty][d][timeslot][0]
-						sub = self.faculty_timetables[faculty][d][timeslot][1]
-						b = '{} ({})'.format(sub[3], sec)
+						cur_timeslot = column + 1
+						cur_sub = self.faculty_timetables[faculty][cur_d][cur_timeslot]
+						if cur_sub != '':
+							sec = cur_sub[0]
+							sec = sec.split(' ')
+							sem = sec[0]
+							sec = sec[1]
+							sub = self.faculty_timetables[faculty][cur_d][cur_timeslot]
+							print(sem, sec, sub)
+						else:
+							sub = '-'
+						
+						
+						prev_sub = self.faculty_timetables[faculty][d][timeslot]
+						if prev_sub != '':
+							sec1 = prev_sub[0]
+							sec1 = sec1.split(' ')
+							sem1 = sec1[0]
+							sec1 = sec1[1]
+							sub1 = self.faculty_timetables[faculty][d][timeslot]
+							b = '{} ({})'.format(sub1[1][3], sem1 + ' ' + sec1) # previous cell
+							print(sem1, sec1, sub1)
+						else:
+							b = '-'
+							sub1 = '-'
 						item = QtWidgets.QTableWidgetItem()
-						item.setText(b)
-						self.ui5.generated_table.setItem(row, column, item)
+						item.setText(b) # previous cell contents
 						i = QtWidgets.QTableWidgetItem()
-						i.setText(x)
-						sub1, sec1 = x.split("(")
-						sec1 = sec1[:-1]
-						print(sub1, sec1)
+						i.setText(x) # current cell contents
+						
+
 						self.ui5.generated_table.setItem(r, c, i)
+						self.ui5.generated_table.setItem(row, column, item)
+						self.faculty_timetables[faculty][d][timeslot] = sub
+						self.faculty_timetables[faculty][cur_d][cur_timeslot] = sub1
+						if prev_sub:
+							prev_cell_cur_sub = self.timetables[sem1][sec1][cur_d][cur_timeslot]
+							if prev_cell_cur_sub != '':
+								self.faculty_timetables[prev_cell_cur_sub[2]][cur_d][cur_timeslot] = ''
+							if self.timetables[sem1][sec1][cur_d][cur_timeslot] != '':
+								self.systemtray_icon.show()
+								clashing_sub = self.timetables[sem1][sec1][cur_d][cur_timeslot]
+								print(clashing_sub)
+								self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + sem1 + ' ' + sec1 + '- ' + clashing_sub[3] + '- ' + clashing_sub[2])
+							self.timetables[sem1][sec1][cur_d][cur_timeslot] = sub1[1]
+							self.timetables[sem1][sec1][d][timeslot] = ''
+						if cur_sub:
+							cur_cell_prev_sub = self.timetables[sem][sec][d][timeslot]
+							if cur_cell_prev_sub != '':
+								self.faculty_timetables[cur_cell_prev_sub[2]][d][timeslot] = ''
+							if self.timetables[sem][sec][d][timeslot] != '':
+								self.systemtray_icon.show()
+								clashing_sub = self.timetables[sem][sec][d][timeslot]
+								print(clashing_sub)
+								self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + sem + ' ' + sec + '- ' + clashing_sub[3] + '- ' + clashing_sub[2])
+							self.timetables[sem][sec][d][timeslot] = sub[1]
+							self.timetables[sem][sec][cur_d][cur_timeslot] = ''
+						print("Swapped")
+
 						print(self.faculty_timetables[faculty][d][timeslot])
 						print(item.text())
 						print(i.text())
-						print("Swapped")
+						
 						self.ui5.generated_table.clearSelection()
 
 				else: # section
 					sem = self.ui5.semester_combobox.currentText()
 					section = self.ui5.section_combobox.currentText()
-					if sem in self.timetables and section in self.timetables[sem]:
-						a = self.ui5.generated_table.currentItem()
-						x = a.text()
-						for day, ro in tt.day_row_num.items():
-							if r == ro:
-								d = day
-						timeslot = c + 1
-						print(self.timetables[sem][section][d][timeslot])
-						sub = self.timetables[sem][section][d][timeslot]
-						b = sub[3]
-						item = QtWidgets.QTableWidgetItem()
-						item.setText(b)
-						self.ui5.generated_table.setItem(row, column, item)
-						i = QtWidgets.QTableWidgetItem()
-						i.setText(x)
-						self.ui5.generated_table.setItem(r, c, i)
-						print(item.text())
-						print(i.text())
-						print("Swapped")
-						self.ui5.generated_table.clearSelection()
-			self.selected_cell = (row, column)
+				
+					a = self.ui5.generated_table.currentItem()
+					x = a.text()
+					for day, ro in tt.day_row_num.items():
+						if r == ro:
+							d = day
+						if row == ro:
+							cur_d = day
+					timeslot = c + 1
+					cur_timeslot = column + 1
+					print(self.timetables[sem][section][d][timeslot])
+					prev_sub = self.timetables[sem][section][d][timeslot]
+					cur_sub = self.timetables[sem][section][cur_d][cur_timeslot]
+					if prev_sub != '':
+						b = prev_sub[3]
+					else:
+						b = '-'
+					item = QtWidgets.QTableWidgetItem()
+					item.setText(b) # previous cell
+					self.ui5.generated_table.setItem(row, column, item)
+					i = QtWidgets.QTableWidgetItem()
+					i.setText(x) # current cell
+					self.ui5.generated_table.setItem(r, c, i)
+
+					self.timetables[sem][section][cur_d][cur_timeslot] = prev_sub
+					self.timetables[sem][section][d][timeslot] = cur_sub
+					if prev_sub != '':
+						f = prev_sub[2]
+						self.faculty_timetables[f][d][timeslot] = ''
+						if self.faculty_timetables[f][cur_d][cur_timeslot] != '':
+							self.systemtray_icon.show()
+							clashing_sub = self.faculty_timetables[f][cur_d][cur_timeslot]
+							self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + clashing_sub[0] + '- ' + clashing_sub[1][3] + '- ' + clashing_sub[1][2])
+						self.faculty_timetables[f][cur_d][cur_timeslot] = (sem + ' ' + section, prev_sub)
+					if cur_sub != '':
+						f = cur_sub[2]
+						self.faculty_timetables[f][cur_d][cur_timeslot] = ''
+						if self.faculty_timetables[f][d][timeslot] != '':
+							self.systemtray_icon.show()
+							clashing_sub = self.faculty_timetables[f][d][timeslot]
+							self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + clashing_sub[0] + '- ' + clashing_sub[1][3] + '- ' + clashing_sub[1][2])
+						self.faculty_timetables[f][d][timeslot] = (sem + ' ' + section, cur_sub)
+					print(item.text())
+					print(i.text())
+					print("Swapped")
+					self.ui5.generated_table.clearSelection()
+			self.selected_cell = ''
 		else:
-			self.selected_cell = (row, column, 0)
+			self.selected_cell = (row, column, 1)
 			
 
 	def print_btn_event(self):
