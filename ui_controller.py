@@ -286,6 +286,7 @@ class ParentWindow(QMainWindow):
 
 		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
+		self.ui5.printBtn.clicked.connect(self.print_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
 		self.ui5.semester_combobox.activated[str].connect(self.semester_combobox5_event)
 		self.ui5.section_combobox.activated[str].connect(self.section_combobox5_event)
@@ -1145,6 +1146,7 @@ class ParentWindow(QMainWindow):
 		self.timetables, self.faculty_timetables = tt.produce_timetable(self)
 		self.section_combobox5_event()
 
+
 	#fifth form functions
 	def semester_combobox5_event(self):
 		self.ui5.generated_table.clearContents()
@@ -1254,6 +1256,30 @@ class ParentWindow(QMainWindow):
 		else:
 			self.selected_cell = (row, column, 0)
 			
+
+	def print_btn_event(self):
+		if self.ui5.inputType_combobox.currentText() = "Students":
+			sem = self.ui5.semester_combobox.currentText()
+			sec = self.ui5.section_combobox.currentText()
+			f = open(sem + ' ' + sec + '.txt','w')
+		'''if name == '':
+		name = tt.name
+		print(('%-20s ' * 9) % (name, '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'))
+		for day in tt:
+			print('%-20s' % day, end = ' ')
+			for timeslot in tt[day]:
+				if tt[day][timeslot] == '':
+					print('%-20s' % '-', end = ' ')
+				else:
+
+					if style == 'section':
+						print('%-20s' % tt[day][timeslot][3], end = ' ')
+					else:
+						section = tt[day][timeslot][0]
+						subject = tt[day][timeslot][1][3]
+						print('%-20s' % (subject + ' (' + section + ')') , end = ' ')
+			print()
+		print()'''
 
 
 	def next_btn_event(self):
