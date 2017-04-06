@@ -1009,6 +1009,9 @@ class ParentWindow(QMainWindow):
 		for sub in self.subjects[sem]:
 			self.ui3.slotType_combobox.addItem(sub.both_names)
 		self.ui3.slotType_combobox.addItem('-')
+		for group in self.electives[sem]:
+			if len(self.electives[sem][group]) > 0:
+				self.ui3.slotType_combobox.addItem(group)
 		self.ui3.section_combobox.clear()
 		for section in self.sections[sem]:
 			self.ui3.section_combobox.addItem(section)
@@ -1044,21 +1047,53 @@ class ParentWindow(QMainWindow):
 		slot = self.ui3.slotType_combobox.currentText()
 		print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
-		if slot == '-':
-			item.setText('-')
-		else:
-			slot = slot.split(' - ')[1]
-			item.setText(slot)
 
 		sem = self.ui3.semester_combobox.currentText()
 		section = self.ui3.section_combobox.currentText()
 		
-		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem] and row in self.section_fixed_slots[sem][section] and column in self.section_fixed_slots[sem][section][row] and self.section_fixed_slots[sem][section][row][column] == slot:
+		slot = slot.split(' - ') # slot is either subject - short name, Elective #, or -
+		if len(slot) > 1:
+			slot = slot[1]
+		else:
+			slot = slot[0]
+
+		dict_entry_exists = sem in self.section_fixed_slots and section in self.section_fixed_slots[sem] and row in self.section_fixed_slots[sem][section] and column in self.section_fixed_slots[sem][section][row]
+
+		if slot.startswith('Elective'):
+			if dict_entry_exists:
+				sub = self.section_fixed_slots[sem][section][row][column] 
+				sub = sub.split('/')
+				if len(sub) > 1 and self.subs[sub[0]] in self.electives[sem][slot]:
+					for section in self.sections[sem]:
+						self.section_fixed_slots[sem][section][row].pop(column)
+					print(slot + 'exists')
+					item.setText('')
+					assign_elective = False
+				else:
+					# assign elective
+					assign_elective = True
+			else:
+				# assign elective
+				assign_elective = True
+			if assign_elective:
+				electives = []
+				for sub in self.electives[sem][slot]:
+					electives.append(sub.short_name)
+				t = '/'.join(electives)
+				item.setText(t)
+				if sem not in self.section_fixed_slots:
+					self.section_fixed_slots[sem] = dict()
+				for section in self.sections[sem]:
+					if section not in self.section_fixed_slots[sem]:
+						self.section_fixed_slots[sem][section] = dict()
+					if row not in self.section_fixed_slots[sem][section]:
+						self.section_fixed_slots[sem][section][row] = dict()
+					self.section_fixed_slots[sem][section][row][column] = t
+
+		elif dict_entry_exists and self.section_fixed_slots[sem][section][row][column] == slot:
 			print(slot + ' exists')
 			self.section_fixed_slots[sem][section][row].pop(column)
-			item = QtWidgets.QTableWidgetItem()
 			item.setText('')
-			self.ui3.subject_table.setItem(row, column, item)
 		else:
 			if sem not in self.section_fixed_slots:
 				self.section_fixed_slots[sem] = dict()
@@ -1066,8 +1101,10 @@ class ParentWindow(QMainWindow):
 				self.section_fixed_slots[sem][section] = dict()
 			if row not in self.section_fixed_slots[sem][section]:
 				self.section_fixed_slots[sem][section][row] = dict()
-			self.section_fixed_slots[sem][section][row][column] = item.text()
-			self.ui3.subject_table.setItem(row, column, item)
+			item.setText(slot)
+			self.section_fixed_slots[sem][section][row][column] = slot
+			
+		self.ui3.subject_table.setItem(row, column, item)
 		print(self.section_fixed_slots)
 
 
@@ -1156,11 +1193,12 @@ class ParentWindow(QMainWindow):
 
 	def cellClick5_event(self, row, column):
 		if self.selected_cell:
-			r, c = self.selected_cell
-			print(r,c)
+			r, c, i = self.selected_cell
+			print(r,c, i)
 			print(str(row), str(column))
 			if r == row and c == column:
 				self.ui5.generated_table.clearSelection()
+				self.selected_cell = ''
 			else:
 				if self.ui5.inputType_combobox.currentText() == "Faculty":
 					faculty = self.ui5.faculty_combobox.currentText()
@@ -1189,7 +1227,7 @@ class ParentWindow(QMainWindow):
 						print("Swapped")
 						self.ui5.generated_table.clearSelection()
 
-				else:
+				else: # section
 					sem = self.ui5.semester_combobox.currentText()
 					section = self.ui5.section_combobox.currentText()
 					if sem in self.timetables and section in self.timetables[sem]:
@@ -1214,8 +1252,8 @@ class ParentWindow(QMainWindow):
 						self.ui5.generated_table.clearSelection()
 			self.selected_cell = (row, column)
 		else:
-			self.selected_cell = (row, column)
-			print (str(row), str(column))
+			self.selected_cell = (row, column, 0)
+			
 
 
 	def next_btn_event(self):
