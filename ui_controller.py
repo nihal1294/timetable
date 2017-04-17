@@ -118,15 +118,21 @@ class ParentWindow(QMainWindow):
 		self.ui.setupUi(self.FirstWindow)
 		#self.ui.input_list.resize(self.adjusted_width*self.ui.input_list.width(), self.adjusted_height*self.ui.input_list.height())
 
-		#nihal mods
 		self.ui.semester_combobox.setEnabled(False)
+		self.ui.label_3.setEnabled(False)
 		self.ui.sections_spinbox.setEnabled(False)
+		self.ui.label_4.setEnabled(False)
 		self.ui.input_textbox.setEnabled(False)
+		self.ui.label_5.setEnabled(False)
 		self.ui.title_combobox.setEnabled(False)
+		self.ui.label_6.setEnabled(False)
 		self.ui.subject_short_input.setEnabled(False)
 		self.ui.lab_checkbox.setEnabled(False)
 		self.ui.credits_spinbox.setEnabled(False)
+		self.ui.label_7.setEnabled(False)
 		self.ui.electiveBtn.setEnabled(False)
+		self.ui.line.setEnabled(False)
+		self.ui.line_2.setEnabled(False)
 		self.ui.addBtn.clicked.connect(self.add_btn_event)
 		self.ui.electiveBtn.clicked.connect(self.elective_btn_event)
 		self.ui.removeBtn.clicked.connect(self.remove_btn_event)
@@ -162,7 +168,7 @@ class ParentWindow(QMainWindow):
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
 		for value in self.titles_list:
 			self.ui.title_combobox.addItem(value)
-		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('E:\The Usual\WaRbxZN.png'))
+		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('icons/favicon.ico'))
 
 		self.FirstWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FirstWindow.updateGeometry()
@@ -178,16 +184,22 @@ class ParentWindow(QMainWindow):
 		self.ui_elec = Ui_elective_window()
 		self.ui_elec.setupUi(self.ElectiveWindow)
 
+		self.ui_elec.semester_combobox.setEnabled(True)
 		self.ui_elec.elective_spinbox.setEnabled(False)
 		self.ui_elec.elective_spinbox.setValue(0)
+		self.ui_elec.label_4.setEnabled(False)
 		self.ui_elec.electiveGroup_combobox.setEnabled(False)
-		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.label_3.setEnabled(False)
 		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.label_5.setEnabled(False)
 		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.label_6.setEnabled(False)
 		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.label_7.setEnabled(False)
 		self.ui_elec.lab_checkbox.setEnabled(False)
-		self.ui_elec.semester_combobox.setEnabled(True)
-
+		self.ui_elec.line.setEnabled(False)
+		self.ui_elec.line_2.setEnabled(False)
+		
 		self.electives = OrderedDict()
 		for sem in self.sem_list:
 			self.ui_elec.semester_combobox.addItem(sem)
@@ -295,6 +307,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.faculty_combobox.activated[str].connect(self.faculty_combobox5_event)
 		self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
 		self.ui5.faculty_combobox.setEnabled(False)
+		self.ui5.label_5.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
 		self.ui5.inputType_combobox.addItem('Faculty')
 		for sem in self.sem_list:
@@ -338,38 +351,53 @@ class ParentWindow(QMainWindow):
 			#print(dir(self.ui.inputType_combobox))
 			if self.inputType == "Faculty":
 				self.ui.semester_combobox.setEnabled(False)
+				self.ui.label_3.setEnabled(False)
 				self.ui.sections_spinbox.setEnabled(False)
+				self.ui.label_4.setEnabled(False)
 				self.ui.title_combobox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
-				self.ui.lab_checkbox.setEnabled(False)
+				self.ui.label_5.setEnabled(True)
+				self.ui.subject_short_input.setEnabled(False)
+				self.ui.label_6.setEnabled(False)
 				self.ui.credits_spinbox.setEnabled(False)
+				self.ui.label_7.setEnabled(False)
+				self.ui.lab_checkbox.setEnabled(False)
+				self.ui.line.setEnabled(True)
+				self.ui.line_2.setEnabled(False)
 				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter faculty name")
-				self.ui.subject_short_input.setEnabled(False)
+				
 				self.ui.input_list.clear()
 				for values in self.faculty_list_value:
 					self.ui.input_list.addItem(values.name)
 			else: # input type subjects
 				self.ui.semester_combobox.setEnabled(True)
+				self.ui.label_3.setEnabled(True)
 				self.ui.sections_spinbox.setEnabled(True)
-				self.ui.input_textbox.setEnabled(True)
-				self.ui.electiveBtn.setEnabled(True)
-				self.ui.input_textbox.clear()
-				self.ui.input_textbox.setPlaceholderText("Please enter subject name")
-				self.ui.lab_checkbox.setEnabled(True)
-				self.ui.lab_checkbox.setChecked(False)
-				self.ui.credits_spinbox.setEnabled(True)
-				self.ui.credits_spinbox.setValue(1)
+				self.ui.label_4.setEnabled(True)
 				self.ui.title_combobox.setEnabled(False)
+				self.ui.input_textbox.setEnabled(True)
+				self.ui.label_5.setEnabled(True)
 				self.ui.subject_short_input.setEnabled(True)
 				self.ui.subject_short_input.clear()
+				self.ui.label_6.setEnabled(True)
+				self.ui.credits_spinbox.setEnabled(True)
+				self.ui.credits_spinbox.setValue(1)
+				self.ui.label_7.setEnabled(True)
+				self.ui.lab_checkbox.setEnabled(True)
+				self.ui.lab_checkbox.setChecked(False)
+				self.ui.line.setEnabled(True)
+				self.ui.line_2.setEnabled(True)
+				self.ui.input_textbox.clear()
+				self.ui.input_textbox.setPlaceholderText("Please enter subject name")
+				self.ui.electiveBtn.setEnabled(True)
 				sem = self.ui.semester_combobox.currentText()
 				self.ui.input_list.clear()
 				if sem in self.subjects:
 					for subject in self.subjects[sem]:
 						self.ui.input_list.addItem(subject.both_names)
 
-		#	sanjan mods - same method is used for fifth window. Do This in other combobox for other windows
+		#same method is used for fifth window. Do This in other combobox for other windows
 		if self.FifthWindow.isVisible():
 			self.inputType = self.ui5.inputType_combobox.currentText()
 			print(self.inputType)
@@ -377,18 +405,24 @@ class ParentWindow(QMainWindow):
 				self.ui5.semester_combobox.setCurrentIndex(-1)
 				self.ui5.section_combobox.setCurrentIndex(-1)
 				self.ui5.semester_combobox.setEnabled(False)
+				self.ui5.label_3.setEnabled(False)
 				self.ui5.section_combobox.setEnabled(False)
+				self.ui5.label_4.setEnabled(False)
 				self.ui5.faculty_combobox.setEnabled(True)
+				self.ui5.label_5.setEnabled(True)
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
 				self.ui5.generated_table.clearContents()
 
 			else:
 				self.ui5.semester_combobox.setEnabled(True)
+				self.ui5.label_3.setEnabled(True)
 				self.ui5.semester_combobox.setCurrentIndex(-1)
 				self.ui5.section_combobox.setEnabled(True)
+				self.ui5.label_4.setEnabled(True)
 				self.ui5.section_combobox.setCurrentIndex(-1)
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
 				self.ui5.faculty_combobox.setEnabled(False)
+				self.ui5.label_5.setEnabled(False)
 				self.ui5.generated_table.clearContents()
 
 	def semester_combobox_event(self):   #function for semester combobox
@@ -624,20 +658,27 @@ class ParentWindow(QMainWindow):
 			self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
 			self.ui_elec.electiveGroup_combobox.clear()
 			self.ui_elec.elective_input_textbox.clear()
-			self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+			self.ui_elec.elective_input_textbox.setPlaceholderText("")
 			self.ui_elec.elective_input_textbox.setEnabled(False)
+			self.ui_elec.label_5.setEnabled(False)
 			self.ui_elec.elective_spinbox.setValue(0)
 			self.ui_elec.elective_short_input.clear()
 			self.ui_elec.elective_short_input.setEnabled(False)
+			self.ui_elec.label_6.setEnabled(False)
 			self.ui_elec.credits_spinbox.setValue(1)
 			self.ui_elec.credits_spinbox.setEnabled(False)
+			self.ui_elec.label_7.setEnabled(False)
 			self.ui_elec.lab_checkbox.setChecked(False)
 			self.ui_elec.lab_checkbox.setEnabled(False)
 			self.ui_elec.elective_list.clear()
 			self.ui_elec.elective_spinbox.setEnabled(False)
+			self.ui_elec.label_4.setEnabled(False)
 			self.ui_elec.semester_combobox.setCurrentIndex(-1)
 			self.ui_elec.semester_combobox.setFocus()
 			self.ui_elec.electiveGroup_combobox.setEnabled(False)
+			self.ui_elec.label_3.setEnabled(False)
+			self.ui_elec.line.setEnabled(False)
+			self.ui_elec.line_2.setEnabled(False)
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()
@@ -688,26 +729,37 @@ class ParentWindow(QMainWindow):
 		sem = self.ui_elec.semester_combobox.currentText()
 		for group in self.electives[sem].keys():
 			self.ui_elec.electiveGroup_combobox.addItem(group)
-		self.ui_elec.electiveGroup_combobox.setEnabled(False)
 		self.ui_elec.elective_input_textbox.clear()
-		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setPlaceholderText("")
 		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.label_5.setEnabled(False)
+		self.ui_elec.elective_spinbox.setEnabled(True)
+		self.ui_elec.label_4.setEnabled(True)
 		self.ui_elec.elective_spinbox.setValue(len(self.electives[sem]))
 		self.ui_elec.elective_short_input.clear()
 		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.label_6.setEnabled(False)
 		self.ui_elec.credits_spinbox.setValue(1)
 		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.label_7.setEnabled(False)
 		self.ui_elec.lab_checkbox.setChecked(False)
 		self.ui_elec.lab_checkbox.setEnabled(False)
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.label_3.setEnabled(False)
+		self.ui_elec.line.setEnabled(True)
+		self.ui_elec.line_2.setEnabled(False)
 		self.ui_elec.elective_list.clear()
-		self.ui_elec.elective_spinbox.setEnabled(True)
 		
 	def electivegroup_combobox_event(self):
-		self.ui_elec.elective_input_textbox.setEnabled(True)
-		self.ui_elec.elective_short_input.setEnabled(True)
 		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setEnabled(True)
+		self.ui_elec.label_5.setEnabled(True)
+		self.ui_elec.elective_short_input.setEnabled(True)
+		self.ui_elec.label_6.setEnabled(True)
 		self.ui_elec.credits_spinbox.setEnabled(True)
+		self.ui_elec.label_7.setEnabled(True)
 		self.ui_elec.lab_checkbox.setEnabled(True)
+		self.ui_elec.line_2.setEnabled(True)
 		self.ui_elec.elective_list.clear()
 		sem = self.ui_elec.semester_combobox.currentText()
 		electivegroup = self.ui_elec.electiveGroup_combobox.currentText()
@@ -720,6 +772,7 @@ class ParentWindow(QMainWindow):
 		no_of_ele_grp = self.ui_elec.elective_spinbox.value()
 		print(no_of_ele_grp)
 		self.ui_elec.electiveGroup_combobox.setEnabled(True)
+		self.ui_elec.label_3.setEnabled(True)
 		self.ui_elec.electiveGroup_combobox.clear()
 		for i in range(0, no_of_ele_grp):
 			s = 'Elective ' + str(i+1)
@@ -851,20 +904,27 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
 		self.ui_elec.electiveGroup_combobox.clear()
 		self.ui_elec.elective_input_textbox.clear()
-		self.ui_elec.elective_input_textbox.setPlaceholderText("Please enter elective name")
+		self.ui_elec.elective_input_textbox.setPlaceholderText("")
 		self.ui_elec.elective_input_textbox.setEnabled(False)
+		self.ui_elec.label_5.setEnabled(False)
 		self.ui_elec.elective_spinbox.setValue(0)
 		self.ui_elec.elective_short_input.clear()
 		self.ui_elec.elective_short_input.setEnabled(False)
+		self.ui_elec.label_6.setEnabled(False)
 		self.ui_elec.credits_spinbox.setValue(1)
 		self.ui_elec.credits_spinbox.setEnabled(False)
+		self.ui_elec.label_7.setEnabled(False)
 		self.ui_elec.lab_checkbox.setChecked(False)
 		self.ui_elec.lab_checkbox.setEnabled(False)
 		self.ui_elec.elective_list.clear()
 		self.ui_elec.elective_spinbox.setEnabled(False)
+		self.ui_elec.label_4.setEnabled(False)
 		self.ui_elec.semester_combobox.setCurrentIndex(-1)
 		self.ui_elec.semester_combobox.setFocus()
 		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.label_3.setEnabled(False)
+		self.ui_elec.line.setEnabled(False)
+		self.ui_elec.line_2.setEnabled(False)
 
 	
 	# second form functions
@@ -1418,7 +1478,7 @@ class ParentWindow(QMainWindow):
 				self.ui5.faculty_combobox.addItem(faculty.name)
 			self.ui5.faculty_combobox.setCurrentIndex(-1)
 		elif self.FifthWindow.isVisible():
-			sys.exit(app.exec_())
+			exit()
 
 	def back_btn_event(self):
 		if self.SecondWindow.isVisible():
@@ -1438,7 +1498,7 @@ class ParentWindow(QMainWindow):
 		option = option.text()
 		print(option)
 		if option == "Exit":
-			sys.exit(app.exec_())
+			exit()
 		elif option == "Save":
 			dialog = QtWidgets.QFileDialog(caption = "Choose save file")
 			dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
@@ -1582,24 +1642,6 @@ class ParentWindow(QMainWindow):
 		print(self.faculty_fixed_slots)
 		'''
 		file.close()
-
-'''class Window(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(Window, self).__init__()
-        self.ui = Ui_window()
-        self.ui.setupUi(self)
-
-    def keyPressEvent(self, ev):
-        print ("key press")
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = Window()
-    MainWindow.show()
-    sys.exit(app.exec_())
-'''
-	
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
