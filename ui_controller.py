@@ -3,13 +3,15 @@ from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
 from PyQt5 import Qt
-from collections import OrderedDict
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 import sys
 import pickle
 import tt
 import os
+from collections import OrderedDict
 import json
+import time
 #import msvcrt
 
 from window import Ui_window
@@ -72,6 +74,23 @@ class faculty_class:
 	def __hash__(self):
 		return self.name.__hash__()
 
+class logger:
+	def __init__(self, logfilename):
+		self.terminal = sys.stdout
+		self.err = sys.stderr
+		self.log = open(logfilename, 'w')
+
+	def __del__(self):
+		sys.stdout = self.terminal
+		sys.stderr = self.err
+		self.log.close()
+
+	def write(self, message):
+		self.terminal.write(message)
+		self.log.write(message)
+
+	def flush(self):
+		pass
 
 #new singular class implementing QStackedLayout
 class ParentWindow(QMainWindow):
@@ -1531,14 +1550,15 @@ class ParentWindow(QMainWindow):
 	def save_state(self, fname):
 		file = open(fname, "wb")
 		state = (self.faculty_list_value,
-			     self.subjects,
-			     #self.subs,
-			     self.num_sections,
-			     self.sections,
-			     self.subjects_assigned,
-			     self.faculty_subjects,
-			     self.section_fixed_slots,
-			     self.faculty_fixed_slots)
+				 self.subjects,
+				 #self.subs,
+				 self.num_sections,
+				 self.sections,
+				 self.subjects_assigned,
+				 self.faculty_subjects,
+				 self.section_fixed_slots,
+				 self.faculty_fixed_slots,
+				 self.electives)
 		pickle.dump(state, file)
 		file.close()
 		pass
@@ -1546,14 +1566,16 @@ class ParentWindow(QMainWindow):
 	def load_state(self, fname):
 		file = open(fname, "rb")
 		state = pickle.load(file)
-		self.faculty_list_value, \
-	    self.subjects, \
-	    self.num_sections, \
-	    self.sections, \
-	    self.subjects_assigned, \
-	    self.faculty_subjects, \
-	    self.section_fixed_slots, \
-	    self.faculty_fixed_slots = state
+		self.faculty_list_value = state[0]
+		self.subjects = state[1]
+		self.num_sections = state[2]
+		self.sections = state[3]
+		self.subjects_assigned = state[4]
+		self.faculty_subjects = state[5]
+		self.section_fixed_slots = state[6]
+		self.faculty_fixed_slots = state[7]
+		if len(state) > 8:
+			self.electives = state[8]
 		file.close()
 
 		self.subs = dict()
@@ -1576,10 +1598,17 @@ class ParentWindow(QMainWindow):
 				subjects[sem].append(sub.__repr__())
 		faculty_fixed_slots = dict()
 		for teacher in self.faculty_fixed_slots:
-			faculty_fixed_slots[str(teacher)] = self.faculty_fixed_slots[teacher]
+			faculty_fixed_slots[teacher.name] = self.faculty_fixed_slots[teacher]
 		faculty_subjects = dict()
 		for teacher in self.faculty_subjects:
-			faculty_subjects[str(teacher)] = self.faculty_subjects[teacher]
+			faculty_subjects[teacher.name] = self.faculty_subjects[teacher]
+		electives = dict()
+		for sem in self.electives:
+			electives[sem] = dict()
+			for group in self.electives[sem]:
+				electives[sem][group] = []
+				for sub in self.electives[sem][group]:
+					electives[sem][group].append(sub.__repr__())
 		state = (
 			faculty_list_value,
 			subjects,
@@ -1588,7 +1617,8 @@ class ParentWindow(QMainWindow):
 			self.subjects_assigned,
 			faculty_subjects,
 			self.section_fixed_slots,
-			faculty_fixed_slots
+			faculty_fixed_slots,
+			electives
 			)
 		
 		dump = json.dumps(state, indent = 4)
@@ -1599,14 +1629,14 @@ class ParentWindow(QMainWindow):
 	def load_state_json(self, fname):
 		file = open(fname, "r")
 		state = json.loads(file.read())
-		faculty_list_value, \
-		subjects, \
-		self.num_sections, \
-		self.sections, \
-		self.subjects_assigned, \
-		self.faculty_subjects, \
-		sfs, \
-		ffs = state
+		faculty_list_value = state[0]
+		subjects = state[1]
+		self.num_sections = state[2]
+		self.sections = state[3]
+		self.subjects_assigned = state[4]
+		self.faculty_subjects = state[5]
+		sfs = state[6]
+		ffs = state[7]
 
 		self.faculty_list_value = []
 		for teacher in faculty_list_value:
@@ -1619,6 +1649,19 @@ class ParentWindow(QMainWindow):
 				s = eval(sub)
 				self.subjects[sem].append(s)
 				self.subs[s.short_name] = s
+		if len(state) > 8: # backward compatibility with older save files
+			electives = state[8]
+			self.electives = dict()
+			for sem in electives:
+				self.electives[sem] = dict()
+				for group in electives[sem]:
+					self.electives[sem][group] = []
+					for sub in electives[sem][group]:
+						s = eval(sub)
+						if s.short_name in self.subs:
+							self.electives[sem][group].append(self.subs[s.short_name])
+						else:
+							self.electives[sem][group].append(s)
 
 		self.section_fixed_slots = dict()
 		self.faculty_fixed_slots = dict()
@@ -1644,10 +1687,16 @@ class ParentWindow(QMainWindow):
 		file.close()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setApplicationName('TimeTable Scheduler')
-    main = ParentWindow()
-    #main.show()
-    sys.exit(app.exec_())
+	if os.path.isdir('logs') == False:
+		os.mkdir('logs')
 
+	l = logger(os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime())))
+	sys.stdout = l
+	sys.stderr = l
+
+	app = QApplication(sys.argv)
+	app.setApplicationName('TimeTable Scheduler')
+	main = ParentWindow()
+	#main.show()
+	sys.exit(app.exec_())
 
