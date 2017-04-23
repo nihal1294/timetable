@@ -605,7 +605,7 @@ QPushButton
 QPushButton:disabled
 {
     background-color: #ededed;
-    background:none;
+    background: none;
     border-width: 1px;
     border-color: #76797C;
     border-style: solid;
@@ -614,7 +614,8 @@ QPushButton:disabled
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 2px;
-    color: #76797C;
+    color: transparent;
+    border: none;
 }
 
 QPushButton:focus {
@@ -1287,9 +1288,28 @@ QTableWidget{
 
 
 QComboBox:disabled, QLineEdit:disabled, QCheckBox:disabled, QSpinBox:disabled{
-    background:transparent;
-    color: #76797C;
+    background: transparent;
+    color: transparent;
+    border: none;
+
 }
 
+QLabel:disabled{
+    background: transparent;
+    color: transparent;
+}
+
+QComboBox::down-arrow:disabled, 
+QSpinBox::up-arrow:disabled, 
+QSpinBox::down-arrow:disabled, 
+QCheckBox::indicator:checked:disabled, 
+QCheckBox::indicator:unchecked:disabled{
+    image: none;
+}
+
+#line:disabled, #line_2:disabled{
+    background: transparent;
+    border: none;
+}
 
 '''

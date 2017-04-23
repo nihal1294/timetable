@@ -147,7 +147,9 @@ def utilize_free_hours(tt, faculty):
 						if teacher[day][t] == '' and teacher.final[day][t] == False:
 							# if teacher is free at timeslot t, move subject from timeslot i to t
 							tt[day][t] = subject
+							tt[day][i] = ''
 							tt.final[day][t] = tt.final[day][i]
+							tt.final[day][i] = False
 							teacher[day][i] = ''
 							teacher[day][t] = (tt.name, subject)
 							break # done filling timeslot t
@@ -279,16 +281,19 @@ def produce_timetable(ui):
 					sub_short = ui.section_fixed_slots[sem][section][row][col]
 					day = ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday')[row]
 					hour = col+1
-					if sub_short == '-':
+					if sub_short == '-': 
 						timetables[sem][section].final[day][hour] = True
 					else:
-						sub = subjects_ref[sem][section][sub_short]
-						print(sub, row, col)
-						if ui.subs[sub_short].lab == True:
-							finalize_lab(timetables[sem][section], day, hour, sub, 1)
-							#finalize_theory(timetables[sem][section], day, hour, sub)
-						else:
-							finalize_theory(timetables[sem][section], day, hour, sub, 1)
+						#sub_short = sub_short.split('/')
+						sub_short = [sub_short]
+						for short in sub_short: # if it's an elective, this list will have more than 1 subject
+							sub = subjects_ref[sem][section][short]
+							print(sub, row, col)
+							if ui.subs[short].lab == True:
+								finalize_lab(timetables[sem][section], day, hour, sub, 1)
+								#finalize_theory(timetables[sem][section], day, hour, sub)
+							else:
+								finalize_theory(timetables[sem][section], day, hour, sub, 1)
 			print_timetable(timetables[sem][section])
 	for staff in ui.faculty_fixed_slots:
 		for row in ui.faculty_fixed_slots[staff]:
@@ -300,13 +305,17 @@ def produce_timetable(ui):
 	for sem in timetables:
 		for section in timetables[sem]:
 			generate(timetables[sem][section], subjects[sem][section], faculty)
+			timetables[sem][section].calc_flexibility()
 			print_timetable(timetables[sem][section])
-	print_timetable(faculty[''], style = 'staff')
+	for teacher in faculty:
+		faculty[teacher].calc_flexibility()
 	print('...adjusting clashes...')
+	adjust_clash(timetables, faculty)
 	adjust_clash(timetables, faculty)
 	for sem in timetables:
 		for section in timetables[sem]:
 			print_timetable(timetables[sem][section])
+			utilize_free_hours(timetables[sem][section], faculty)
 	return timetables, faculty
 
 if __name__ == '__main__':
@@ -498,7 +507,7 @@ if __name__ == '__main__':
 	for teacher in faculty:
 		faculty[teacher].calc_flexibility()
 	adjust_clash(timetables, faculty=faculty)
-	adjust_clash(timetables, faculty=faculty)
+	#adjust_clash(timetables, faculty=faculty)
 	for sem in timetables:
 		for section in timetables[sem]:
 			utilize_free_hours(timetables[sem][section], faculty)

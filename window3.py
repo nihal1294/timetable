@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window3(object):
     def setupUi(self, window3):
         window3.setObjectName("window3")
-        window3.resize(920, 469)
+        window3.resize(920, 472)
         window3.setStyleSheet(lightstyle.css)
         window3.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window3)
@@ -24,7 +24,7 @@ class Ui_window3(object):
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
-        font.setPointSize(9)
+        font.setPointSize(11)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.gridLayout.addWidget(self.label_3, 1, 1, 1, 1, QtCore.Qt.AlignHCenter)
@@ -55,7 +55,7 @@ class Ui_window3(object):
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
-        font.setPointSize(9)
+        font.setPointSize(11)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 1, 2, 1, 1, QtCore.Qt.AlignHCenter)
@@ -67,7 +67,7 @@ class Ui_window3(object):
         self.slotType_combobox.setSizePolicy(sizePolicy)
         self.slotType_combobox.setMinimumSize(QtCore.QSize(370, 30))
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(11)
         self.slotType_combobox.setFont(font)
         self.slotType_combobox.setObjectName("slotType_combobox")
         self.gridLayout.addWidget(self.slotType_combobox, 2, 2, 1, 1)
@@ -135,7 +135,7 @@ class Ui_window3(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
-        font.setPointSize(9)
+        font.setPointSize(11)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1, QtCore.Qt.AlignHCenter)
@@ -151,14 +151,6 @@ class Ui_window3(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(-1, 3, -1, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.printBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.printBtn.setMinimumSize(QtCore.QSize(120, 35))
-        font = QtGui.QFont()
-        font.setFamily("Century Gothic")
-        font.setPointSize(11)
-        self.printBtn.setFont(font)
-        self.printBtn.setObjectName("printBtn")
-        self.horizontalLayout.addWidget(self.printBtn)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.backBtn = QtWidgets.QPushButton(self.centralwidget)
@@ -187,8 +179,6 @@ class Ui_window3(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
-        self.menuHelp = QtWidgets.QMenu(self.menubar)
-        self.menuHelp.setObjectName("menuHelp")
         window3.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window3)
         self.actionSave.setObjectName("actionSave")
@@ -198,6 +188,7 @@ class Ui_window3(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window3)
         self.actionExit.setObjectName("actionExit")
+        self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window3)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window3)
@@ -205,18 +196,14 @@ class Ui_window3(object):
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
         self.menuFile.addAction(self.actionExit)
-        self.menuHelp.addAction(self.actionManual)
-        self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window3)
         QtCore.QMetaObject.connectSlotsByName(window3)
         window3.setTabOrder(self.semester_combobox, self.section_combobox)
         window3.setTabOrder(self.section_combobox, self.slotType_combobox)
         window3.setTabOrder(self.slotType_combobox, self.subject_table)
-        window3.setTabOrder(self.subject_table, self.printBtn)
-        window3.setTabOrder(self.printBtn, self.backBtn)
+        window3.setTabOrder(self.subject_table, self.backBtn)
         window3.setTabOrder(self.backBtn, self.nextBtn)
 
     def retranslateUi(self, window3):
@@ -254,16 +241,38 @@ class Ui_window3(object):
         item.setText(_translate("window3", "3:40-4:30"))
         self.label_2.setText(_translate("window3", "Semester:"))
         self.label.setText(_translate("window3", "Subject Constraints"))
-        self.printBtn.setText(_translate("window3", "Print"))
-        self.backBtn.setText(_translate("window3", "< Back"))
-        self.nextBtn.setText(_translate("window3", "Next >"))
+        self.backBtn.setText(_translate("window3", "Back"))
+        self.nextBtn.setText(_translate("window3", "Next"))
         self.menuFile.setTitle(_translate("window3", "File"))
-        self.menuHelp.setTitle(_translate("window3", "Help"))
         self.actionSave.setText(_translate("window3", "Save"))
         self.actionLoad.setText(_translate("window3", "Load"))
         self.actionExit.setText(_translate("window3", "Exit"))
         self.actionAbout.setText(_translate("window3", "About"))
         self.actionManual.setText(_translate("window3", "Manual"))
+
+
+    def closeEvent(self, event):
+        exit()
+    
+    '''
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox()
+        close.setText("Are you sure you want to exit?")
+        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        close = close.exec()
+        if close == QtWidgets.QMessageBox.Yes:
+            app.quit()
+        else:
+            pass
+    '''
+    '''def closeEvent(self, event):
+        print("event")
+        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()'''
+
 
 
 if __name__ == "__main__":

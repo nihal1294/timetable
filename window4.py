@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
-        window4.resize(920, 469)
+        window4.resize(920, 472)
         window4.setStyleSheet(lightstyle.css)
         window4.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window4)
@@ -24,7 +24,7 @@ class Ui_window4(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
-        font.setPointSize(9)
+        font.setPointSize(11)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1, QtCore.Qt.AlignRight)
@@ -36,7 +36,7 @@ class Ui_window4(object):
         self.faculty_combobox.setSizePolicy(sizePolicy)
         self.faculty_combobox.setMinimumSize(QtCore.QSize(305, 30))
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(11)
         self.faculty_combobox.setFont(font)
         self.faculty_combobox.setObjectName("faculty_combobox")
         self.gridLayout.addWidget(self.faculty_combobox, 1, 1, 1, 1)
@@ -112,14 +112,6 @@ class Ui_window4(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(-1, 3, -1, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.printBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.printBtn.setMinimumSize(QtCore.QSize(120, 35))
-        font = QtGui.QFont()
-        font.setFamily("Century Gothic")
-        font.setPointSize(11)
-        self.printBtn.setFont(font)
-        self.printBtn.setObjectName("printBtn")
-        self.horizontalLayout.addWidget(self.printBtn)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.backBtn = QtWidgets.QPushButton(self.centralwidget)
@@ -148,8 +140,6 @@ class Ui_window4(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
-        self.menuHelp = QtWidgets.QMenu(self.menubar)
-        self.menuHelp.setObjectName("menuHelp")
         window4.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window4)
         self.actionSave.setObjectName("actionSave")
@@ -159,6 +149,7 @@ class Ui_window4(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window4)
         self.actionExit.setObjectName("actionExit")
+        self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window4)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window4)
@@ -166,16 +157,12 @@ class Ui_window4(object):
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
         self.menuFile.addAction(self.actionExit)
-        self.menuHelp.addAction(self.actionManual)
-        self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window4)
         QtCore.QMetaObject.connectSlotsByName(window4)
         window4.setTabOrder(self.faculty_combobox, self.faculty_table)
-        window4.setTabOrder(self.faculty_table, self.printBtn)
-        window4.setTabOrder(self.printBtn, self.backBtn)
+        window4.setTabOrder(self.faculty_table, self.backBtn)
         window4.setTabOrder(self.backBtn, self.generateBtn)
 
     def retranslateUi(self, window4):
@@ -211,16 +198,38 @@ class Ui_window4(object):
         item = self.faculty_table.horizontalHeaderItem(7)
         item.setText(_translate("window4", "3:40-4:30"))
         self.label.setText(_translate("window4", "Faculty Constraints"))
-        self.printBtn.setText(_translate("window4", "Print"))
-        self.backBtn.setText(_translate("window4", "< Back"))
-        self.generateBtn.setText(_translate("window4", "Generate >"))
+        self.backBtn.setText(_translate("window4", "Back"))
+        self.generateBtn.setText(_translate("window4", "Generate"))
         self.menuFile.setTitle(_translate("window4", "File"))
-        self.menuHelp.setTitle(_translate("window4", "Help"))
         self.actionSave.setText(_translate("window4", "Save"))
         self.actionLoad.setText(_translate("window4", "Load"))
         self.actionExit.setText(_translate("window4", "Exit"))
         self.actionAbout.setText(_translate("window4", "About"))
         self.actionManual.setText(_translate("window4", "Manual"))
+
+
+    def closeEvent(self, event):
+        exit()
+    
+    '''
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox()
+        close.setText("Are you sure you want to exit?")
+        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        close = close.exec()
+        if close == QtWidgets.QMessageBox.Yes:
+            app.quit()
+        else:
+            pass
+    '''
+    '''def closeEvent(self, event):
+        print("event")
+        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()'''
+
 
 
 if __name__ == "__main__":

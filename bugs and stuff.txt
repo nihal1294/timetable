@@ -7,9 +7,8 @@ after resetting, list only populates after setting spinbox and combobox again.(f
 in window 1 , faculty is sorted in list initially, but isnt sorted when faculty is chosen again in input combobox.
 
 clicking generate crashes with "max() arg is an empty sequence" error.
-buttons and few widgets need to be cleared after clicking,i.e., they stay selected.
 
-need to add confirming dialog box on closing with X button/File->Exit.
+need to add confirming dialog box on closing with X button.
 
 better run program with an .exe file.
 
