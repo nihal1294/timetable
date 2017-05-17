@@ -247,7 +247,7 @@ def produce_timetable(ui):
 
 	faculty = dict()
 	for member in ui.faculty_list_value:
-		faculty[member] = timetable(member)
+		faculty[member] = timetable(str(member))
 	subjects = dict()
 	subjects_ref = dict()
 	timetables = dict()
@@ -314,8 +314,8 @@ def produce_timetable(ui):
 	adjust_clash(timetables, faculty)
 	for sem in timetables:
 		for section in timetables[sem]:
-			print_timetable(timetables[sem][section])
 			utilize_free_hours(timetables[sem][section], faculty)
+			print_timetable(timetables[sem][section])
 	return timetables, faculty
 
 if __name__ == '__main__':

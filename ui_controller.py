@@ -12,6 +12,8 @@ import os
 from collections import OrderedDict
 import json
 import time
+import traceback
+import worddoc
 #import msvcrt
 
 from window import Ui_window
@@ -79,17 +81,20 @@ class logger:
 		self.terminal = sys.stdout
 		self.err = sys.stderr
 		self.log = open(logfilename, 'w')
+		sys.stdout = self
+		sys.stderr = self
 
 	def __del__(self):
-		sys.stdout = self.terminal
-		sys.stderr = self.err
 		self.log.close()
 
 	def write(self, message):
 		self.terminal.write(message)
 		self.log.write(message)
+		self.flush()
 
 	def flush(self):
+		self.log.flush()
+		self.terminal.flush()
 		pass
 
 #new singular class implementing QStackedLayout
@@ -174,7 +179,7 @@ class ParentWindow(QMainWindow):
 		self.ui.semester_combobox.setCurrentIndex(-1)
 		self.faculty_list_value = []
 		self.subjects = OrderedDict()
-		self.subs = dict() # store link between subject name and its object
+		self.subs = dict() # store link between subject short name and its object
 		self.num_sections = dict()
 		for sem in self.sem_list:
 			self.subjects[sem] = []
@@ -1435,7 +1440,7 @@ class ParentWindow(QMainWindow):
 			self.selected_cell = (row, column, 1)
 			
 
-	def print_btn_event(self):
+	def print_btn_event_plaintext(self):
 		inputType = self.ui5.inputType_combobox.currentText()
 		if inputType == "Students":
 			sem = self.ui5.semester_combobox.currentText()
@@ -1472,7 +1477,7 @@ class ParentWindow(QMainWindow):
 			faculty = self.ui5.faculty_combobox.currentText()
 			if faculty == '':
 				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Select the Faculty to timetable')
+				self.systemtray_icon.showMessage('Warning!', 'Select the Faculty to print timetable')
 			else:
 				tt = self.faculty_timetables[faculty]
 				f = open('Output/Personal Timetables/' + faculty + '.txt','w')
@@ -1495,7 +1500,29 @@ class ParentWindow(QMainWindow):
 				f.close()
 				os.startfile(filename)
 
-
+	def print_btn_event(self):
+		inputType = self.ui5.inputType_combobox.currentText()
+		if inputType == 'Students':
+			sem = self.ui5.semester_combobox.currentText()
+			sec = self.ui5.section_combobox.currentText()
+			if sem =='' or sec == '':
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Warning!', 'Select Semester and Section to print timetable')
+			else:
+				tt = self.timetables[sem][sec]
+				filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
+				worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value)
+				os.startfile(filepath)
+		else:
+			faculty = self.ui5.faculty_combobox.currentText()
+			if faculty == '':
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Warning!', 'Select the Faculty to print timetable')
+			else:
+				tt = self.faculty_timetables[faculty]
+				filepath = os.path.join('Output', 'Personal Timetables', '{}.docx'.format(faculty_class(tt.name).name))
+				worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty')
+				os.startfile(filepath)
 
 	def next_btn_event(self):
 		if self.FirstWindow.isVisible():
@@ -1707,17 +1734,19 @@ class ParentWindow(QMainWindow):
 		'''
 		file.close()
 
+def my_excepthook(type, value, tb):
+	traceback.print_exception(type, value, tb)
+	sys.exit(0)
+
 if __name__ == "__main__":
 	if os.path.isdir('logs') == False:
 		os.mkdir('logs')
-
+	
 	l = logger(os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime())))
-	sys.stdout = l
-	sys.stderr = l
-
+	sys.excepthook = my_excepthook
+	
 	app = QApplication(sys.argv)
 	app.setApplicationName('TimeTable Scheduler')
 	main = ParentWindow()
 	#main.show()
 	sys.exit(app.exec_())
-
