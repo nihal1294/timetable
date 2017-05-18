@@ -24,7 +24,7 @@ from window5 import Ui_window5
 from elective_window import Ui_elective_window
 
 class subject:
-	def __init__(self, name, short_name = '', credits = 0, lab = False):
+	def __init__(self, name, short_name = '', credits = 0, lab = False, subcode = ''):
 		if short_name == '': # if both names are provided together in name
 			both_names = name
 			self.name, self.short_name = both_names.split(' - ')
@@ -33,6 +33,7 @@ class subject:
 			self.short_name = short_name
 		self.credits = credits
 		self.lab = lab
+		self.subcode = subcode
 
 	@property
 	def both_names(self):
@@ -43,7 +44,7 @@ class subject:
 		return self.name == obj.name and self.short_name == obj.short_name
 		
 	def __repr__(self):
-		return 'subject({}, {}, {}, {})'.format(self.name.__repr__(), self.short_name.__repr__(), self.credits, self.lab) 
+		return 'subject({}, {}, {}, {})'.format(self.name.__repr__(), self.short_name.__repr__(), self.credits, self.lab, self.subcode.__repr__()) 
 
 
 class faculty_class:
@@ -510,12 +511,14 @@ class ParentWindow(QMainWindow):
 									self.systemtray_icon.show()
 									self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
 									return
+								subcode = self.ui.subject_code_input.text()
 								credits = self.ui.credits_spinbox.value()
 								lab = self.ui.lab_checkbox.isChecked()
 								y.name = text
 								y.short_name = short_sub
 								y.credits = credits
 								y.lab = lab
+								y.subcode = subcode
 								print(text, short_sub, credits, lab)
 								t = text + " - " + short_sub
 								self.ui.input_list.takeItem(self.ui.input_list.row(x))
@@ -553,9 +556,10 @@ class ParentWindow(QMainWindow):
 						self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
 						return
+					subcode = self.ui.subject_code_input.text()
 					credits = self.ui.credits_spinbox.value()
 					lab = self.ui.lab_checkbox.isChecked()
-					sub = subject(text, short_sub, credits, lab)
+					sub = subject(text, short_sub, credits, lab, subcode)
 					print(text, short_sub, credits, lab)
 					t = text + " - " + short_sub
 					for x in self.subjects[sem]:
@@ -593,6 +597,7 @@ class ParentWindow(QMainWindow):
 		self.ui.input_list.sortItems()
 		self.ui.subject_short_input.clear()
 		self.ui.input_textbox.clear()
+		self.ui.subject_code_input.clear()
 		self.ui.lab_checkbox.setChecked(False)
 		self.ui.input_textbox.setFocus()
 		
@@ -659,6 +664,7 @@ class ParentWindow(QMainWindow):
 						self.ui.input_textbox.setText(subj.name)
 						self.ui.subject_short_input.setText(subj.short_name)
 						self.ui.credits_spinbox.setValue(y.credits)
+						self.ui.subject_code_input.setText(y.subcode)
 						if y.lab == True:
 							self.ui.lab_checkbox.setChecked(True)
 						else:
@@ -827,6 +833,7 @@ class ParentWindow(QMainWindow):
 		row = self.ui_elec.elective_list.selectedItems()
 		elective_group = self.ui_elec.electiveGroup_combobox.currentText()
 		short_sub = self.ui_elec.elective_short_input.text()
+		subcode = self.ui_elec.elective_code_input.text()
 		if not sem:
 			self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select the semester.')
@@ -845,7 +852,7 @@ class ParentWindow(QMainWindow):
 				subj = subject(x.text())
 				sem = self.ui_elec.semester_combobox.currentText()
 				for y in self.electives[sem][elective_group]:
-					if subj.name == y.name:
+					if subj == y:
 						if text != '':
 							credits = self.ui_elec.credits_spinbox.value()
 							lab = self.ui_elec.lab_checkbox.isChecked()
@@ -853,22 +860,28 @@ class ParentWindow(QMainWindow):
 							y.short_name = short_sub
 							y.credits = credits
 							y.lab = lab
+							y.subcode = subcode
 							print(text, short_sub, credits, lab)
 							t = text + " - " + short_sub
 							self.ui_elec.elective_list.takeItem(self.ui_elec.elective_list.row(x))
 							self.ui_elec.elective_list.addItem(t)
+							'''
 							if subj in self.subjects[sem]:
 								self.subjects[sem].remove(subj)
 								self.subjects[sem].append(y)
+							'''
 							self.update_subject_changes(subj, y)
 							self.ui_elec.credits_spinbox.setValue(1)
 							break
+						else:
+							self.systemtray_icon.show()
+							self.systemtray_icon.showMessage('Input', 'Please enter the elective name.')
 		else:
 			
 			if text != "":
 				credits = self.ui_elec.credits_spinbox.value()
 				lab = self.ui_elec.lab_checkbox.isChecked()
-				sub = subject(text, short_sub, credits, lab)
+				sub = subject(text, short_sub, credits, lab, subcode)
 				print(text, short_sub, credits, lab)
 				t = text + " - " + short_sub
 				#if elective_group in self.electives[sem]:
@@ -893,6 +906,7 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.elective_list.sortItems()
 		self.ui_elec.elective_short_input.clear()
 		self.ui_elec.elective_input_textbox.clear()
+		self.ui_elec.elective_code_input.clear()
 		self.ui_elec.lab_checkbox.setChecked(False)
 		self.ui_elec.elective_input_textbox.setFocus()
 		
@@ -936,6 +950,7 @@ class ParentWindow(QMainWindow):
 						self.ui_elec.elective_input_textbox.setText(subj.name)
 						self.ui_elec.elective_short_input.setText(subj.short_name)
 						self.ui_elec.credits_spinbox.setValue(y.credits)
+						self.ui_elec.elective_code_input.setText(y.subcode)
 						if y.lab == True:
 							self.ui_elec.lab_checkbox.setChecked(True)
 						else:
@@ -998,7 +1013,7 @@ class ParentWindow(QMainWindow):
 		
 		for faculty in self.faculty_list_value:
 			if faculty not in self.faculty_subjects:
-				self.faculty_subjects[faculty] = []
+				self.faculty_subjects[faculty.name] = []
 		#print(self.subjects_assigned)
 		
 	def semester_combobox2_event(self): # semester combobox in second form
@@ -1611,6 +1626,12 @@ class ParentWindow(QMainWindow):
 		file.close()
 		pass
 
+	def update_sub(self):
+		for sem in self.subjects:
+			for i, sub in enumerate(self.subjects[sem]):
+				self.subjects[sem][i] = subject(sub.name, sub.short_name, sub.credits, sub.lab)
+		 
+
 	def load_state(self, fname):
 		file = open(fname, "rb")
 		state = pickle.load(file)
@@ -1631,7 +1652,8 @@ class ParentWindow(QMainWindow):
 			for sub in self.subjects[sem]:
 				self.subs[sub.short_name] = sub
 		#print(self.subs)
-
+		print(self.faculty_subjects)
+		print(self.faculty_fixed_slots)
 		pass
 
 	def save_state_json(self, fname):
@@ -1644,12 +1666,24 @@ class ParentWindow(QMainWindow):
 			subjects[sem] = []
 			for sub in self.subjects[sem]:
 				subjects[sem].append(sub.__repr__())
+		'''
 		faculty_fixed_slots = dict()
 		for teacher in self.faculty_fixed_slots:
-			faculty_fixed_slots[teacher.name] = self.faculty_fixed_slots[teacher]
+			if type(teacher) == type('str'):
+				faculty_fixed_slots[teacher] = self.faculty_fixed_slots[teacher]
+			else:
+				faculty_fixed_slots[teacher.name] = self.faculty_fixed_slots[teacher]
 		faculty_subjects = dict()
 		for teacher in self.faculty_subjects:
-			faculty_subjects[teacher.name] = self.faculty_subjects[teacher]
+			if type(teacher) == type('str'):
+				try:
+					name = self.faculty_list_value[self.faculty_list_value.index(teacher)].name
+				except ValueError:
+					pass
+				faculty_subjects[name] = self.faculty_subjects[teacher]
+			else:
+				faculty_subjects[teacher.name] = self.faculty_subjects[teacher]
+		'''
 		electives = dict()
 		for sem in self.electives:
 			electives[sem] = dict()
@@ -1663,9 +1697,9 @@ class ParentWindow(QMainWindow):
 			self.num_sections,
 			self.sections,
 			self.subjects_assigned,
-			faculty_subjects,
+			self.faculty_subjects,
 			self.section_fixed_slots,
-			faculty_fixed_slots,
+			self.faculty_fixed_slots,
 			electives
 			)
 		

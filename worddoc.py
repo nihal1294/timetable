@@ -5,9 +5,9 @@ section timetable:
 1st table:
 t = root[0][6]
 r1 = t[3]
-c11 = r1[2]
-c11_text = c11[1][1][1].text
-c12 = r1[3] etc
+u11 = r1[1] 
+u11_text = c11[1][1][1].text
+u12 = r1[2] etc
 r2 = t[4] etc
 
 2nd table:
@@ -134,19 +134,21 @@ def print_section_wordxml(tt, subjects_assigned, subs, faculty):
 				if lname.endswith(' Lab') == False:
 					lname = lname + ' Lab'
 				initials = ''.join(map(lambda x: x[0].upper(), fac[i].split(' ')))
-				labs.append((lname, '', initials))
+				labs.append((lname, initials))
 		else:
-			regular_subs.append((sub_name, short_sub, str(faculty[faculty.index(fac)])))
+			regular_subs.append((sub_name, sub.subcode, str(faculty[faculty.index(fac)])))
 
 	t2 = root[0][10]
 	r = t2[3]
 	labrow1 = t2[5]
 	labrow2 = t2[6]
+	r[1][1][1][1].text = regular_subs[0][1] # subject code
 	r[2][1][1][1].text = regular_subs[0][0] # sub expansion
 	r[3][1][1][1].text = regular_subs[0][2] # faculty
 	t2_nextrow = 4
-	for sub_name, short_sub, faculty in regular_subs[1:]:
+	for sub_name, subcode, faculty in regular_subs[1:]:
 		r = copy.deepcopy(t2[3])
+		r[1][1][1][1].text = subcode
 		r[2][1][1][1].text = sub_name
 		r[3][1][1][1].text = faculty
 		t2.insert(t2_nextrow, r)
@@ -157,11 +159,11 @@ def print_section_wordxml(tt, subjects_assigned, subs, faculty):
 		sec = tt.name.split(' ')[1]
 		r[1][1][1][1].text = labs[0][0]
 		r[2][1][1][1].text = sec + '1'
-		r[3][1][1][1].text = labs[0][2]
+		r[3][1][1][1].text = labs[0][1]
 		r = labrow2
 		r[2][1][1][1].text = sec + '2'
-		r[3][1][1][1].text = labs[0][2]
-		for labname, _, initials in labs[1:]:
+		r[3][1][1][1].text = labs[0][1]
+		for labname, initials in labs[1:]:
 			r = copy.deepcopy(labrow1)
 			r[1][1][1][1].text = labname
 			r[2][1][1][1].text = sec + '1'

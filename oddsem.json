@@ -56,6 +56,19 @@
         "faculty_class('Vijay Murari T', 'Mr.')"
     ],
     {
+        "V": [
+            "subject('Compilers', 'CD', 4, False)",
+            "subject('Database', 'RDBMS', 4, False)",
+            "subject('Microprocessors', 'MP', 4, False)",
+            "subject('Software Engg', 'SE', 4, False)",
+            "subject('Operating Systems', 'OS', 4, False)",
+            "subject('Emp Skill Dev', 'ESD', 1, False)",
+            "subject('CD | RDBMS Lab', 'CD|RDBMS Lab', 0, True)",
+            "subject('MP Lab', 'MP Lab', 0, True)",
+            "subject('Adv Unix Prog', 'AUP', 0, False)",
+            "subject('Operations Research', 'OR', 0, True)",
+            "subject('Program Verification', 'PV', 0, False)"
+        ],
         "III": [
             "subject('GFTT', 'Maths', 0, False)",
             "subject('Digital System Design', 'DSD', 4, False)",
@@ -79,35 +92,20 @@
             "subject('Cloud App Dev', 'CDA', 2, False)",
             "subject('CDA Lab', 'CDA Lab', 0, True)"
         ],
-        "V": [
-            "subject('Compilers', 'CD', 4, False)",
-            "subject('Database', 'RDBMS', 4, False)",
-            "subject('Microprocessors', 'MP', 4, False)",
-            "subject('Software Engg', 'SE', 4, False)",
-            "subject('Operating Systems', 'OS', 4, False)",
-            "subject('Emp Skill Dev', 'ESD', 1, False)",
-            "subject('CD | RDBMS Lab', 'CD|RDBMS Lab', 0, True)",
-            "subject('MP Lab', 'MP Lab', 0, True)",
-            "subject('Adv Unix Prog', 'AUP', 0, False)",
-            "subject('Operations Research', 'OR', 0, True)",
-            "subject('Program Verification', 'PV', 0, False)"
-        ]
+        "IV": [],
+        "VI": [],
+        "VIII": []
     },
     {
-        "III": 4,
+        "VIII": 0,
         "VI": 0,
         "V": 4,
-        "IV": 0,
-        "VIII": 0,
-        "VII": 4
+        "III": 4,
+        "VII": 4,
+        "IV": 0
     },
     {
-        "III": [
-            "A",
-            "B",
-            "C",
-            "D"
-        ],
+        "VIII": [],
         "VI": [],
         "V": [
             "A",
@@ -115,60 +113,37 @@
             "C",
             "D"
         ],
-        "IV": [],
-        "VIII": [],
+        "III": [
+            "A",
+            "B",
+            "C",
+            "D"
+        ],
         "VII": [
             "A",
             "B",
             "C",
             "D"
-        ]
+        ],
+        "IV": []
     },
     {
-        "III": {
-            "B": [
-                "GFTT - Maths - Sowmya A",
-                "Digital System Design - DSD - Sannidhan M S",
-                "DMS - DMS - Chandra Naik",
-                "Web programming - BWP - Krishna Prasad Rao",
-                "Data Structures - DS - Asmitha Poojari",
-                "OOP - OOP - Sunil Kumar Aithal",
-                "DSD Lab - DSD Lab - Sannidhan M S",
-                "DS OOP Lab - DS|OOP Lab - Asmitha Poojari, Sunil Kumar Aithal"
-            ],
-            "A": [
-                "GFTT - Maths - Ambika N",
-                "Digital System Design - DSD - Raghunandan K R",
-                "DMS - DMS - K R Uday Kumar Reddy",
-                "Web programming - BWP - Ranjan Kumar H S",
-                "Data Structures - DS - Savitha Shetty",
-                "OOP - OOP - Sudeepa K B",
-                "DS OOP Lab - DS|OOP Lab - Savitha Shetty, Sudeepa K B, Sampath Kini",
-                "DSD Lab - DSD Lab - Raghunandan K R, Keerthana B C"
-            ],
-            "C": [
-                "GFTT - Maths - Smitha G V",
-                "Digital System Design - DSD - Keerthana B C",
-                "DMS - DMS - Ravi B",
-                "Web programming - BWP - Shashank Shetty",
-                "Data Structures - DS - Ramesha Shettigar",
-                "OOP - OOP - Pallavi K N",
-                "DSD Lab - DSD Lab - Keerthana B C, Sandeep Hegde",
-                "DS OOP Lab - DS|OOP Lab - Ramesha Shettigar, Pallavi K N"
-            ],
-            "D": [
-                "GFTT - Maths - Smitha G V",
-                "Digital System Design - DSD - Pradeep Nazareth",
-                "DMS - DMS - Chandra Naik",
-                "Web programming - BWP - Shabari Shedthi B",
-                "Data Structures - DS - Sannidhan M S",
-                "OOP - OOP - Raghunandan K R",
-                "DSD Lab - DSD Lab - Pradeep Nazareth",
-                "DS OOP Lab - DS|OOP Lab - Sannidhan M S, Raghunandan K R, Vijay Murari T"
-            ]
-        },
+        "VIII": {},
         "VI": {},
         "V": {
+            "D": [
+                "Compilers - CD - Minu P Abraham",
+                "Database - RDBMS - Pawan Hegde",
+                "Microprocessors - MP - Roshan Fernandes",
+                "Software Engg - SE - Naveen Chandavarkar",
+                "Operating Systems - OS - Savitha Shetty",
+                "Adv Unix Prog - AUP - Venugopala P S",
+                "Operations Research - OR - Vijay Murari T, Asmitha Poojari",
+                "Program Verification - PV - Ranjan Kumar H S",
+                "Emp Skill Dev - ESD - Krishna Prasad Rao",
+                "MP Lab - MP Lab - Roshan Fernandes",
+                "CD | RDBMS Lab - CD|RDBMS Lab - Minu P Abraham, Pawan Hegde"
+            ],
             "B": [
                 "Compilers - CD - Jyothi Shetty",
                 "Database - RDBMS - Ravi B",
@@ -181,19 +156,6 @@
                 "Emp Skill Dev - ESD - Chandra Naik",
                 "MP Lab - MP Lab - Mahesh Kini",
                 "CD | RDBMS Lab - CD|RDBMS Lab - Jyothi Shetty, Ranjan Kumar H S, Ravi B"
-            ],
-            "A": [
-                "Compilers - CD - Pallavi K N",
-                "Database - RDBMS - Radhakrishna Dodmane",
-                "Microprocessors - MP - Mahesh Kini",
-                "Software Engg - SE - Keerthana B C",
-                "Operating Systems - OS - Sampath Kini",
-                "Adv Unix Prog - AUP - Venugopala P S",
-                "Operations Research - OR - Vijay Murari T, Asmitha Poojari",
-                "Program Verification - PV - Ranjan Kumar H S",
-                "MP Lab - MP Lab - Mahesh Kini",
-                "CD | RDBMS Lab - CD|RDBMS Lab - Pallavi K N, Ranjan Kumar H S, Radhakrishna Dodmane",
-                "Emp Skill Dev - ESD - Pradeep Nazareth"
             ],
             "C": [
                 "Compilers - CD - Anisha P Rodrigues",
@@ -208,23 +170,73 @@
                 "MP Lab - MP Lab - Shilpa M K",
                 "CD | RDBMS Lab - CD|RDBMS Lab - Anisha P Rodrigues, Rajashree"
             ],
-            "D": [
-                "Compilers - CD - Minu P Abraham",
-                "Database - RDBMS - Pawan Hegde",
-                "Microprocessors - MP - Roshan Fernandes",
-                "Software Engg - SE - Naveen Chandavarkar",
-                "Operating Systems - OS - Savitha Shetty",
+            "A": [
+                "Compilers - CD - Pallavi K N",
+                "Database - RDBMS - Radhakrishna Dodmane",
+                "Microprocessors - MP - Mahesh Kini",
+                "Software Engg - SE - Keerthana B C",
+                "Operating Systems - OS - Sampath Kini",
                 "Adv Unix Prog - AUP - Venugopala P S",
                 "Operations Research - OR - Vijay Murari T, Asmitha Poojari",
                 "Program Verification - PV - Ranjan Kumar H S",
-                "Emp Skill Dev - ESD - Krishna Prasad Rao",
-                "MP Lab - MP Lab - Roshan Fernandes",
-                "CD | RDBMS Lab - CD|RDBMS Lab - Minu P Abraham, Pawan Hegde"
+                "MP Lab - MP Lab - Mahesh Kini",
+                "CD | RDBMS Lab - CD|RDBMS Lab - Pallavi K N, Ranjan Kumar H S, Radhakrishna Dodmane",
+                "Emp Skill Dev - ESD - Pradeep Nazareth"
             ]
         },
-        "IV": {},
-        "VIII": {},
+        "III": {
+            "D": [
+                "GFTT - Maths - Smitha G V",
+                "Digital System Design - DSD - Pradeep Nazareth",
+                "DMS - DMS - Chandra Naik",
+                "Web programming - BWP - Shabari Shedthi B",
+                "Data Structures - DS - Sannidhan M S",
+                "OOP - OOP - Raghunandan K R",
+                "DSD Lab - DSD Lab - Pradeep Nazareth",
+                "DS OOP Lab - DS|OOP Lab - Sannidhan M S, Raghunandan K R, Vijay Murari T"
+            ],
+            "B": [
+                "GFTT - Maths - Sowmya A",
+                "Digital System Design - DSD - Sannidhan M S",
+                "DMS - DMS - Chandra Naik",
+                "Web programming - BWP - Krishna Prasad Rao",
+                "Data Structures - DS - Asmitha Poojari",
+                "OOP - OOP - Sunil Kumar Aithal",
+                "DSD Lab - DSD Lab - Sannidhan M S",
+                "DS OOP Lab - DS|OOP Lab - Asmitha Poojari, Sunil Kumar Aithal"
+            ],
+            "C": [
+                "GFTT - Maths - Smitha G V",
+                "Digital System Design - DSD - Keerthana B C",
+                "DMS - DMS - Ravi B",
+                "Web programming - BWP - Shashank Shetty",
+                "Data Structures - DS - Ramesha Shettigar",
+                "OOP - OOP - Pallavi K N",
+                "DSD Lab - DSD Lab - Keerthana B C, Sandeep Hegde",
+                "DS OOP Lab - DS|OOP Lab - Ramesha Shettigar, Pallavi K N"
+            ],
+            "A": [
+                "GFTT - Maths - Ambika N",
+                "Digital System Design - DSD - Raghunandan K R",
+                "DMS - DMS - K R Uday Kumar Reddy",
+                "Web programming - BWP - Ranjan Kumar H S",
+                "Data Structures - DS - Savitha Shetty",
+                "OOP - OOP - Sudeepa K B",
+                "DS OOP Lab - DS|OOP Lab - Savitha Shetty, Sudeepa K B, Sampath Kini",
+                "DSD Lab - DSD Lab - Raghunandan K R, Keerthana B C"
+            ]
+        },
         "VII": {
+            "D": [
+                "OO Modeling and Design - OOMD - Naveen Chandavarkar",
+                "Adv Comp Arch - ACA - Shabari Shedthi B",
+                "Sw Arch - SA - Rajalaxmi Hegde",
+                "Python - PP - Ramesha Shettigar",
+                "Seminar - Seminar - D K Sreekantha, Minu P Abraham",
+                "Managing the Cloud - MC - Puneeth R P",
+                "Cloud App Dev - CDA - Minu P Abraham",
+                "CDA Lab - CDA Lab - Minu P Abraham, Shabari Shedthi B"
+            ],
             "B": [
                 "OO Modeling and Design - OOMD - Sharada Uday Shenoy",
                 "Adv Comp Arch - ACA - Manjunath Prasad",
@@ -234,16 +246,6 @@
                 "Social and Web Analytics - SWA - Shashank Shetty",
                 "Social and Web Analytics Lab - SWA Lab - Shashank Shetty, Sunil Kumar Aithal",
                 "Seminar - Seminar - Uday Kumar Shenoy, Anisha P Rodrigues"
-            ],
-            "A": [
-                "OO Modeling and Design - OOMD - Swathi Pai M",
-                "Adv Comp Arch - ACA - Raju K",
-                "Sw Arch - SA - Sandeep Hegde",
-                "Python - PP - Vijay Murari T",
-                "Virt and Cloud - CCV - Anisha P Rodrigues",
-                "Social and Web Analytics - SWA - Sunil Kumar Aithal",
-                "Social and Web Analytics Lab - SWA Lab - Sunil Kumar Aithal",
-                "Seminar - Seminar - Ramesha Shettigar, Shabari Shedthi B"
             ],
             "C": [
                 "OO Modeling and Design - OOMD - Ankitha A Nayak",
@@ -255,456 +257,96 @@
                 "CDA Lab - CDA Lab - Krishna Prasad Rao",
                 "Seminar - Seminar - Ranjan Kumar H S, Asmitha Poojari"
             ],
-            "D": [
-                "OO Modeling and Design - OOMD - Naveen Chandavarkar",
-                "Adv Comp Arch - ACA - Shabari Shedthi B",
-                "Sw Arch - SA - Rajalaxmi Hegde",
-                "Python - PP - Ramesha Shettigar",
-                "Seminar - Seminar - D K Sreekantha, Minu P Abraham",
-                "Managing the Cloud - MC - Puneeth R P",
-                "Cloud App Dev - CDA - Minu P Abraham",
-                "CDA Lab - CDA Lab - Minu P Abraham, Shabari Shedthi B"
+            "A": [
+                "OO Modeling and Design - OOMD - Swathi Pai M",
+                "Adv Comp Arch - ACA - Raju K",
+                "Sw Arch - SA - Sandeep Hegde",
+                "Python - PP - Vijay Murari T",
+                "Virt and Cloud - CCV - Anisha P Rodrigues",
+                "Social and Web Analytics - SWA - Sunil Kumar Aithal",
+                "Social and Web Analytics Lab - SWA Lab - Sunil Kumar Aithal",
+                "Seminar - Seminar - Ramesha Shettigar, Shabari Shedthi B"
             ]
-        }
+        },
+        "IV": {}
     },
     {
-        "Mr. Sandeep Hegde": [],
-        "Mr. Rama Krishna": [],
-        "Mr. K R Raghunandan": [],
-        "Dr. Mohammed Javed": [],
-        "Mrs. Sharada Uday Shenoy": [],
-        "Mr. Naveen Chandavarkar": [],
-        "Mr. Puneeth R P": [
+        "": [],
+        "Radhakrishna Dodmane": [],
+        "Divya Jennifer D'Souza": [],
+        "Swathi Pai M": [],
+        "Ambika N": [
+            "GFTT - Maths - III A"
+        ],
+        "Raghunandan K R": [],
+        "Puneeth R P": [
             "Managing the Cloud - MC - VII C",
             "Managing the Cloud - MC - VII D"
         ],
-        "Mrs. Shilpa M K": [],
-        "Mr. H R Manjunath Prasad": [],
-        "Dr. D K Sreekantha": [],
-        "Ms. Rajashree": [],
-        " ": [],
-        "Mrs. Minu P Abraham": [],
-        "Ms. Apoorva D'Souza": [],
-        "Mr. Raju K": [],
-        "Ms. Anitha D Bayar": [],
-        "Mrs. Anisha P Rodrigues": [],
-        "Mrs. Shabari Shedthi B": [],
-        "Mrs. Divya Jennifer D'Souza": [],
-        "Ms. Smitha G V": [],
-        "Mr. Pradeep Nazareth": [
+        "Savitha Shetty": [],
+        "Rajashree": [],
+        "Sowmya A": [],
+        "H R Manjunath Prasad": [],
+        "Manjunath Prasad": [
+            "Adv Comp Arch - ACA - VII B"
+        ],
+        "Sarika Hegde": [],
+        "Venugopala P S": [],
+        "Shashank Shetty": [],
+        "Sunil Kumar Aithal": [],
+        "Naveen Chandavarkar": [],
+        "Minu P Abraham": [],
+        "Uday Kumar Shenoy": [
+            "Operating Systems - OS - V B",
+            "Seminar - Seminar - VII B"
+        ],
+        "Rajalaxmi Hegde": [],
+        "Keerthana B C": [
+            "Digital System Design - DSD - III C",
+            "DSD Lab - DSD Lab - III C",
+            "Software Engg - SE - V A"
+        ],
+        "Apoorva D'Souza": [],
+        "Rama Krishna": [],
+        "Roshan Fernandes": [],
+        "Shilpa M K": [],
+        "Sandeep Hegde": [],
+        "Pawan Hegde": [],
+        "Ramesha Shettigar": [],
+        "Anisha P Rodrigues": [],
+        "Ranjan Kumar H S": [],
+        "Pradeep Nazareth": [
             "Digital System Design - DSD - III D",
             "DSD Lab - DSD Lab - III D",
             "Emp Skill Dev - ESD - V A",
             "Operating Systems - OS - V C"
         ],
-        "Mr. Ranjan Kumar H S": [],
-        "Dr. Uday Kumar Shenoy": [
-            "Operating Systems - OS - V B",
-            "Seminar - Seminar - VII B"
-        ],
-        "Mr. Venugopala P S": [],
-        "Mrs. Asmitha Poojari": [],
-        "Ms. Swathi Pai M": [
-            "OO Modeling and Design - OOMD - VII A"
-        ],
-        "Mr. Sannidhan M S": [],
-        "Mr. Radhakrishna Dodmane": [],
-        "Mr. Sampath Kini": [],
-        " Humanities": [],
-        "Mrs. Rajalaxmi Hegde": [],
-        "Mrs. Sarika Hegde": [],
-        "Ms. Sowmya A": [],
-        "Mr. Vijay Murari T": [],
-        "Dr. K R Uday Kumar Reddy": [],
-        "Mr. Ramesha Shettigar": [],
-        "Mrs. Jyothi Shetty": [],
-        "Mr. Sunil Kumar Aithal": [],
-        "Mr. Mahesh Kini": [],
-        "Mr. Manjunath Prasad": [
-            "Adv Comp Arch - ACA - VII B"
-        ],
-        "Mr. Ravi B": [],
-        "Ms. Ankitha A Nayak": [],
-        "Mr. Shashank Shetty": [
-            "Web programming - BWP - III C",
-            "Social and Web Analytics - SWA - VII B",
-            "Social and Web Analytics Lab - SWA Lab - VII B"
-        ],
-        "Mr. Chandra Naik": [],
-        "Dr. Shashirekha B Rai": [],
-        "Mr. Roshan Fernandes": [
-            "Microprocessors - MP - V D",
-            "MP Lab - MP Lab - V D"
-        ],
-        "Mr. Krishna Prasad Rao": [
-            "Web programming - BWP - III B",
-            "Emp Skill Dev - ESD - V D",
-            "Cloud App Dev - CDA - VII C",
-            "CDA Lab - CDA Lab - VII C"
-        ],
-        "Mrs. Pallavi K N": [],
-        "Ms. Ambika N": [
-            "GFTT - Maths - III A"
-        ],
-        "Mrs. Savitha Shetty": [],
-        "Mr. Pawan Hegde": [],
-        "Mr. Raghunandan K R": [],
-        "Mrs. Keerthana B C": [
-            "Digital System Design - DSD - III C",
-            "DSD Lab - DSD Lab - III C",
-            "Software Engg - SE - V A"
-        ],
-        "Mr. Sudeepa K B": [],
-        "Mr. Pradeep Kanchan": []
+        "Pradeep Kanchan": [],
+        "Mahesh Kini": [],
+        "Sudeepa K B": [],
+        "Sharada Uday Shenoy": [],
+        "K R Uday Kumar Reddy": [],
+        "Shashirekha B Rai": [],
+        "Ravi B": [],
+        "Chandra Naik": [],
+        "Ankitha A Nayak": [],
+        "Krishna Prasad Rao": [],
+        "D K Sreekantha": [],
+        "Vijay Murari T": [],
+        "Anitha D Bayar": [],
+        "Shabari Shedthi B": [],
+        "Sannidhan M S": [],
+        "Raju K": [],
+        "Mohammed Javed": [],
+        "Jyothi Shetty": [],
+        "Sampath Kini": [],
+        "Pallavi K N": [],
+        "Asmitha Poojari": [],
+        "Humanities": [],
+        "Smitha G V": []
     },
     {
-        "III": {
-            "B": {
-                "0": {
-                    "4": "-",
-                    "5": "Maths"
-                },
-                "1": {
-                    "3": "Maths",
-                    "4": "-",
-                    "5": "DSD Lab",
-                    "6": "DSD Lab",
-                    "7": "DSD Lab"
-                },
-                "2": {
-                    "0": "Maths",
-                    "4": "-",
-                    "5": "DS|OOP Lab",
-                    "6": "DS|OOP Lab",
-                    "7": "DS|OOP Lab"
-                },
-                "3": {
-                    "4": "-",
-                    "6": "Maths"
-                },
-                "4": {
-                    "0": "DSD Lab",
-                    "1": "DSD Lab",
-                    "2": "DSD Lab",
-                    "4": "-"
-                },
-                "5": {
-                    "0": "DS|OOP Lab",
-                    "1": "DS|OOP Lab",
-                    "2": "DS|OOP Lab",
-                    "3": "-"
-                }
-            },
-            "A": {
-                "0": {
-                    "1": "DS|OOP Lab",
-                    "2": "DS|OOP Lab",
-                    "3": "DS|OOP Lab",
-                    "4": "-"
-                },
-                "1": {
-                    "2": "Maths",
-                    "4": "-",
-                    "5": "DS|OOP Lab",
-                    "6": "DS|OOP Lab",
-                    "7": "DS|OOP Lab"
-                },
-                "2": {
-                    "0": "DSD Lab",
-                    "1": "DSD Lab",
-                    "2": "DSD Lab",
-                    "4": "-",
-                    "5": "Maths"
-                },
-                "3": {
-                    "4": "-",
-                    "5": "Maths"
-                },
-                "4": {
-                    "1": "Maths",
-                    "4": "-",
-                    "5": "DSD Lab",
-                    "6": "DSD Lab",
-                    "7": "DSD Lab"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
-            "D": {
-                "0": {
-                    "3": "Maths",
-                    "4": "-",
-                    "5": "DS|OOP Lab",
-                    "6": "DS|OOP Lab",
-                    "7": "DS|OOP Lab"
-                },
-                "1": {
-                    "0": "DSD Lab",
-                    "1": "DSD Lab",
-                    "2": "DSD Lab",
-                    "4": "-"
-                },
-                "2": {
-                    "2": "Maths",
-                    "4": "-",
-                    "5": "DSD Lab",
-                    "6": "DSD Lab",
-                    "7": "DSD Lab"
-                },
-                "3": {
-                    "1": "DS|OOP Lab",
-                    "2": "DS|OOP Lab",
-                    "3": "DS|OOP Lab",
-                    "4": "-",
-                    "5": "Maths"
-                },
-                "4": {
-                    "2": "Maths",
-                    "4": "-"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
-            "C": {
-                "0": {
-                    "4": "-",
-                    "5": "DSD Lab",
-                    "6": "DSD Lab",
-                    "7": "DSD Lab"
-                },
-                "1": {
-                    "4": "-",
-                    "5": "Maths"
-                },
-                "2": {
-                    "1": "DS|OOP Lab",
-                    "2": "DS|OOP Lab",
-                    "3": "DS|OOP Lab",
-                    "4": "-",
-                    "5": "Maths"
-                },
-                "3": {
-                    "1": "Maths",
-                    "4": "-"
-                },
-                "4": {
-                    "0": "Maths",
-                    "4": "-",
-                    "5": "DS|OOP Lab",
-                    "6": "DS|OOP Lab",
-                    "7": "DS|OOP Lab"
-                },
-                "5": {
-                    "0": "DSD Lab",
-                    "1": "DSD Lab",
-                    "2": "DSD Lab",
-                    "3": "-"
-                }
-            }
-        },
-        "VII": {
-            "B": {
-                "0": {
-                    "4": "-",
-                    "5": "SWA Lab",
-                    "6": "SWA Lab",
-                    "7": "SWA Lab"
-                },
-                "1": {
-                    "0": "PP",
-                    "1": "PP",
-                    "4": "-"
-                },
-                "2": {
-                    "2": "PP",
-                    "3": "PP",
-                    "4": "-",
-                    "5": "Seminar",
-                    "6": "Seminar"
-                },
-                "3": {
-                    "4": "-",
-                    "5": "SWA Lab",
-                    "6": "SWA Lab",
-                    "7": "SWA Lab"
-                },
-                "4": {
-                    "4": "-"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
-            "A": {
-                "0": {
-                    "4": "-",
-                    "5": "Seminar",
-                    "6": "Seminar"
-                },
-                "1": {
-                    "4": "-",
-                    "5": "SWA Lab",
-                    "6": "SWA Lab",
-                    "7": "SWA Lab"
-                },
-                "2": {
-                    "0": "PP",
-                    "1": "PP",
-                    "4": "-"
-                },
-                "3": {
-                    "4": "-"
-                },
-                "4": {
-                    "0": "PP",
-                    "1": "PP",
-                    "4": "-",
-                    "5": "SWA Lab",
-                    "6": "SWA Lab",
-                    "7": "SWA Lab"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
-            "C": {
-                "0": {
-                    "4": "-",
-                    "5": "CDA Lab",
-                    "6": "CDA Lab",
-                    "7": "CDA Lab"
-                },
-                "1": {
-                    "4": "-",
-                    "5": "CDA Lab",
-                    "6": "CDA Lab",
-                    "7": "CDA Lab"
-                },
-                "2": {
-                    "4": "-"
-                },
-                "3": {
-                    "2": "PP",
-                    "3": "PP",
-                    "4": "-"
-                },
-                "4": {
-                    "2": "PP",
-                    "3": "PP",
-                    "4": "-",
-                    "5": "Seminar",
-                    "6": "Seminar"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
-            "D": {
-                "0": {
-                    "4": "-"
-                },
-                "1": {
-                    "2": "PP",
-                    "3": "PP",
-                    "4": "-"
-                },
-                "2": {
-                    "4": "-",
-                    "5": "CDA Lab",
-                    "6": "CDA Lab",
-                    "7": "CDA Lab"
-                },
-                "3": {
-                    "0": "PP",
-                    "1": "PP",
-                    "4": "-"
-                },
-                "4": {
-                    "0": "Seminar",
-                    "1": "Seminar",
-                    "4": "-",
-                    "5": "CDA Lab",
-                    "6": "CDA Lab",
-                    "7": "CDA Lab"
-                },
-                "5": {
-                    "3": "-"
-                }
-            }
-        },
         "V": {
-            "B": {
-                "0": {
-                    "3": "AUP",
-                    "4": "-",
-                    "5": "MP Lab",
-                    "6": "MP Lab",
-                    "7": "MP Lab"
-                },
-                "1": {
-                    "4": "-",
-                    "7": "AUP"
-                },
-                "2": {
-                    "2": "AUP",
-                    "4": "-",
-                    "5": "CD|RDBMS Lab",
-                    "6": "CD|RDBMS Lab",
-                    "7": "CD|RDBMS Lab"
-                },
-                "3": {
-                    "1": "CD|RDBMS Lab",
-                    "2": "CD|RDBMS Lab",
-                    "3": "CD|RDBMS Lab",
-                    "4": "-"
-                },
-                "4": {
-                    "0": "MP Lab",
-                    "1": "MP Lab",
-                    "2": "MP Lab",
-                    "4": "-"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
-            "A": {
-                "0": {
-                    "0": "MP Lab",
-                    "1": "MP Lab",
-                    "2": "MP Lab",
-                    "3": "AUP",
-                    "4": "-"
-                },
-                "1": {
-                    "1": "CD|RDBMS Lab",
-                    "2": "CD|RDBMS Lab",
-                    "3": "CD|RDBMS Lab",
-                    "4": "-",
-                    "7": "AUP"
-                },
-                "2": {
-                    "2": "AUP",
-                    "4": "-"
-                },
-                "3": {
-                    "4": "-",
-                    "5": "MP Lab",
-                    "6": "MP Lab",
-                    "7": "MP Lab"
-                },
-                "4": {
-                    "1": "CD|RDBMS Lab",
-                    "2": "CD|RDBMS Lab",
-                    "3": "CD|RDBMS Lab",
-                    "4": "-"
-                },
-                "5": {
-                    "3": "-"
-                }
-            },
             "D": {
                 "0": {
                     "3": "AUP",
@@ -735,6 +377,41 @@
                     "5": "MP Lab",
                     "6": "MP Lab",
                     "7": "MP Lab"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "3": "AUP",
+                    "4": "-",
+                    "5": "MP Lab",
+                    "6": "MP Lab",
+                    "7": "MP Lab"
+                },
+                "1": {
+                    "4": "-",
+                    "7": "AUP"
+                },
+                "2": {
+                    "2": "AUP",
+                    "4": "-",
+                    "5": "CD|RDBMS Lab",
+                    "6": "CD|RDBMS Lab",
+                    "7": "CD|RDBMS Lab"
+                },
+                "3": {
+                    "1": "CD|RDBMS Lab",
+                    "2": "CD|RDBMS Lab",
+                    "3": "CD|RDBMS Lab",
+                    "4": "-"
+                },
+                "4": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "4": "-"
                 },
                 "5": {
                     "3": "-"
@@ -774,8 +451,327 @@
                 "5": {
                     "3": "-"
                 }
+            },
+            "A": {
+                "0": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "3": "AUP",
+                    "4": "-"
+                },
+                "1": {
+                    "1": "CD|RDBMS Lab",
+                    "2": "CD|RDBMS Lab",
+                    "3": "CD|RDBMS Lab",
+                    "4": "-",
+                    "7": "AUP"
+                },
+                "2": {
+                    "2": "AUP",
+                    "4": "-"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "MP Lab",
+                    "6": "MP Lab",
+                    "7": "MP Lab"
+                },
+                "4": {
+                    "1": "CD|RDBMS Lab",
+                    "2": "CD|RDBMS Lab",
+                    "3": "CD|RDBMS Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            }
+        },
+        "III": {
+            "D": {
+                "0": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "DS|OOP Lab",
+                    "6": "DS|OOP Lab",
+                    "7": "DS|OOP Lab"
+                },
+                "1": {
+                    "0": "DSD Lab",
+                    "1": "DSD Lab",
+                    "2": "DSD Lab",
+                    "4": "-"
+                },
+                "2": {
+                    "2": "Maths",
+                    "4": "-",
+                    "5": "DSD Lab",
+                    "6": "DSD Lab",
+                    "7": "DSD Lab"
+                },
+                "3": {
+                    "1": "DS|OOP Lab",
+                    "2": "DS|OOP Lab",
+                    "3": "DS|OOP Lab",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "4": {
+                    "2": "Maths",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "1": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "DSD Lab",
+                    "6": "DSD Lab",
+                    "7": "DSD Lab"
+                },
+                "2": {
+                    "0": "Maths",
+                    "4": "-",
+                    "5": "DS|OOP Lab",
+                    "6": "DS|OOP Lab",
+                    "7": "DS|OOP Lab"
+                },
+                "3": {
+                    "4": "-",
+                    "6": "Maths"
+                },
+                "4": {
+                    "0": "DSD Lab",
+                    "1": "DSD Lab",
+                    "2": "DSD Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "0": "DS|OOP Lab",
+                    "1": "DS|OOP Lab",
+                    "2": "DS|OOP Lab",
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "4": "-",
+                    "5": "DSD Lab",
+                    "6": "DSD Lab",
+                    "7": "DSD Lab"
+                },
+                "1": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "2": {
+                    "1": "DS|OOP Lab",
+                    "2": "DS|OOP Lab",
+                    "3": "DS|OOP Lab",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "3": {
+                    "1": "Maths",
+                    "4": "-"
+                },
+                "4": {
+                    "0": "Maths",
+                    "4": "-",
+                    "5": "DS|OOP Lab",
+                    "6": "DS|OOP Lab",
+                    "7": "DS|OOP Lab"
+                },
+                "5": {
+                    "0": "DSD Lab",
+                    "1": "DSD Lab",
+                    "2": "DSD Lab",
+                    "3": "-"
+                }
+            },
+            "A": {
+                "0": {
+                    "1": "DS|OOP Lab",
+                    "2": "DS|OOP Lab",
+                    "3": "DS|OOP Lab",
+                    "4": "-"
+                },
+                "1": {
+                    "2": "Maths",
+                    "4": "-",
+                    "5": "DS|OOP Lab",
+                    "6": "DS|OOP Lab",
+                    "7": "DS|OOP Lab"
+                },
+                "2": {
+                    "0": "DSD Lab",
+                    "1": "DSD Lab",
+                    "2": "DSD Lab",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "4": {
+                    "1": "Maths",
+                    "4": "-",
+                    "5": "DSD Lab",
+                    "6": "DSD Lab",
+                    "7": "DSD Lab"
+                },
+                "5": {
+                    "3": "-"
+                }
+            }
+        },
+        "VII": {
+            "D": {
+                "0": {
+                    "4": "-"
+                },
+                "1": {
+                    "2": "PP",
+                    "3": "PP",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "CDA Lab",
+                    "6": "CDA Lab",
+                    "7": "CDA Lab"
+                },
+                "3": {
+                    "0": "PP",
+                    "1": "PP",
+                    "4": "-"
+                },
+                "4": {
+                    "0": "Seminar",
+                    "1": "Seminar",
+                    "4": "-",
+                    "5": "CDA Lab",
+                    "6": "CDA Lab",
+                    "7": "CDA Lab"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-",
+                    "5": "SWA Lab",
+                    "6": "SWA Lab",
+                    "7": "SWA Lab"
+                },
+                "1": {
+                    "0": "PP",
+                    "1": "PP",
+                    "4": "-"
+                },
+                "2": {
+                    "2": "PP",
+                    "3": "PP",
+                    "4": "-",
+                    "5": "Seminar",
+                    "6": "Seminar"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "SWA Lab",
+                    "6": "SWA Lab",
+                    "7": "SWA Lab"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "4": "-",
+                    "5": "CDA Lab",
+                    "6": "CDA Lab",
+                    "7": "CDA Lab"
+                },
+                "1": {
+                    "4": "-",
+                    "5": "CDA Lab",
+                    "6": "CDA Lab",
+                    "7": "CDA Lab"
+                },
+                "2": {
+                    "4": "-"
+                },
+                "3": {
+                    "2": "PP",
+                    "3": "PP",
+                    "4": "-"
+                },
+                "4": {
+                    "2": "PP",
+                    "3": "PP",
+                    "4": "-",
+                    "5": "Seminar",
+                    "6": "Seminar"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "A": {
+                "0": {
+                    "4": "-",
+                    "5": "Seminar",
+                    "6": "Seminar"
+                },
+                "1": {
+                    "4": "-",
+                    "5": "SWA Lab",
+                    "6": "SWA Lab",
+                    "7": "SWA Lab"
+                },
+                "2": {
+                    "0": "PP",
+                    "1": "PP",
+                    "4": "-"
+                },
+                "3": {
+                    "4": "-"
+                },
+                "4": {
+                    "0": "PP",
+                    "1": "PP",
+                    "4": "-",
+                    "5": "SWA Lab",
+                    "6": "SWA Lab",
+                    "7": "SWA Lab"
+                },
+                "5": {
+                    "3": "-"
+                }
             }
         }
     },
-    {}
+    {},
+    {
+        "VIII": {},
+        "VI": {},
+        "V": {},
+        "III": {},
+        "VII": {},
+        "IV": {}
+    }
 ]

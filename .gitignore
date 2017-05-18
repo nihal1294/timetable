@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 Output/
 logs/
+template/word/document.xml
