@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
-        window4.resize(920, 472)
+        window4.resize(920, 476)
         window4.setStyleSheet(lightstyle.css)
         window4.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window4)
@@ -102,7 +102,7 @@ class Ui_window4(object):
         self.faculty_table.verticalHeader().setMinimumSectionSize(27)
         self.gridLayout.addWidget(self.faculty_table, 2, 0, 1, 2)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(0, 48))
+        self.label.setMinimumSize(QtCore.QSize(0, 52))
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
         font.setPointSize(14)

@@ -112,7 +112,7 @@ class ParentWindow(QMainWindow):
 		print('current screen res: ',self.screen_width, self.screen_height)
 		#self.adjusted_width = (screen_width/1366)
 		#self.adjusted_height = (screen_height/768)
-		self.resize_ratio = (self.screen_height/self.screen_width) #need a more accurate resize ratio than this.
+		self.resize_ratio = 0.7 #70% resizing ... need a more accurate resize ratio than this.
 		print('resize ratio: ',self.resize_ratio)
 
 		self.setup_first_window()
@@ -371,6 +371,7 @@ class ParentWindow(QMainWindow):
 		self.ui.label_8.setEnabled(False)
 		self.ui.line.setEnabled(False)
 		self.ui.line_2.setEnabled(False)
+		self.ui.electiveBtn.setEnabled(False)
 		self.ui.input_textbox.setPlaceholderText("")
 		self.ui.inputType_combobox.setCurrentIndex(-1)
 		self.ui.semester_combobox.setCurrentIndex(-1)
