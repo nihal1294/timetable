@@ -90,3 +90,4 @@ ENV/
 Output/
 logs/
 template/word/document.xml
+release/

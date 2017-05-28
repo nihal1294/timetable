@@ -44,7 +44,7 @@ class subject:
 		return self.name == obj.name and self.short_name == obj.short_name
 		
 	def __repr__(self):
-		return 'subject({}, {}, {}, {})'.format(self.name.__repr__(), self.short_name.__repr__(), self.credits, self.lab, self.subcode.__repr__()) 
+		return 'subject({}, {}, {}, {}, {})'.format(self.name.__repr__(), self.short_name.__repr__(), self.credits, self.lab, self.subcode.__repr__()) 
 
 
 class faculty_class:
@@ -363,6 +363,15 @@ class ParentWindow(QMainWindow):
 		self.ui.subject_short_input.setEnabled(False)
 		self.ui.lab_checkbox.setEnabled(False)
 		self.ui.credits_spinbox.setEnabled(False)
+		self.ui.label_3.setEnabled(False)
+		self.ui.label_4.setEnabled(False)
+		self.ui.label_5.setEnabled(False)
+		self.ui.label_6.setEnabled(False)
+		self.ui.label_7.setEnabled(False)
+		self.ui.label_8.setEnabled(False)
+		self.ui.line.setEnabled(False)
+		self.ui.line_2.setEnabled(False)
+		self.ui.input_textbox.setPlaceholderText("")
 		self.ui.inputType_combobox.setCurrentIndex(-1)
 		self.ui.semester_combobox.setCurrentIndex(-1)
 		self.ui.input_list.clear()
@@ -1758,7 +1767,7 @@ class ParentWindow(QMainWindow):
 		for teacher in ffs:
 			self.faculty_fixed_slots[teacher] = dict()
 			for row in ffs[teacher]:
-				self.faculty_fixed_slots[teacher][int(row)] = dict()
+				self.faculty_fixed_slots[teacher][in2t(row)] = dict()
 				for col in ffs[teacher][row]:
 					self.faculty_fixed_slots[teacher][int(row)][int(col)] = ffs[teacher][row][col]
 		'''
