@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
-from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QDialog
 from PyQt5 import Qt
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -22,6 +22,7 @@ from window3 import Ui_window3
 from window4 import Ui_window4
 from window5 import Ui_window5
 from elective_window import Ui_elective_window
+from year_window import Ui_year_window
 
 class subject:
 	def __init__(self, name, short_name = '', credits = 0, lab = False, subcode = ''):
@@ -115,12 +116,14 @@ class ParentWindow(QMainWindow):
 		self.resize_ratio = 0.7 #70% resizing ... need a more accurate resize ratio than this.
 		print('resize ratio: ',self.resize_ratio)
 
+		self.setup_year_window()
 		self.setup_first_window()
 		self.setup_second_window()
 		self.setup_third_window()
 		self.setup_fourth_window()
 		self.setup_fifth_window()
 
+		self.layered_windows.addWidget(self.YearWindow)
 		self.layered_windows.addWidget(self.FirstWindow)
 		self.layered_windows.addWidget(self.SecondWindow)
 		self.layered_windows.addWidget(self.ThirdWindow)
@@ -133,6 +136,24 @@ class ParentWindow(QMainWindow):
 		#intended original size for the app = (920, 500)
 		#self.resize(916*self.adjusted_width, 460*self.adjusted_height)
 		#self.resize()
+
+	# setup year input window
+	def setup_year_window(self):
+		#YEAR WINDOW - ACADEMIC YEAR INPUT
+		self.YearWindow = QDialog()
+		self.ui_year = Ui_year_window()
+		self.ui_year.setupUi(self.YearWindow)
+
+		self.months = ['January','February','March','April','May','June','July','August','September','October','November','December']
+		for m in self.months:
+			self.ui_year.startMonth_combobox.addItem(m)
+			self.ui_year.endMonth_combobox.addItem(m)
+
+		self.ui_year.startYear_dateedit.setDate(QtCore.QDate.currentDate())
+		self.ui_year.endYear_dateedit.setDate(QtCore.QDate.currentDate())
+
+		self.ui_year.continueBtn.clicked.connect(self.continue_btn_event)
+		self.ui_year.skipBtn.clicked.connect(self.next_btn_event)
 
 
 	# setup functions
@@ -376,6 +397,17 @@ class ParentWindow(QMainWindow):
 		self.ui.inputType_combobox.setCurrentIndex(-1)
 		self.ui.semester_combobox.setCurrentIndex(-1)
 		self.ui.input_list.clear()
+
+	# year input window functions
+	def continue_btn_event(self):
+		self.startMonth = self.ui_year.startMonth_combobox.currentText()
+		self.startYear = self.ui_year.startYear_dateedit.date().year()
+		self.endMonth = self.ui_year.endMonth_combobox.currentText()
+		self.endYear = self.ui_year.endYear_dateedit.date().year()
+
+		print(self.startMonth, self.startYear, self.endMonth, self.endYear)
+
+		self.next_btn_event()
 
 
 	# first form functions
@@ -1550,7 +1582,10 @@ class ParentWindow(QMainWindow):
 				os.startfile(filepath)
 
 	def next_btn_event(self):
-		if self.FirstWindow.isVisible():
+		if self.YearWindow.isVisible():
+			self.YearWindow.hide()
+			self.FirstWindow.show()
+		elif self.FirstWindow.isVisible():
 			self.FirstWindow.hide()
 			self.SecondWindow.show()
 			self.populate_second_window()
