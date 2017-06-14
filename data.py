@@ -16,7 +16,7 @@ class timetable(OrderedDict):
         for timeslot in self[day]:
           if self.final[day][timeslot] == False:
             flexibility += 1
-      self.flexibility = flexibility/100.0
+      self.flexibility = flexibility / 44
 
 faculty = { 'Mr. Venugopala P S': timetable('Mr. Venugopala P S'),
     'Mr. Ravi B': timetable('Mr. Ravi B'),

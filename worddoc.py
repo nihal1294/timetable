@@ -192,9 +192,11 @@ def make_docx(tt, subjects_assigned, subs, filename, tt_type, faculty = None):
 					file_paths.append(os.path.join(root, file))
 		else:
 			file_paths.append(file)
-
-	with zipfile.ZipFile(os.path.join('..', filename), 'w') as zf:
-		for file in file_paths:
-			zf.write(file)
-
-	os.chdir('..')
+	try:
+		with zipfile.ZipFile(os.path.join('..', filename), 'w') as zf:
+			for file in file_paths:
+				zf.write(file)
+	except: # reraise the exception
+		raise
+	finally: # always change dir back
+		os.chdir('..')

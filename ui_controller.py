@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
-from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QDialog
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QDialog, QMessageBox
 from PyQt5 import Qt
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -144,8 +144,8 @@ class ParentWindow(QMainWindow):
 		self.ui_year = Ui_year_window()
 		self.ui_year.setupUi(self.YearWindow)
 
-		self.months = ['January','February','March','April','May','June','July','August','September','October','November','December']
-		for m in self.months:
+		months = ['January','February','March','April','May','June','July','August','September','October','November','December']
+		for m in months:
 			self.ui_year.startMonth_combobox.addItem(m)
 			self.ui_year.endMonth_combobox.addItem(m)
 
@@ -1568,8 +1568,12 @@ class ParentWindow(QMainWindow):
 			else:
 				tt = self.timetables[sem][sec]
 				filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
-				worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value)
-				os.startfile(filepath)
+				try:
+					worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value)
+					os.startfile(filepath)
+				except OSError as err:
+					self.show_printerror_dialog(err)
+				
 		else:
 			faculty = self.ui5.faculty_combobox.currentText()
 			if faculty == '':
@@ -1578,8 +1582,20 @@ class ParentWindow(QMainWindow):
 			else:
 				tt = self.faculty_timetables[faculty]
 				filepath = os.path.join('Output', 'Personal Timetables', '{}.docx'.format(faculty_class(tt.name).name))
-				worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty')
-				os.startfile(filepath)
+				try:
+					worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty')
+					os.startfile(filepath)
+				except OSError as err:
+					self.show_printerror_dialog(err)
+
+	def show_printerror_dialog(self, error):
+		msg = QMessageBox()
+		msg.setIcon(QMessageBox.Critical)
+		msg.setText('There was an error with printing')
+		msg.setInformativeText(error.strerror + ': ' + error.filename)
+		msg.setWindowTitle("Error")
+		msg.setStandardButtons(QMessageBox.Ok)
+		msg.exec_()
 
 	def next_btn_event(self):
 		if self.YearWindow.isVisible():
