@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window3(object):
     def setupUi(self, window3):
         window3.setObjectName("window3")
-        window3.resize(920, 472)
+        window3.resize(920, 475)
         window3.setStyleSheet(lightstyle.css)
         window3.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window3)
@@ -179,6 +179,8 @@ class Ui_window3(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         window3.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window3)
         self.actionSave.setObjectName("actionSave")
@@ -188,15 +190,24 @@ class Ui_window3(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window3)
         self.actionExit.setObjectName("actionExit")
-        self.actionExit.triggered.connect(self.closeEvent)
+        #self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window3)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window3)
         self.actionManual.setObjectName("actionManual")
+        self.actionSet_Year_Department = QtWidgets.QAction(window3)
+        self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
+        self.aboutMenu = QtWidgets.QAction(window3)
+        self.aboutMenu.setObjectName("aboutMenu")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionSet_Year_Department)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.aboutMenu)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window3)
         QtCore.QMetaObject.connectSlotsByName(window3)
@@ -244,17 +255,20 @@ class Ui_window3(object):
         self.backBtn.setText(_translate("window3", "Back"))
         self.nextBtn.setText(_translate("window3", "Next"))
         self.menuFile.setTitle(_translate("window3", "File"))
+        self.menuHelp.setTitle(_translate("window3", "Help"))
         self.actionSave.setText(_translate("window3", "Save"))
         self.actionLoad.setText(_translate("window3", "Load"))
         self.actionExit.setText(_translate("window3", "Exit"))
         self.actionAbout.setText(_translate("window3", "About"))
         self.actionManual.setText(_translate("window3", "Manual"))
+        self.actionSet_Year_Department.setText(_translate("window3", "Set Year/Department"))
+        self.aboutMenu.setText(_translate("window3", "About"))
 
 
+    '''
     def closeEvent(self, event):
         exit()
     
-    '''
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()
         close.setText("Are you sure you want to exit?")
@@ -272,7 +286,6 @@ class Ui_window3(object):
             event.accept()
         else:
             event.ignore()'''
-
 
 
 if __name__ == "__main__":

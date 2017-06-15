@@ -140,6 +140,8 @@ class Ui_window4(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         window4.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window4)
         self.actionSave.setObjectName("actionSave")
@@ -149,15 +151,24 @@ class Ui_window4(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window4)
         self.actionExit.setObjectName("actionExit")
-        self.actionExit.triggered.connect(self.closeEvent)
+        #self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window4)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window4)
         self.actionManual.setObjectName("actionManual")
+        self.actionSet_Year_Department = QtWidgets.QAction(window4)
+        self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
+        self.aboutMenu = QtWidgets.QAction(window4)
+        self.aboutMenu.setObjectName("aboutMenu")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionSet_Year_Department)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.aboutMenu)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window4)
         QtCore.QMetaObject.connectSlotsByName(window4)
@@ -201,17 +212,19 @@ class Ui_window4(object):
         self.backBtn.setText(_translate("window4", "Back"))
         self.generateBtn.setText(_translate("window4", "Generate"))
         self.menuFile.setTitle(_translate("window4", "File"))
+        self.menuHelp.setTitle(_translate("window4", "Help"))
         self.actionSave.setText(_translate("window4", "Save"))
         self.actionLoad.setText(_translate("window4", "Load"))
         self.actionExit.setText(_translate("window4", "Exit"))
         self.actionAbout.setText(_translate("window4", "About"))
         self.actionManual.setText(_translate("window4", "Manual"))
+        self.actionSet_Year_Department.setText(_translate("window4", "Set Year/Department"))
+        self.aboutMenu.setText(_translate("window4", "About"))
 
-
+    '''
     def closeEvent(self, event):
         exit()
     
-    '''
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()
         close.setText("Are you sure you want to exit?")
@@ -229,7 +242,6 @@ class Ui_window4(object):
             event.accept()
         else:
             event.ignore()'''
-
 
 
 if __name__ == "__main__":

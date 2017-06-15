@@ -23,6 +23,7 @@ from window4 import Ui_window4
 from window5 import Ui_window5
 from elective_window import Ui_elective_window
 from year_window import Ui_year_window
+from about_window import Ui_aboutWindow
 
 class subject:
 	def __init__(self, name, short_name = '', credits = 0, lab = False, subcode = ''):
@@ -149,6 +150,11 @@ class ParentWindow(QMainWindow):
 			self.ui_year.startMonth_combobox.addItem(m)
 			self.ui_year.endMonth_combobox.addItem(m)
 
+		depts = ['Biotechnology', 'Civil Engineering', 'Computer Science and Engineering', 'Electronics & Communications Engineering',\
+		 'Electrical & Electronics Engineering', 'Information Science and Engineering', 'Mechanical Engineering']
+		for d in depts:
+			self.ui_year.dept_combobox.addItem(d)
+
 		self.ui_year.startYear_dateedit.setDate(QtCore.QDate.currentDate())
 		self.ui_year.endYear_dateedit.setDate(QtCore.QDate.currentDate())
 
@@ -171,6 +177,8 @@ class ParentWindow(QMainWindow):
 		self.ui.input_textbox.setEnabled(False)
 		self.ui.label_5.setEnabled(False)
 		self.ui.title_combobox.setEnabled(False)
+		self.ui.desig_combobox.setEnabled(False)
+		self.ui.label_9.setEnabled(False)
 		self.ui.subject_code_input.setEnabled(False)
 		self.ui.label_8.setEnabled(False)
 		self.ui.subject_short_input.setEnabled(False)
@@ -216,15 +224,20 @@ class ParentWindow(QMainWindow):
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
 		for value in self.titles_list:
 			self.ui.title_combobox.addItem(value)
+		self.desig_list = ['Professor', 'Assistant Professor', 'Associate Professor', 'Head of Department', 'Principal']
+		for val in self.desig_list:
+			self.ui.desig_combobox.addItem(val)
+
 		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('icons/favicon.ico'))
 
 		self.FirstWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FirstWindow.updateGeometry()
 
-		self.ui.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+		self.ui.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
-		#setting up elective window during first window setup
+		#setting up elective window and about window during first window setup
 		self.setup_elective_window()
+		self.setup_about_window()
 
 	def setup_elective_window(self):
 		#ELECTIVE WINDOW - Elective Entry
@@ -294,7 +307,7 @@ class ParentWindow(QMainWindow):
 		self.SecondWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.SecondWindow.updateGeometry()
 
-		self.ui2.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+		self.ui2.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
 	def setup_third_window(self):
 		#THIRD WINDOW - Subject Constraints
@@ -319,7 +332,7 @@ class ParentWindow(QMainWindow):
 		self.ThirdWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.ThirdWindow.updateGeometry()
 
-		self.ui3.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+		self.ui3.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
 	def setup_fourth_window(self):
 		#FOURTH WINDOW - Faculty Constraints
@@ -340,7 +353,7 @@ class ParentWindow(QMainWindow):
 		self.FourthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FourthWindow.updateGeometry()
 
-		self.ui4.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+		self.ui4.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
 	def setup_fifth_window(self):
 		#FIFTH WINDOW - Generated timetable
@@ -348,7 +361,7 @@ class ParentWindow(QMainWindow):
 		self.ui5 = Ui_window5()
 		self.ui5.setupUi(self.FifthWindow)
 
-		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
+		self.ui5.finishBtn.clicked.connect(exit)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
 		self.ui5.printBtn.clicked.connect(self.print_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
@@ -373,7 +386,18 @@ class ParentWindow(QMainWindow):
 		self.FifthWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
 		self.FifthWindow.updateGeometry()
 
-		self.ui5.menuFile.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+		self.ui5.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
+
+	def setup_about_window(self):
+		# ABOUT WINDOW
+		self.AboutWindow = QDialog()
+		self.ui_about = Ui_aboutWindow()
+		self.ui_about.setupUi(self.AboutWindow)
+
+		self.ui_about.logoLabel.setPixmap(QtGui.QPixmap('icons/nittelogo.png'))
+
+		self.ui_about.closeBtn.clicked.connect(self.AboutWindow.hide)
+
 
 	def reset_first_window(self):
 		self.ui.semester_combobox.setEnabled(False)
@@ -398,14 +422,15 @@ class ParentWindow(QMainWindow):
 		self.ui.semester_combobox.setCurrentIndex(-1)
 		self.ui.input_list.clear()
 
-	# year input window functions
+	# year window functions
 	def continue_btn_event(self):
 		self.startMonth = self.ui_year.startMonth_combobox.currentText()
 		self.startYear = self.ui_year.startYear_dateedit.date().year()
 		self.endMonth = self.ui_year.endMonth_combobox.currentText()
 		self.endYear = self.ui_year.endYear_dateedit.date().year()
+		self.department = self.ui_year.dept_combobox.currentText()
 
-		print(self.startMonth, self.startYear, self.endMonth, self.endYear)
+		print(self.startMonth, self.startYear, self.endMonth, self.endYear, self.department)
 
 		self.next_btn_event()
 
@@ -429,6 +454,8 @@ class ParentWindow(QMainWindow):
 				self.ui.title_combobox.setEnabled(True)
 				self.ui.input_textbox.setEnabled(True)
 				self.ui.label_5.setEnabled(True)
+				self.ui.desig_combobox.setEnabled(True)
+				self.ui.label_9.setEnabled(True)
 				self.ui.subject_code_input.setEnabled(False)
 				self.ui.label_8.setEnabled(False)
 				self.ui.subject_short_input.setEnabled(False)
@@ -452,6 +479,8 @@ class ParentWindow(QMainWindow):
 				self.ui.title_combobox.setEnabled(False)
 				self.ui.input_textbox.setEnabled(True)
 				self.ui.label_5.setEnabled(True)
+				self.ui.desig_combobox.setEnabled(False)
+				self.ui.label_9.setEnabled(False)
 				self.ui.subject_code_input.setEnabled(True)
 				self.ui.subject_code_input.clear()
 				self.ui.label_8.setEnabled(True)
@@ -1598,9 +1627,16 @@ class ParentWindow(QMainWindow):
 		msg.exec_()
 
 	def next_btn_event(self):
-		if self.YearWindow.isVisible():
-			self.YearWindow.hide()
-			self.FirstWindow.show()
+		if self.YearWindow.isVisible(): # if year window is opened from menu option
+			if self.FirstWindow.isVisible() or \
+			self.SecondWindow.isVisible() or \
+			self.ThirdWindow.isVisible() or \
+			self.FourthWindow.isVisible() or \
+			self.FifthWindow.isVisible():
+				self.YearWindow.hide()
+			else:						# when year window is opened when app is started
+				self.YearWindow.hide()
+				self.FirstWindow.show()
 		elif self.FirstWindow.isVisible():
 			self.FirstWindow.hide()
 			self.SecondWindow.show()
@@ -1670,6 +1706,10 @@ class ParentWindow(QMainWindow):
 				self.populate_second_window()
 				self.reset_first_window()
 			pass
+		elif option == "Set Year/Department":
+			self.YearWindow.show()
+		elif option == "About":
+			self.AboutWindow.show()
 
 	def save_state(self, fname):
 		file = open(fname, "wb")
