@@ -199,7 +199,7 @@ class Ui_window(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.input_list.sizePolicy().hasHeightForWidth())
         self.input_list.setSizePolicy(sizePolicy)
-        self.input_list.setMinimumSize(QtCore.QSize(280, 0))
+        self.input_list.setMinimumSize(QtCore.QSize(260, 0))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.input_list.setFont(font)
