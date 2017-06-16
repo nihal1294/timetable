@@ -66,6 +66,22 @@ def getnumhours(tt, subject, day):
 			hours.append(timeslot)
 	return num, hours
 	
+def is_consecutive_hour(teacher, d, h):
+	previous = teacher[d][h-1] if h > 1 else None
+	if (d == 'saturday' and h < 4) or (d != 'saturday' and h < 8):
+		next = teacher[d][h+1]
+	else:
+		next = None
+	if not previous and not next:
+		return False
+	elif previous and next:
+		return True
+	elif previous and h == 3:
+		return False
+	elif next and h == 2:
+		return False
+	else:
+		return True
 
 
 def generate(tt, subjects, faculty): # subjects is a list of tuples (name, hours/week, teacher, short name); faculty is a dict
@@ -117,16 +133,16 @@ def print_timetable(tt, style = 'section', name = ''):
 def rehabilitate(day, section, subject, faculty):
 	teacher = faculty[subject[2]]
 	for timeslot in teacher[day]:
-		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True: # and getnumhours(section, subject, day)[0] < 1: # teacher is available
+		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot): # and getnumhours(section, subject, day)[0] < 1: # teacher is available
 			if section.final[day][timeslot] != True: # time slot for that section is not finalized
 				clashing_subject = section[day][timeslot]
-				if teacher.flexibility < section.final[day][timeslot]: # whatever subject has been allotted, move it to clash
+				if teacher.workload > section.final[day][timeslot]: # whatever subject has been allotted, move it to clash
 					if clashing_subject != '': 
 						clash.append((section, clashing_subject))
 						clashing_teacher = clashing_subject[2]
 						#print(clashing_teacher)
 						faculty[clashing_teacher][day][timeslot] = ''
-					section.final[day][timeslot] = 1-teacher.flexibility # finalize the lecture by moving the new subject into the time slot
+					section.final[day][timeslot] = teacher.workload # finalize the lecture by moving the new subject into the time slot
 					section[day][timeslot] = subject
 					teacher[day][timeslot] = (section.name, subject)
 					break
@@ -134,7 +150,6 @@ def rehabilitate(day, section, subject, faculty):
 		dayclash.append((section, subject))
 
 def utilize_free_hours(tt, faculty):
-	return
 	for day in tt:
 		timeslots = tt[day].keys()
 		t1 = min(timeslots)
@@ -145,7 +160,7 @@ def utilize_free_hours(tt, faculty):
 					if tt[day][i] != '' and tt.final[day][i] != True:
 						subject = tt[day][i]
 						teacher = faculty[subject[2]]
-						if teacher[day][t] == '' and teacher.final[day][t] == False:
+						if teacher[day][t] == '' and teacher.final[day][t] == False and not is_consecutive_hour(teacher, day, t):
 							# if teacher is free at timeslot t, move subject from timeslot i to t
 							tt[day][t] = subject
 							tt[day][i] = ''
@@ -180,9 +195,9 @@ def adjust_clash(timetables, faculty):
 						#numhours, hours = getnumhours(section, subject, day)
 						
 						try:
-							if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True:
+							if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot):
 								teacher[day][timeslot] = (section.name, subject)
-								section.final[day][timeslot] = teacher.flexibility
+								section.final[day][timeslot] = teacher.workload
 								#teacher.final[day][timeslot] = True
 							elif teacher[day][timeslot] != '' and (teacher[day][timeslot][0] != section.name or teacher[day][timeslot][1] != subject): # teacher is not available, there is a clash
 								# teacher is not available
@@ -190,8 +205,13 @@ def adjust_clash(timetables, faculty):
 								section[day][timeslot] = ''
 								section.final[day][timeslot] = False
 								rehabilitate(day, section, subject, faculty)
+							elif is_consecutive_hour(teacher, day, timeslot):
+								section[day][timeslot] = ''
+								section.final[day][timeslot] = False
+								teacher[day][timeslot] = ''
+								rehabilitate(day, section, subject, faculty)
 							else: # if teacher is available, finalize the lecture 
-								section.final[day][timeslot] = teacher.flexibility
+								section.final[day][timeslot] = teacher.workload
 								#teacher.final[day][timeslot] = True
 						except Exception as e:
 							print(section.name, subject, day, timeslot, faculty[subject[2]][day][timeslot])
@@ -238,6 +258,11 @@ def free_faculty(teacher, time, day = 'all'):
 		else:
 			teacher.final[day][time] = True
 
+def print_dayclash():
+	for item in dayclash:
+		print(item[0].name, item[1])
+	print(len(dayclash))
+
 def produce_timetable(ui):
 	global faculty
 	global subjects
@@ -266,15 +291,17 @@ def produce_timetable(ui):
 			for sub in ui.subjects_assigned[sem][section]:
 				sub_long, sub_short, staff = sub.split(' - ')
 				staff = staff.split(', ')
+				sub = ui.subs[sub_short]
 				if ui.subs[sub_short].lab == False:
 					staff = staff[0]
-				print(sub_long, sub_short, staff)
-				print(ui.subs)
-				sub = ui.subs[sub_short]
+					faculty[staff].workload += sub.credits
+				#print(sub_long, sub_short, staff)
+				#print(ui.subs)
 				s = [sub_long, sub.credits, staff, sub_short]
 				subjects[sem][section].append(s)
 				subjects_ref[sem][section][sub_short] = s
-	print(subjects)
+
+	#print(subjects)
 	for sem in ui.section_fixed_slots:
 		for section in ui.section_fixed_slots[sem]:
 			for row in ui.section_fixed_slots[sem][section]:
@@ -289,7 +316,7 @@ def produce_timetable(ui):
 						sub_short = [sub_short]
 						for short in sub_short: # if it's an elective, this list will have more than 1 subject
 							sub = subjects_ref[sem][section][short]
-							print(sub, row, col)
+							#print(sub, row, col)
 							if ui.subs[short].lab == True:
 								finalize_lab(timetables[sem][section], day, hour, sub, 1)
 								#finalize_theory(timetables[sem][section], day, hour, sub)
@@ -306,10 +333,9 @@ def produce_timetable(ui):
 	for sem in timetables:
 		for section in timetables[sem]:
 			generate(timetables[sem][section], subjects[sem][section], faculty)
-			timetables[sem][section].calc_flexibility()
 			print_timetable(timetables[sem][section])
 	for teacher in faculty:
-		faculty[teacher].calc_flexibility()
+		faculty[teacher].calc_workload()
 	print('...adjusting clashes...')
 	adjust_clash(timetables, faculty)
 	adjust_clash(timetables, faculty)
@@ -317,12 +343,8 @@ def produce_timetable(ui):
 		for section in timetables[sem]:
 			utilize_free_hours(timetables[sem][section], faculty)
 			print_timetable(timetables[sem][section])
-	return timetables, faculty
-
-def print_dayclash():
-	for item in dayclash:
-		print(item[0].name, item[1])
-	print(len(dayclash))
+	print_dayclash()
+	return timetables, faculty, dayclash
 
 if __name__ == '__main__':
 
@@ -392,10 +414,10 @@ if __name__ == '__main__':
 		for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
 			section.final[day][5] = True # lunch break
 		section.final['saturday'][4] = True # saturday
-		'''
+		
 		for hour in 6,7,8: # thursday afternoon
 			section.final['thursday'][hour] = True
-		'''
+		
 	# faculty constraints
 	'''
 	free_faculty(faculty['Mr. Venugopala P S'], 1)
@@ -513,15 +535,18 @@ if __name__ == '__main__':
 		# 	'D': eightd
 		# })
 	})
-	for sem in timetables:
-		for section in timetables[sem]:
-			timetables[sem][section].calc_flexibility()
-	for teacher in faculty:
-		faculty[teacher].calc_flexibility()
+
+	for sec in subjects:
+		for _, hours, name, _ in subjects[sec]:
+			if hours != 0:
+				faculty[name].workload += hours
+	for name in faculty:
+		faculty[name].calc_workload()
+		#print(name, faculty[name].workload)
+	
 	adjust_clash(timetables, faculty=faculty)
 	print_dayclash()
-	adjust_clash(timetables, faculty=faculty)
-	print_dayclash()
+	print('... 2nd pass ...')
 	adjust_clash(timetables, faculty=faculty)
 	print_dayclash()
 	
@@ -541,7 +566,7 @@ if __name__ == '__main__':
 	
 
 	#print('... faculty timetable ...')
-	#print_timetable(faculty['Mr. Venugopala P S'], style = 'staff', name = 'Mr. Venugopal')
+	print_timetable(faculty['Mr. Venugopala P S'], style = 'staff', name = 'Mr. Venugopal')
 	#print_timetable(faculty['Mr. Ramesha Shettigar'], style = 'staff', name = 'Mr. RS')
 	#print_timetable(faculty['Mr. Pradeep Nazareth'], style = 'staff', name = 'Mr. Pradeep')
 

@@ -1336,9 +1336,9 @@ class ParentWindow(QMainWindow):
 		print(self.faculty_fixed_slots)
 
 	def generate_event(self):
-		self.timetables, self.faculty_timetables = tt.produce_timetable(self)
+		self.timetables, self.faculty_timetables, dayclash = tt.produce_timetable(self)
 		self.section_combobox5_event()
-
+		self.show_results_dialog(dayclash)
 
 	#fifth form functions
 	def semester_combobox5_event(self):
@@ -1623,6 +1623,17 @@ class ParentWindow(QMainWindow):
 		msg.setText('There was an error with printing')
 		msg.setInformativeText(error.strerror + ': ' + error.filename)
 		msg.setWindowTitle("Error")
+		msg.setStandardButtons(QMessageBox.Ok)
+		msg.exec_()
+
+	def show_results_dialog(self, dayclash):
+		msg = QMessageBox()
+		msg.setIcon(QMessageBox.Information)	
+		msg.setText('Completed generation')
+		msg.setInformativeText('There were ' + str(len(dayclash)) + ' unallocated subjects.')
+		info = 'They are: \n' + '\n'.join(map(lambda x: '{} {} {}'.format(x[0].name, x[1][2], x[1][3]), dayclash))
+		msg.setDetailedText(info)
+		msg.setWindowTitle("Info")
 		msg.setStandardButtons(QMessageBox.Ok)
 		msg.exec_()
 
