@@ -25,8 +25,13 @@ l121: t[6][2]
 l122: t[6][3]
 
 section:
-root[0][3][18][1].text - replace
+root[0][3][16][1].text - replace 's00'
 
+year:
+root[0][3][3][1].text 
+room no: root[0][4][3][1].text
+dept long: root[0][1][1][1].text
+dept short: root[0][4][17][1].text - replace 'CSE'
 
 personal timetable:
 staff name: root[0][5][2][1].text
@@ -40,6 +45,9 @@ teaching workload:
 w1: root[0][27][2][1].text - replace
 w2: root[0][28][5][1].text
 w3: root[0][29][3][1].text
+
+dept- root[0][4][2][1].text - replace
+designation- root[0][6][1][1].text - append
 '''
 
 import xml.etree.ElementTree as ET
@@ -56,10 +64,22 @@ day_row_num = {
 	'saturday': 5
 }
 
-def print_faculty_wordxml(tt, faculty_subjects, subs):
+dept_short = {  'Biotechnology': 'BT',
+	 				'Civil Engineering': 'CV', 
+	 				'Computer Science & Engineering': 'CSE', 
+	 				'Electronics & Communications Engineering': 'ECE',
+		 			'Electrical & Electronics Engineering': 'EE', 
+		 			'Information Science & Engineering': 'ISE', 
+		 			'Mechanical Engineering': 'ME',
+		 			'': '' }
+
+def print_faculty_wordxml(tt, designation, faculty_subjects, subs, sections):
 	tree = ET.parse('template2.xml')
 	root = tree.getroot()
 	root[0][5][2][1].text = tt.name # name
+	root[0][4][2][1].text = root[0][4][2][1].text.replace('CSE', dept_short[tt.dept]) # branch
+	root[0][6][1][1].text += ' ' + designation
+
 	t = root[0][9] # table
 	w1 = root[0][27][2][1] # teaching workloads
 	w2 = root[0][28][5][1]
@@ -73,11 +93,13 @@ def print_faculty_wordxml(tt, faculty_subjects, subs):
 			reg_subs.append((short_sub, sec))
 	if len(reg_subs) > 0:
 		r = root[0][8]
-		r[4][1].text = '{} - {} - '.format(reg_subs[0][0], reg_subs[0][1])
+		sem, sec = reg_subs[0][1].split(' ')
+		r[4][1].text = '{} - {} - {}'.format(reg_subs[0][0], reg_subs[0][1], sections[sem][sec].roomno)
 		next_sub = 9
 		for short_sub, sec in reg_subs[1:]:
 			p = copy.deepcopy(r)
-			p[4][1].text = '{} - {} - '.format(short_sub, sec)
+			sem, s = sec.split(' ')
+			p[4][1].text = '{} - {} - {}'.format(short_sub, sec, sections[sem][s].roomno)
 			root[0].insert(next_sub, p)
 	
 	theory_units = 0
@@ -103,7 +125,7 @@ def print_faculty_wordxml(tt, faculty_subjects, subs):
 
 	return ET.tostring(root)
 
-def print_section_wordxml(tt, subjects_assigned, subs, faculty):
+def print_section_wordxml(tt, subjects_assigned, subs, year, faculty):
 	tree = ET.parse('template.xml')
 	root = tree.getroot()
 	t1 = root[0][6]
@@ -120,7 +142,14 @@ def print_section_wordxml(tt, subjects_assigned, subs, faculty):
 			t1[r][c][1][1][1].text = sub
 			
 
-	root[0][3][18][1].text = root[0][3][18][1].text.replace('s00', tt.name)	
+	root[0][3][16][1].text = root[0][3][16][1].text.replace('s00', tt.name) # section
+	root[0][1][1][1].text = 'Department of ' + tt.dept # department - long
+	branch = root[0][4][17][1].text # department - short
+	branch = branch.replace('CSE', dept_short[tt.dept])
+	root[0][4][17][1].text = branch
+	root[0][3][3][1].text = year # year
+	root[0][4][3][1].text = tt.roomno # room number
+
 
 	regular_subs = []
 	labs = []
@@ -176,11 +205,11 @@ def print_section_wordxml(tt, subjects_assigned, subs, faculty):
 
 	return ET.tostring(root)
 
-def make_docx(tt, subjects_assigned, subs, filename, tt_type, faculty = None):
+def make_docx(tt, subjects_assigned, subs, filename, tt_type, dicts, year = None):
 	if tt_type == 'section':
-		xml_string = print_section_wordxml(tt, subjects_assigned, subs, faculty)
+		xml_string = print_section_wordxml(tt, subjects_assigned, subs, year, dicts)
 	else:
-		xml_string = print_faculty_wordxml(tt, subjects_assigned, subs)
+		xml_string = print_faculty_wordxml(tt, year, subjects_assigned, subs, dicts)
 	with open(os.path.join('template', 'word', 'document.xml'), 'wb') as f:
 		f.write(xml_string)
 	file_paths = []

@@ -274,6 +274,7 @@ def produce_timetable(ui):
 	faculty = dict()
 	for member in ui.faculty_list_value:
 		faculty[member] = timetable(str(member))
+		faculty[member].dept = ui.department
 	subjects = dict()
 	subjects_ref = dict()
 	timetables = dict()
@@ -286,6 +287,7 @@ def produce_timetable(ui):
 				subjects[sem][section] = []
 				subjects_ref[sem][section] = dict()
 				timetables[sem][section] = timetable(sem + ' ' + section)
+				timetables[sem][section].dept = ui.department
 	for sem in ui.subjects_assigned:
 		for section in ui.subjects_assigned[sem]:
 			for sub in ui.subjects_assigned[sem][section]:

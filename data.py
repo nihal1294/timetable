@@ -3,6 +3,8 @@ from collections import OrderedDict
 class timetable(OrderedDict):
     def __init__(self, name, fixedslots = False):
         self.name = name
+        self.roomno = ''
+        self.dept = ''
         self.final = OrderedDict()
         for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
             self[day] = OrderedDict({1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: ''})

@@ -50,7 +50,7 @@ class subject:
 
 
 class faculty_class:
-	def __init__(self, name, title = ''):
+	def __init__(self, name, title = '', designation = ''):
 		if title == '':
 			name = name.split(' ')
 			if len(name) > 1:
@@ -60,9 +60,10 @@ class faculty_class:
 				name = name[0]
 		self.name = name
 		self.title = title
+		self.designation = designation
 
 	def __repr__(self):
-		return 'faculty_class({}, {})'.format(self.name.__repr__(), self.title.__repr__())
+		return 'faculty_class({}, {}, {})'.format(self.name.__repr__(), self.title.__repr__(), self.designation.__repr__())
 
 	def __str__(self):
 		return self.title + ' ' + self.name
@@ -150,16 +151,23 @@ class ParentWindow(QMainWindow):
 			self.ui_year.startMonth_combobox.addItem(m)
 			self.ui_year.endMonth_combobox.addItem(m)
 
-		depts = ['Biotechnology', 'Civil Engineering', 'Computer Science and Engineering', 'Electronics & Communications Engineering',\
+		depts = ['Biotechnology', 'Civil Engineering', 'Computer Science & Engineering', 'Electronics & Communications Engineering',\
 		 'Electrical & Electronics Engineering', 'Information Science and Engineering', 'Mechanical Engineering']
 		for d in depts:
 			self.ui_year.dept_combobox.addItem(d)
 
 		self.ui_year.startYear_dateedit.setDate(QtCore.QDate.currentDate())
+		#self.ui_year.startYear_dateedit.setDate(QtCore.QDate.fromString('2015', 'yyyy'))
 		self.ui_year.endYear_dateedit.setDate(QtCore.QDate.currentDate())
 
 		self.ui_year.continueBtn.clicked.connect(self.continue_btn_event)
 		self.ui_year.skipBtn.clicked.connect(self.next_btn_event)
+
+		self.startMonth = ''
+		self.startYear = ''
+		self.endMonth = ''
+		self.endYear = ''
+		self.department = ''
 
 
 	# setup functions
@@ -224,7 +232,7 @@ class ParentWindow(QMainWindow):
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
 		for value in self.titles_list:
 			self.ui.title_combobox.addItem(value)
-		self.desig_list = ['Professor', 'Assistant Professor', 'Associate Professor', 'Head of Department', 'Principal']
+		self.desig_list = ['Assistant Professor', 'Professor', 'Associate Professor', 'Head of Department', 'Principal']
 		for val in self.desig_list:
 			self.ui.desig_combobox.addItem(val)
 
@@ -594,7 +602,8 @@ class ParentWindow(QMainWindow):
 								t = text + " - " + short_sub
 								self.ui.input_list.takeItem(self.ui.input_list.row(x))
 								self.ui.input_list.addItem(t)
-								self.update_subject_changes(subj, y)
+								if y.name != text or y.short_name != short_sub:
+									self.update_subject_changes(subj, y)
 								self.ui.credits_spinbox.setValue(1)
 								break
 			else:
@@ -604,6 +613,7 @@ class ParentWindow(QMainWindow):
 						if fac == y.name:
 							y.title = self.ui.title_combobox.currentText()
 							y.name = text
+							y.designation = self.ui.desig_combobox.currentText()
 							self.ui.input_list.takeItem(self.ui.input_list.row(x))
 							self.ui.input_list.addItem(text)
 							self.update_faculty_changes(fac, y)
@@ -652,7 +662,9 @@ class ParentWindow(QMainWindow):
 					title = self.ui.title_combobox.currentText()
 					t = title + " " + text
 					if t not in self.faculty_list_value:
-						self.faculty_list_value.append(faculty_class(t))
+						f = faculty_class(t)
+						f.designation = self.ui.desig_combobox.currentText()
+						self.faculty_list_value.append(f)
 						self.ui.input_list.addItem(text)
 					else:
 						self.systemtray_icon.show()
@@ -750,6 +762,9 @@ class ParentWindow(QMainWindow):
 						index = self.ui.title_combobox.findText(y.title)
 						if index >= 0:
 							self.ui.title_combobox.setCurrentIndex(index)
+						index = self.ui.desig_combobox.findText(y.designation)
+						if index >= 0:
+							self.ui.desig_combobox.setCurrentIndex(index)
 						break
 		'''if msvcrt.kbhit() and ord(msvcrt.getch()) == 27:
 			self.ui.subject_short_input.clear()
@@ -1598,7 +1613,10 @@ class ParentWindow(QMainWindow):
 				tt = self.timetables[sem][sec]
 				filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
 				try:
-					worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value)
+					year = '{}. {} - {}. {}'.format(self.startMonth[:3], self.startYear, self.endMonth[:3], self.endYear)
+					roomno = self.ui5.roomno_textbox.text()
+					tt.roomno = roomno
+					worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value, year)
 					os.startfile(filepath)
 				except OSError as err:
 					self.show_printerror_dialog(err)
@@ -1612,7 +1630,9 @@ class ParentWindow(QMainWindow):
 				tt = self.faculty_timetables[faculty]
 				filepath = os.path.join('Output', 'Personal Timetables', '{}.docx'.format(faculty_class(tt.name).name))
 				try:
-					worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty')
+					i = self.faculty_list_value.index(faculty)
+					designation = self.faculty_list_value[i].designation
+					worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty', self.timetables, designation)
 					os.startfile(filepath)
 				except OSError as err:
 					self.show_printerror_dialog(err)
@@ -1716,6 +1736,18 @@ class ParentWindow(QMainWindow):
 				self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
 				self.populate_second_window()
 				self.reset_first_window()
+				# set year window 
+				self.ui_year.startYear_dateedit.setDate(QtCore.QDate.fromString(str(self.startYear), 'yyyy'))
+				self.ui_year.endYear_dateedit.setDate(QtCore.QDate.fromString(str(self.endYear), 'yyyy'))
+				i = self.ui_year.startMonth_combobox.findText(self.startMonth)
+				if i >= 0:
+					self.ui_year.startMonth_combobox.setCurrentIndex(i)
+				i = self.ui_year.endMonth_combobox.findText(self.endMonth)
+				if i >= 0:
+					self.ui_year.endMonth_combobox.setCurrentIndex(i)
+				i = self.ui_year.dept_combobox.findText(self.department)
+				if i >= 0:
+					self.ui_year.dept_combobox.setCurrentIndex(i)
 			pass
 		elif option == "Set Year/Department":
 			self.YearWindow.show()
@@ -1724,7 +1756,8 @@ class ParentWindow(QMainWindow):
 
 	def save_state(self, fname):
 		file = open(fname, "wb")
-		state = (self.faculty_list_value,
+		state = (self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
+				 self.faculty_list_value,
 				 self.subjects,
 				 #self.subs,
 				 self.num_sections,
@@ -1747,16 +1780,16 @@ class ParentWindow(QMainWindow):
 	def load_state(self, fname):
 		file = open(fname, "rb")
 		state = pickle.load(file)
-		self.faculty_list_value = state[0]
-		self.subjects = state[1]
-		self.num_sections = state[2]
-		self.sections = state[3]
-		self.subjects_assigned = state[4]
-		self.faculty_subjects = state[5]
-		self.section_fixed_slots = state[6]
-		self.faculty_fixed_slots = state[7]
-		if len(state) > 8:
-			self.electives = state[8]
+		(	self.startMonth, self.startYear, self.endMonth, self.endYear, self.department, 
+			self.faculty_list_value,
+			self.subjects,
+			self.num_sections,
+			self.sections,
+			self.subjects_assigned,
+			self.faculty_subjects,
+			self.section_fixed_slots,
+			self.faculty_fixed_slots,
+			self.electives ) = state
 		file.close()
 
 		self.subs = dict()
@@ -1766,6 +1799,7 @@ class ParentWindow(QMainWindow):
 		#print(self.subs)
 		print(self.faculty_subjects)
 		print(self.faculty_fixed_slots)
+
 		pass
 
 	def save_state_json(self, fname):
@@ -1804,6 +1838,7 @@ class ParentWindow(QMainWindow):
 				for sub in self.electives[sem][group]:
 					electives[sem][group].append(sub.__repr__())
 		state = (
+			self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
 			faculty_list_value,
 			subjects,
 			self.num_sections,
@@ -1823,14 +1858,16 @@ class ParentWindow(QMainWindow):
 	def load_state_json(self, fname):
 		file = open(fname, "r")
 		state = json.loads(file.read())
-		faculty_list_value = state[0]
-		subjects = state[1]
-		self.num_sections = state[2]
-		self.sections = state[3]
-		self.subjects_assigned = state[4]
-		self.faculty_subjects = state[5]
-		sfs = state[6]
-		ffs = state[7]
+		(	self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
+			faculty_list_value,
+			subjects,
+			self.num_sections,
+			self.sections,
+			self.subjects_assigned,
+			self.faculty_subjects,
+			sfs,
+			ffs,
+			electives) = state
 
 		self.faculty_list_value = []
 		for teacher in faculty_list_value:
@@ -1843,19 +1880,19 @@ class ParentWindow(QMainWindow):
 				s = eval(sub)
 				self.subjects[sem].append(s)
 				self.subs[s.short_name] = s
-		if len(state) > 8: # backward compatibility with older save files
-			electives = state[8]
-			self.electives = dict()
-			for sem in electives:
-				self.electives[sem] = dict()
-				for group in electives[sem]:
-					self.electives[sem][group] = []
-					for sub in electives[sem][group]:
-						s = eval(sub)
-						if s.short_name in self.subs:
-							self.electives[sem][group].append(self.subs[s.short_name])
-						else:
-							self.electives[sem][group].append(s)
+
+			
+		self.electives = dict()
+		for sem in electives:
+			self.electives[sem] = dict()
+			for group in electives[sem]:
+				self.electives[sem][group] = []
+				for sub in electives[sem][group]:
+					s = eval(sub)
+					if s.short_name in self.subs:
+						self.electives[sem][group].append(self.subs[s.short_name])
+					else:
+						self.electives[sem][group].append(s)
 
 		self.section_fixed_slots = dict()
 		self.faculty_fixed_slots = dict()
