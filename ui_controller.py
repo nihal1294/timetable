@@ -14,6 +14,7 @@ import json
 import time
 import traceback
 import worddoc
+import xlrd
 #import msvcrt
 
 from window import Ui_window
@@ -152,7 +153,7 @@ class ParentWindow(QMainWindow):
 			self.ui_year.endMonth_combobox.addItem(m)
 
 		depts = ['Biotechnology', 'Civil Engineering', 'Computer Science & Engineering', 'Electronics & Communications Engineering',\
-		 'Electrical & Electronics Engineering', 'Information Science and Engineering', 'Mechanical Engineering']
+		 'Electrical & Electronics Engineering', 'Information Science & Engineering', 'Mechanical Engineering']
 		for d in depts:
 			self.ui_year.dept_combobox.addItem(d)
 
@@ -616,7 +617,7 @@ class ParentWindow(QMainWindow):
 							y.designation = self.ui.desig_combobox.currentText()
 							self.ui.input_list.takeItem(self.ui.input_list.row(x))
 							self.ui.input_list.addItem(text)
-							self.update_faculty_changes(fac, y)
+							self.update_faculty_changes(fac, y.name)
 							break
 			self.ui.input_list.clearSelection()
 			self.row = []
@@ -1730,6 +1731,8 @@ class ParentWindow(QMainWindow):
 				print(fname)
 				if fname.endswith('.json'):
 					self.load_state_json(fname)
+				elif fname.endswith('.xlsx') or fname.endswith('.xls'):
+					self.load_excel(fname)
 				else:
 					self.load_state(fname)
 				self.systemtray_icon.show()
@@ -1916,6 +1919,70 @@ class ParentWindow(QMainWindow):
 		print(self.faculty_fixed_slots)
 		'''
 		file.close()
+
+	def load_excel(self, fname):
+		book = xlrd.open_workbook(fname)
+		sheet = book.sheet_by_index(0)
+		rows = sheet.nrows
+		cols = sheet.ncols
+		faculty = set()
+		subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
+		subs = dict()
+		subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
+		faculty_subjects = dict()
+		sections = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
+		cur_sem = ''
+		cur_sub = ''
+		cur_sec = 1
+		for r in range(1, rows):
+			cur_sec += 1
+			if sheet.cell_value(r, 4).strip():
+				cur_sem = sheet.cell_value(r, 4).strip()
+				cur_sec = 1
+			if sheet.cell_value(r, 1).strip():
+				sub_code = sheet.cell_value(r, 0).strip()
+				sub_name = sheet.cell_value(r, 1).strip()
+				sub_short =  sheet.cell_value(r, 2).strip()
+				credits = sheet.cell_value(r, 3) or 0
+				credits = int(credits)
+				lab = sub_name.endswith('Lab')
+				if not cur_sub or sub_name != cur_sub.name:
+					cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
+					if not sub_short.startswith('ELE'):
+						subjects[cur_sem].append(cur_sub)
+						subs[sub_short] = cur_sub
+					else: # elective
+						cur_sub = ''
+						pass
+			if cur_sub: # don't do anything for electives
+				section = chr(64 + cur_sec)
+				if section not in subjects_assigned[cur_sem]:
+					subjects_assigned[cur_sem][section] = []
+					sections[cur_sem].append(section)
+				
+				f = sheet.cell_value(r, 5).strip()
+				f = f.split(',')
+				for i, fac_name in enumerate(f):
+					f[i] = fac_name.strip()
+					if fac_name not in faculty:
+						faculty.add(faculty_class(fac_name, ' '))
+						faculty_subjects[fac_name] = []
+					faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
+				subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
+
+		self.faculty_list_value = list(faculty)
+		self.subjects = subjects
+		self.subs = subs
+		self.subjects_assigned = subjects_assigned
+		print(self.subjects_assigned)
+		self.faculty_subjects = faculty_subjects
+		self.sections = sections
+		num_sections = dict()
+		for sem in sections:
+			num_sections[sem] = len(sections[sem])
+		self.num_sections = num_sections
+
+	# end class
 
 def my_excepthook(type, value, tb):
 	traceback.print_exception(type, value, tb)
