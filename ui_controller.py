@@ -93,7 +93,7 @@ class logger:
 		self.log.close()
 
 	def write(self, message):
-		self.terminal.write(message)
+		#self.terminal.write(message)
 		self.log.write(message)
 		self.flush()
 
@@ -1928,6 +1928,7 @@ class ParentWindow(QMainWindow):
 		faculty = set()
 		subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
 		subs = dict()
+		electives = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
 		subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
 		faculty_subjects = dict()
 		sections = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
@@ -1947,32 +1948,45 @@ class ParentWindow(QMainWindow):
 				credits = int(credits)
 				lab = sub_name.endswith('Lab')
 				if not cur_sub or sub_name != cur_sub.name:
-					cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
-					if not sub_short.startswith('ELE'):
+					if not sub_short.upper().startswith('ELE'):
+						if lab:
+							sub_short = sub_short.split('|')
+							sub_short = ' | '.join(map(str.strip, sub_short))
+						cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
 						subjects[cur_sem].append(cur_sub)
 						subs[sub_short] = cur_sub
 					else: # elective
-						cur_sub = ''
+						sub_short = sub_short.split(',')
+						sub_short = list(map(str.strip, sub_short))
+						group = 'Elective ' + sub_short[0].split('-')[1].strip()
+						sub_short = sub_short[1]
+						cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
+						subjects[cur_sem].append(cur_sub)
+						subs[sub_short] = cur_sub
+						if group not in electives[cur_sem]:
+							electives[cur_sem][group] = []
+						electives[cur_sem][group].append(cur_sub)
 						pass
-			if cur_sub: # don't do anything for electives
-				section = chr(64 + cur_sec)
-				if section not in subjects_assigned[cur_sem]:
-					subjects_assigned[cur_sem][section] = []
-					sections[cur_sem].append(section)
-				
-				f = sheet.cell_value(r, 5).strip()
-				f = f.split(',')
-				for i, fac_name in enumerate(f):
-					f[i] = fac_name.strip()
-					if fac_name not in faculty:
-						faculty.add(faculty_class(fac_name, ' '))
-						faculty_subjects[fac_name] = []
-					faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
-				subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
+
+			section = chr(64 + cur_sec)
+			if section not in subjects_assigned[cur_sem]:
+				subjects_assigned[cur_sem][section] = []
+				sections[cur_sem].append(section)
+			
+			f = sheet.cell_value(r, 5).strip()
+			f = f.split(',')
+			for i, fac_name in enumerate(f):
+				f[i] = fac_name.strip()
+				if fac_name not in faculty:
+					faculty.add(faculty_class(fac_name, ' '))
+					faculty_subjects[fac_name] = []
+				faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
+			subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
 
 		self.faculty_list_value = list(faculty)
 		self.subjects = subjects
 		self.subs = subs
+		self.electives = electives
 		self.subjects_assigned = subjects_assigned
 		print(self.subjects_assigned)
 		self.faculty_subjects = faculty_subjects

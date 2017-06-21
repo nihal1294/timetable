@@ -241,6 +241,20 @@ def finalize_theory(section, day, time, subject, hours = 1):
 		faculty[teacher][day][i] = (section.name, subject)
 		faculty[teacher].final[day][i] = True
 
+def finalize_elective(section, day, time, subjects, sub_short):
+	global faculty
+	section[day][time] = ('Elective', 0, 'Elective staff', sub_short) # last field is the one that matters, others are not used
+	section.final[day][time] = True
+	for sub in subjects:
+		teacher = sub[2]
+		if isinstance(teacher, list): # if elective is a lab, it may have multiple teachers
+			for t in teacher:
+				faculty[t][day][time] = (section.name, sub)
+				faculty[t].final[day][time] = True
+		else:
+			faculty[teacher][day][time] = (section.name, sub)
+			faculty[teacher].final[day][time] = True
+
 def free_faculty(teacher, time, day = 'all'):
 	if day == 'all':
 		for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday':
@@ -314,9 +328,15 @@ def produce_timetable(ui):
 					if sub_short == '-': 
 						timetables[sem][section].final[day][hour] = True
 					else:
-						#sub_short = sub_short.split('/')
-						sub_short = [sub_short]
-						for short in sub_short: # if it's an elective, this list will have more than 1 subject
+						sub_short = sub_short.split('/')
+						if len(sub_short) > 1: # if it's an elective, this list will have more than 1 subject
+							subs = []
+							for s in sub_short:
+								if s in subjects_ref[sem][section]:
+									subs.append(subjects_ref[sem][section][s])
+							sub_short = '/'.join(sub_short)
+							finalize_elective(timetables[sem][section], day, hour, subs, sub_short)
+						else: # not elective
 							sub = subjects_ref[sem][section][short]
 							#print(sub, row, col)
 							if ui.subs[short].lab == True:
