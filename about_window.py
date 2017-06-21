@@ -101,9 +101,12 @@ class Ui_aboutWindow(object):
 "Sanjan S Poojari\n"
 "Shishir Upadhya\n"
 "\n"
-"Under Guidance of:\n"
+"Under the Guidance of:\n"
 "Mr. Ramesha Shettigar\n"
+"Assistant Professor\n"
 "Department of Computer Science\n"
+"\n"
+"For:\n"
 "NMAM Institute of Technology, Nitte\n"
 "2017"))
         self.closeBtn.setText(_translate("aboutWindow", "Close"))
