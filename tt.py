@@ -371,6 +371,7 @@ def produce_timetable(ui, loc):
 							sub_short = '/'.join(sub_short)
 							finalize_elective(timetables[sem][section], day, hour, subs, sub_short)
 						else: # not elective
+							short = sub_short[0]
 							sub = subjects_ref[sem][section][short]
 							#print(sub, row, col)
 							if ui.subs[short].lab == True:

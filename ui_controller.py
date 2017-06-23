@@ -49,6 +49,8 @@ class subject:
 	def __repr__(self):
 		return 'subject({}, {}, {}, {}, {})'.format(self.name.__repr__(), self.short_name.__repr__(), self.credits, self.lab, self.subcode.__repr__()) 
 
+	def __hash__(self):
+		return self.name.__hash__()
 
 class faculty_class:
 	def __init__(self, name, title = '', designation = ''):
@@ -94,7 +96,7 @@ class faculty_class:
 		self.log.close()
 
 	def write(self, message):
-		#self.terminal.write(message)
+		self.terminal.write(message)
 		self.log.write(message)
 		self.flush()
 
@@ -914,7 +916,7 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
 		self.ui_elec.electiveGroup_combobox.clear()
 		sem = self.ui_elec.semester_combobox.currentText()
-		for group in self.electives[sem].keys():
+		for group in self.electives[sem]:
 			self.ui_elec.electiveGroup_combobox.addItem(group)
 		self.ui_elec.elective_input_textbox.clear()
 		self.ui_elec.elective_input_textbox.setPlaceholderText("")
@@ -1862,6 +1864,7 @@ class ParentWindow(QMainWindow):
 					self.save_state(fname)
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
+<<<<<<< HEAD
 				logger.debug('Success. Saved to %s', fname)
 			pass
 		elif option == "Load":
@@ -1918,6 +1921,38 @@ class ParentWindow(QMainWindow):
 			else:
 				logger.debug('Clear All denied')
 				pass
+=======
+		elif option == "Load":
+			dialog = QtWidgets.QFileDialog(caption = "Choose file to load")
+			dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+			if dialog.exec_():
+				fname = dialog.selectedFiles()[0]
+				print(fname)
+				if fname.endswith('.json'):
+					success = self.load_state_json(fname)
+				elif fname.endswith('.xlsx') or fname.endswith('.xls'):
+					success = self.load_excel(fname)
+				else:
+					success = self.load_state(fname)
+				if success:
+					self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
+					self.populate_second_window()
+					self.reset_first_window()
+
+					# set year window 
+					self.ui_year.startYear_dateedit.setDate(QtCore.QDate.fromString(str(self.startYear), 'yyyy'))
+					self.ui_year.endYear_dateedit.setDate(QtCore.QDate.fromString(str(self.endYear), 'yyyy'))
+					i = self.ui_year.startMonth_combobox.findText(self.startMonth)
+					if i >= 0:
+						self.ui_year.startMonth_combobox.setCurrentIndex(i)
+					i = self.ui_year.endMonth_combobox.findText(self.endMonth)
+					if i >= 0:
+						self.ui_year.endMonth_combobox.setCurrentIndex(i)
+					i = self.ui_year.dept_combobox.findText(self.department)
+					if i >= 0:
+						self.ui_year.dept_combobox.setCurrentIndex(i)
+>>>>>>> origin/testing
 		elif option == "Set Year/Department":
 			self.YearWindow.show()
 		elif option == "About":
@@ -1926,6 +1961,7 @@ class ParentWindow(QMainWindow):
 
 	#save and load functions
 	def save_state(self, fname):
+<<<<<<< HEAD
 		logger.info('Saving as binary file')
 		file = open(fname, "wb")
 		state = (self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
@@ -1942,11 +1978,32 @@ class ParentWindow(QMainWindow):
 		pickle.dump(state, file)
 		file.close()
 		pass
+=======
+		try:
+			with open(fname, "wb") as file:
+				state = (self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
+						 self.faculty_list_value,
+						 self.subjects,
+						 #self.subs,
+						 self.num_sections,
+						 self.sections,
+						 self.subjects_assigned,
+						 self.faculty_subjects,
+						 self.section_fixed_slots,
+						 self.faculty_fixed_slots,
+						 self.electives)
+				pickle.dump(state, file)
+		except IOError as err:
+			self.file_error_dialog(err.strerror + ': ' + err.filename)
+		except:
+			self.file_error_dialog('Error pickling data')
+>>>>>>> origin/testing
 
 	def update_sub(self):
 		for sem in self.subjects:
 			for i, sub in enumerate(self.subjects[sem]):
 				self.subjects[sem][i] = subject(sub.name, sub.short_name, sub.credits, sub.lab)
+<<<<<<< HEAD
 
 	def load_state(self, fname):
 		logger.info('Loading binary file')
@@ -1963,11 +2020,25 @@ class ParentWindow(QMainWindow):
 			self.faculty_fixed_slots,
 			self.electives ) = state
 		file.close()
+=======
+		 
+	def merge_data(self, faculty_list_value, subjects, electives):
+		self.faculty_list_value = list(set(faculty_list_value).union(set(self.faculty_list_value)))
+		self.faculty_list_value.sort()
+		for sem in subjects:
+			self.subjects[sem] = list(set(subjects[sem]).union(set(self.subjects[sem])))
+		for sem in electives:
+			n_groups = len(self.electives[sem])
+			for group in electives[sem]:
+				n_groups += 1
+				self.electives[sem]['Elective ' + str(n_groups)] = electives[sem][group]
+>>>>>>> origin/testing
 
 		self.subs = dict()
 		for sem in self.subjects:
 			for sub in self.subjects[sem]:
 				self.subs[sub.short_name] = sub
+<<<<<<< HEAD
 		#print(self.subs)
 		logger.info(self.faculty_subjects)
 		logger.info(self.faculty_fixed_slots)
@@ -2044,56 +2115,169 @@ class ParentWindow(QMainWindow):
 			sfs,
 			ffs,
 			electives) = state
+=======
 
-		self.faculty_list_value = []
-		for teacher in faculty_list_value:
-			self.faculty_list_value.append(eval(teacher))
-		self.subjects = dict()
-		self.subs = dict()
-		for sem in subjects:
-			self.subjects[sem] = []
-			for sub in subjects[sem]:
-				s = eval(sub)
-				self.subjects[sem].append(s)
-				self.subs[s.short_name] = s
+	def load_state(self, fname):
+		try:
+			with open(fname, "rb") as file:
+				state = pickle.load(file)
+				(	startMonth, startYear, endMonth, endYear, department, 
+					faculty_list_value,
+					subjects,
+					self.num_sections,
+					self.sections,
+					self.subjects_assigned,
+					self.faculty_subjects,
+					self.section_fixed_slots,
+					self.faculty_fixed_slots,
+					electives ) = state
+			self.startMonth = startMonth or self.startMonth
+			self.startYear = startYear or self.startYear
+			self.endMonth = endMonth or self.endMonth
+			self.endYear = endYear or self.endYear
+			self.department = department or self.department
+
+			self.merge_data(faculty_list_value, subjects, electives)
 
 			
-		self.electives = dict()
-		for sem in electives:
-			self.electives[sem] = dict()
-			for group in electives[sem]:
-				self.electives[sem][group] = []
-				for sub in electives[sem][group]:
-					s = eval(sub)
-					if s.short_name in self.subs:
-						self.electives[sem][group].append(self.subs[s.short_name])
-					else:
-						self.electives[sem][group].append(s)
+			#print(self.subs)
+			print(self.faculty_subjects)
+			print(self.faculty_fixed_slots)
+>>>>>>> origin/testing
 
-		self.section_fixed_slots = dict()
-		self.faculty_fixed_slots = dict()
-		for sem in sfs:
-			self.section_fixed_slots[sem] = dict()
-			for sec in sfs[sem]:
-				self.section_fixed_slots[sem][sec] = dict()
-				for row in sfs[sem][sec]:
-					self.section_fixed_slots[sem][sec][int(row)] = dict()
-					for col in sfs[sem][sec][row]:
-						self.section_fixed_slots[sem][sec][int(row)][int(col)] = sfs[sem][sec][row][col]
-		for teacher in ffs:
-			self.faculty_fixed_slots[teacher] = dict()
-			for row in ffs[teacher]:
-				self.faculty_fixed_slots[teacher][in2t(row)] = dict()
-				for col in ffs[teacher][row]:
-					self.faculty_fixed_slots[teacher][int(row)][int(col)] = ffs[teacher][row][col]
-		'''
-		print(self.section_fixed_slots)
-		print()
-		print(self.faculty_fixed_slots)
-		'''
-		file.close()
+		except IOError as err:
+			self.file_error_dialog(err.strerror + ': ' + err.filename)
+		except:
+			self.file_error_dialog('Error with the file or format')
+
+	def save_state_json(self, fname):
+		try:
+			faculty_list_value = []
+			for teacher in self.faculty_list_value:
+				faculty_list_value.append(teacher.__repr__())
+			subjects = dict()
+			for sem in self.subjects:
+				subjects[sem] = []
+				for sub in self.subjects[sem]:
+					subjects[sem].append(sub.__repr__())
+			'''
+			faculty_fixed_slots = dict()
+			for teacher in self.faculty_fixed_slots:
+				if type(teacher) == type('str'):
+					faculty_fixed_slots[teacher] = self.faculty_fixed_slots[teacher]
+				else:
+					faculty_fixed_slots[teacher.name] = self.faculty_fixed_slots[teacher]
+			faculty_subjects = dict()
+			for teacher in self.faculty_subjects:
+				if type(teacher) == type('str'):
+					try:
+						name = self.faculty_list_value[self.faculty_list_value.index(teacher)].name
+					except ValueError:
+						pass
+					faculty_subjects[name] = self.faculty_subjects[teacher]
+				else:
+					faculty_subjects[teacher.name] = self.faculty_subjects[teacher]
+			'''
+			electives = dict()
+			for sem in self.electives:
+				electives[sem] = dict()
+				for group in self.electives[sem]:
+					electives[sem][group] = []
+					for sub in self.electives[sem][group]:
+						electives[sem][group].append(sub.__repr__())
+			state = (
+				self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
+				faculty_list_value,
+				subjects,
+				self.num_sections,
+				self.sections,
+				self.subjects_assigned,
+				self.faculty_subjects,
+				self.section_fixed_slots,
+				self.faculty_fixed_slots,
+				electives
+				)
+			
+			dump = json.dumps(state, indent = 4)
+			with open(fname, 'w') as file:
+				file.write(dump)
+		except IOError as err:
+			self.file_error_dialog(err.strerror + ': ' + err.filename)
+		except Exception as err:
+			self.file_error_dialog('Error encoding json')
+
+	def load_state_json(self, fname):
+		try:
+			with open(fname, "r") as file:
+				state = json.loads(file.read())
+
+			(startMonth, startYear, endMonth, endYear, department,
+				faculty_list_value,
+				subjects,
+				self.num_sections,
+				self.sections,
+				self.subjects_assigned,
+				self.faculty_subjects,
+				sfs,
+				ffs,
+				electives) = state
+			self.startMonth = startMonth or self.startMonth
+			self.startYear = startYear or self.startYear
+			self.endMonth = endMonth or self.endMonth
+			self.endYear = endYear or self.endYear
+			self.department = department or self.department
+
+			flv = []
+			for teacher in faculty_list_value:
+				flv.append(eval(teacher))
+			subjs = dict()
+			for sem in subjects:
+				subjs[sem] = []
+				for sub in subjects[sem]:
+					s = eval(sub)
+					subjs[sem].append(s)
+				
+			elec = dict()
+			for sem in electives:
+				elec[sem] = dict()
+				for group in electives[sem]:
+					elec[sem][group] = []
+					for sub in electives[sem][group]:
+						s = eval(sub)
+						elec[sem][group].append(s)
+			self.merge_data(flv, subjs, elec)
+			self.section_fixed_slots = dict()
+			self.faculty_fixed_slots = dict()
+			for sem in sfs:
+				self.section_fixed_slots[sem] = dict()
+				for sec in sfs[sem]:
+					self.section_fixed_slots[sem][sec] = dict()
+					for row in sfs[sem][sec]:
+						self.section_fixed_slots[sem][sec][int(row)] = dict()
+						for col in sfs[sem][sec][row]:
+							self.section_fixed_slots[sem][sec][int(row)][int(col)] = sfs[sem][sec][row][col]
+			for teacher in ffs:
+				self.faculty_fixed_slots[teacher] = dict()
+				for row in ffs[teacher]:
+					self.faculty_fixed_slots[teacher][in2t(row)] = dict()
+					for col in ffs[teacher][row]:
+						self.faculty_fixed_slots[teacher][int(row)][int(col)] = ffs[teacher][row][col]
+		except IOError as err:
+			self.file_error_dialog(err.strerror + ': ' + err.filename)
+		except Exception as err:
+			self.file_error_dialog('Error with the file or format')
+
+	def file_error_dialog(self, error):
+		msg = QMessageBox()
+		msg.setIcon(QMessageBox.Critical)
+		msg.setText('There was an error opening the file')
+		msg.setInformativeText(error)
+		msg.setWindowTitle("Error")
+		msg.setStandardButtons(QMessageBox.Ok)
+		msg.exec_()
 
 	def load_excel(self, fname):
+<<<<<<< HEAD
 		logger.info('Loading Excel file')
 		book = xlrd.open_workbook(fname)
 		sheet = book.sheet_by_index(0)
@@ -2170,6 +2354,84 @@ class ParentWindow(QMainWindow):
 		for sem in sections:
 			num_sections[sem] = len(sections[sem])
 		self.num_sections = num_sections
+=======
+		try:
+			with xlrd.open_workbook(fname) as book:
+				sheet = book.sheet_by_index(0)
+			rows = sheet.nrows
+			cols = sheet.ncols
+			faculty = set()
+			subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
+			electives = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
+			subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
+			faculty_subjects = dict()
+			sections = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
+			cur_sem = ''
+			cur_sub = ''
+			cur_sec = 1
+			for r in range(1, rows):
+				cur_sec += 1
+				if sheet.cell_value(r, 4).strip():
+					cur_sem = sheet.cell_value(r, 4).strip()
+					cur_sec = 1
+				if sheet.cell_value(r, 1).strip():
+					sub_code = sheet.cell_value(r, 0).strip()
+					sub_name = sheet.cell_value(r, 1).strip()
+					sub_short =  sheet.cell_value(r, 2).strip()
+					credits = sheet.cell_value(r, 3) or 0
+					credits = int(credits)
+					lab = sub_name.endswith('Lab')
+					if not cur_sub or sub_name != cur_sub.name:
+						if not sub_short.upper().startswith('ELE'):
+							if lab:
+								sub_short = sub_short.split('|')
+								sub_short = ' | '.join(map(str.strip, sub_short))
+							cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
+							subjects[cur_sem].append(cur_sub)
+						else: # elective
+							sub_short = sub_short.split(',')
+							sub_short = list(map(str.strip, sub_short))
+							group = 'Elective ' + sub_short[0].split('-')[1].strip()
+							sub_short = sub_short[1]
+							cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
+							subjects[cur_sem].append(cur_sub)
+							if group not in electives[cur_sem]:
+								electives[cur_sem][group] = []
+							electives[cur_sem][group].append(cur_sub)
+
+				section = chr(64 + cur_sec)
+				if section not in subjects_assigned[cur_sem]:
+					subjects_assigned[cur_sem][section] = []
+					sections[cur_sem].append(section)
+				
+				f = sheet.cell_value(r, 5).strip()
+				f = f.split(',')
+				for i, fac_name in enumerate(f):
+					fac_name = fac_name.strip()
+					f[i] = fac_name
+					if fac_name not in faculty:
+						faculty.add(faculty_class(fac_name, ' '))
+						faculty_subjects[fac_name] = []
+					faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
+				subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
+
+			self.merge_data(faculty, subjects, electives)
+			self.subjects_assigned = subjects_assigned
+			print(self.subjects_assigned)
+			self.faculty_subjects = faculty_subjects
+			self.sections = sections
+			num_sections = dict()
+			for sem in sections:
+				num_sections[sem] = len(sections[sem])
+			self.num_sections = num_sections
+			self.section_fixed_slots = dict()
+			self.faculty_fixed_slots = dict()
+
+		except IOError as err:
+			self.file_error_dialog(err.strerror + ': ' + err.filename)
+		except Exception as err:
+			self.file_error_dialog('Error with the file or format')
+>>>>>>> origin/testing
 
 	# end class
 
@@ -2193,11 +2455,16 @@ if __name__ == "__main__":
 
 	if os.path.isdir('logs') == False:
 		os.mkdir('logs')
+<<<<<<< HEAD
 	
 	global loc
 	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime()))
 	my_logger()
 
+=======
+	 
+	l = logger(os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime())))
+>>>>>>> origin/testing
 	sys.excepthook = my_excepthook
 	
 	app = QApplication(sys.argv)
