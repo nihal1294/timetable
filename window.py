@@ -319,7 +319,6 @@ class Ui_window(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window)
         self.actionExit.setObjectName("actionExit")
-        #self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window)
@@ -328,6 +327,7 @@ class Ui_window(object):
         self.actionAbout_2.setObjectName("actionAbout_2")
         self.actionClear_All = QtWidgets.QAction(window)
         self.actionClear_All.setObjectName("actionClear_All")
+        self.actionClear_All.setShortcut("Ctrl+R")
         self.aboutMenu = QtWidgets.QAction(window)
         self.aboutMenu.setObjectName("aboutMenu")
         self.actionSet_Year_Dept = QtWidgets.QAction(window)
@@ -336,6 +336,8 @@ class Ui_window(object):
         self.menuFile.addAction(self.actionLoad)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionSet_Year_Dept)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionClear_All)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.aboutMenu)
@@ -387,28 +389,6 @@ class Ui_window(object):
         self.actionClear_All.setText(_translate("window", "Clear All"))
         self.aboutMenu.setText(_translate("window", "About"))
         self.actionSet_Year_Dept.setText(_translate("window", "Set Year/Department"))
-
-    '''
-    def closeEvent(self, event):
-        exit()
-    
-    def closeEvent(self, event):
-        close = QtWidgets.QMessageBox()
-        close.setText("Are you sure you want to exit?")
-        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
-        close = close.exec()
-        if close == QtWidgets.QMessageBox.Yes:
-            app.quit()
-        else:
-            pass
-    '''
-    '''def closeEvent(self, event):
-        print("event")
-        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
-        if reply == QtWidgets.QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()'''
 
 
 if __name__ == "__main__":

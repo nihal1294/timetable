@@ -155,13 +155,15 @@ class Ui_window2(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window2)
         self.actionExit.setObjectName("actionExit")
-        #self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window2)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window2)
         self.actionManual.setObjectName("actionManual")
         self.actionAbout_2 = QtWidgets.QAction(window2)
         self.actionAbout_2.setObjectName("actionAbout_2")
+        self.actionClear_All = QtWidgets.QAction(window2)
+        self.actionClear_All.setObjectName("actionClear_All")
+        self.actionClear_All.setShortcut("Ctrl+R")
         self.actionSet_Year_Department = QtWidgets.QAction(window2)
         self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
         self.aboutMenu = QtWidgets.QAction(window2)
@@ -170,6 +172,8 @@ class Ui_window2(object):
         self.menuFile.addAction(self.actionLoad)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionSet_Year_Department)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionClear_All)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.aboutMenu)
@@ -208,29 +212,9 @@ class Ui_window2(object):
         self.actionManual.setText(_translate("window2", "Manual"))
         self.actionAbout_2.setText(_translate("window2", "About"))
         self.actionSet_Year_Department.setText(_translate("window2", "Set Year/Department"))
+        self.actionClear_All.setText(_translate("window2", "Clear All"))
         self.aboutMenu.setText(_translate("window2", "About"))
 
-    '''
-    def closeEvent(self, event):
-        exit()
-    
-    def closeEvent(self, event):
-        close = QtWidgets.QMessageBox()
-        close.setText("Are you sure you want to exit?")
-        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
-        close = close.exec()
-        if close == QtWidgets.QMessageBox.Yes:
-            app.quit()
-        else:
-            pass
-    '''
-    '''def closeEvent(self, event):
-        print("event")
-        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
-        if reply == QtWidgets.QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()'''
 
 if __name__ == "__main__":
     import sys
