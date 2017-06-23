@@ -90,11 +90,7 @@ def generate(tt, subjects, faculty, location): # subjects is a list of tuples (n
 	remaining_hours = [i[1] for i in subjects]
 	freeslots, _ = getfreeslots(tt)
 	logger = logging.getLogger('tt_algo')
-	#logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 	logging.basicConfig(filename = location, level = logging.DEBUG)
-	#handler = logging.FileHandler('C:\\New folder\logs\example.log')
-	#handler.setLevel(logging.DEBUG)
-	#logger.addHandler(handler)
 	logger.info('')
 
 	for _ in range(max(remaining_hours)): # repeat for as many times as the max credits 
@@ -123,7 +119,6 @@ def generate(tt, subjects, faculty, location): # subjects is a list of tuples (n
 
 def print_timetable(tt, location, style = 'section', name = ''):
 	logger = logging.getLogger('tt_algo')
-	#logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 	logging.basicConfig(filename = location, level = logging.DEBUG)
 	if name == '':
 		name = tt.name
@@ -197,7 +192,6 @@ def utilize_free_hours(tt, faculty):
 
 def adjust_clash(timetables, location, faculty):
 	logger = logging.getLogger('tt_algo')
-	#logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 	logging.basicConfig(filename = location, level = logging.DEBUG)
 	for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']:
 		#print(day)
@@ -300,7 +294,6 @@ def free_faculty(teacher, time, day = 'all'):
 
 def print_dayclash(location):
 	logger = logging.getLogger('tt_algo')
-	#logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 	logging.basicConfig(filename = location, level = logging.DEBUG)
 	for item in dayclash:
 		#print(item[0].name, item[1])

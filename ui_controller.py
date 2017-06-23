@@ -26,6 +26,7 @@ from elective_window import Ui_elective_window
 from year_window import Ui_year_window
 from about_window import Ui_aboutWindow
 
+
 class subject:
 	def __init__(self, name, short_name = '', credits = 0, lab = False, subcode = ''):
 		if short_name == '': # if both names are provided together in name
@@ -51,6 +52,7 @@ class subject:
 
 	def __hash__(self):
 		return self.name.__hash__()
+
 
 class faculty_class:
 	def __init__(self, name, title = '', designation = ''):
@@ -105,6 +107,7 @@ class faculty_class:
 		self.terminal.flush()
 		pass
 '''
+
 
 #new singular class implementing QStackedLayout
 class ParentWindow(QMainWindow):
@@ -824,33 +827,6 @@ class ParentWindow(QMainWindow):
 		else:
 			self.ElectiveWindow.show()
 			self.reset_Btn_event()
-			'''self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
-			self.ui_elec.electiveGroup_combobox.clear()
-			self.ui_elec.elective_input_textbox.clear()
-			self.ui_elec.elective_input_textbox.setPlaceholderText("")
-			self.ui_elec.elective_input_textbox.setEnabled(False)
-			self.ui_elec.label_5.setEnabled(False)
-			self.ui_elec.elective_spinbox.setValue(0)
-			self.ui_elec.elective_code_input.clear()
-			self.ui_elec.elective_code_input.setEnabled(False)
-			self.ui_elec.label_8.setEnabled(False)
-			self.ui_elec.elective_short_input.clear()
-			self.ui_elec.elective_short_input.setEnabled(False)
-			self.ui_elec.label_6.setEnabled(False)
-			self.ui_elec.credits_spinbox.setValue(1)
-			self.ui_elec.credits_spinbox.setEnabled(False)
-			self.ui_elec.label_7.setEnabled(False)
-			self.ui_elec.lab_checkbox.setChecked(False)
-			self.ui_elec.lab_checkbox.setEnabled(False)
-			self.ui_elec.elective_list.clear()
-			self.ui_elec.elective_spinbox.setEnabled(False)
-			self.ui_elec.label_4.setEnabled(False)
-			self.ui_elec.semester_combobox.setCurrentIndex(-1)
-			self.ui_elec.semester_combobox.setFocus()
-			self.ui_elec.electiveGroup_combobox.setEnabled(False)
-			self.ui_elec.label_3.setEnabled(False)
-			self.ui_elec.line.setEnabled(False)
-			self.ui_elec.line_2.setEnabled(False)'''
 
 	def remove_btn_event(self):    #function for remove button
 		row = self.ui.input_list.selectedItems()
@@ -1864,7 +1840,6 @@ class ParentWindow(QMainWindow):
 					self.save_state(fname)
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
-<<<<<<< HEAD
 				logger.debug('Success. Saved to %s', fname)
 			pass
 		elif option == "Load":
@@ -1878,36 +1853,37 @@ class ParentWindow(QMainWindow):
 					logger.info(fname)
 					#print(fname)
 					if fname.endswith('.json'):
-						self.load_state_json(fname)
+						success = self.load_state_json(fname)
 					elif fname.endswith('.xlsx') or fname.endswith('.xls'):
-						self.load_excel(fname)
+						success = self.load_excel(fname)
 					else:
-						self.load_state(fname)
-					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
-					logger.debug('Success. Loaded from %s', fname)
-					self.reset_first_window()
-					self.populate_second_window()
-					self.reset_third_window()
-					self.reset_fourth_window()
-					self.reset_fifth_window()
-					self.reset_Btn_event()	#reset elective window
-					self.reset_year_window()
-					if self.SecondWindow.isVisible() or self.ThirdWindow.isVisible() or self.FourthWindow.isVisible() or self.FifthWindow.isVisible() or self.ElectiveWindow.isVisible():
-						self.ElectiveWindow.hide()
-						self.SecondWindow.hide()
-						self.ThirdWindow.hide()
-						self.FourthWindow.hide()
-						self.FifthWindow.hide()
-						self.FirstWindow.show()
+						success = self.load_state(fname)
+					if success:
+						self.systemtray_icon.show()
+						self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
+						logger.debug('Success. Loaded from %s', fname)
+						self.reset_first_window()
+						self.populate_second_window()
+						self.reset_third_window()
+						self.reset_fourth_window()
+						self.reset_fifth_window()
+						self.reset_Btn_event()	#reset elective window
+						self.reset_year_window()
+						if self.SecondWindow.isVisible() or self.ThirdWindow.isVisible() or self.FourthWindow.isVisible() or self.FifthWindow.isVisible() or self.ElectiveWindow.isVisible():
+							self.ElectiveWindow.hide()
+							self.SecondWindow.hide()
+							self.ThirdWindow.hide()
+							self.FourthWindow.hide()
+							self.FifthWindow.hide()
+							self.FirstWindow.show()
 			else:
-				logger.debug('Load denied')
+				logger.debug('Load cancelled')
 				pass
 		elif option == "Clear All":
-			logger.info('Clearing all unsaved data')
 			buttonReply = QMessageBox.question(self, 'Reset Confirmation', "Are you sure you want to clear all data? All unsaved data will be lost and the program will be reset.", QMessageBox.Ok | QMessageBox.Cancel, QMessageBox.Cancel)
 			if buttonReply == QMessageBox.Ok:
 				logger.debug('Clear All confirmed')
+				logger.info('Clearing all unsaved data')
 				self.reset_first_window()
 				self.populate_second_window()
 				self.reset_third_window()
@@ -1919,40 +1895,8 @@ class ParentWindow(QMainWindow):
 				self.systemtray_icon.showMessage('Reset', 'All unsaved data have been cleared.')
 				logger.debug('Reset-All unsaved data have been cleared.')
 			else:
-				logger.debug('Clear All denied')
+				logger.debug('Clear All cancelled')
 				pass
-=======
-		elif option == "Load":
-			dialog = QtWidgets.QFileDialog(caption = "Choose file to load")
-			dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-			if dialog.exec_():
-				fname = dialog.selectedFiles()[0]
-				print(fname)
-				if fname.endswith('.json'):
-					success = self.load_state_json(fname)
-				elif fname.endswith('.xlsx') or fname.endswith('.xls'):
-					success = self.load_excel(fname)
-				else:
-					success = self.load_state(fname)
-				if success:
-					self.systemtray_icon.show()
-					self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
-					self.populate_second_window()
-					self.reset_first_window()
-
-					# set year window 
-					self.ui_year.startYear_dateedit.setDate(QtCore.QDate.fromString(str(self.startYear), 'yyyy'))
-					self.ui_year.endYear_dateedit.setDate(QtCore.QDate.fromString(str(self.endYear), 'yyyy'))
-					i = self.ui_year.startMonth_combobox.findText(self.startMonth)
-					if i >= 0:
-						self.ui_year.startMonth_combobox.setCurrentIndex(i)
-					i = self.ui_year.endMonth_combobox.findText(self.endMonth)
-					if i >= 0:
-						self.ui_year.endMonth_combobox.setCurrentIndex(i)
-					i = self.ui_year.dept_combobox.findText(self.department)
-					if i >= 0:
-						self.ui_year.dept_combobox.setCurrentIndex(i)
->>>>>>> origin/testing
 		elif option == "Set Year/Department":
 			self.YearWindow.show()
 		elif option == "About":
@@ -1961,24 +1905,6 @@ class ParentWindow(QMainWindow):
 
 	#save and load functions
 	def save_state(self, fname):
-<<<<<<< HEAD
-		logger.info('Saving as binary file')
-		file = open(fname, "wb")
-		state = (self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
-				 self.faculty_list_value,
-				 self.subjects,
-				 #self.subs,
-				 self.num_sections,
-				 self.sections,
-				 self.subjects_assigned,
-				 self.faculty_subjects,
-				 self.section_fixed_slots,
-				 self.faculty_fixed_slots,
-				 self.electives)
-		pickle.dump(state, file)
-		file.close()
-		pass
-=======
 		try:
 			with open(fname, "wb") as file:
 				state = (self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
@@ -1993,34 +1919,18 @@ class ParentWindow(QMainWindow):
 						 self.faculty_fixed_slots,
 						 self.electives)
 				pickle.dump(state, file)
+				logger.info('Saving as binary file')
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
+			logger.exception(err)
 		except:
 			self.file_error_dialog('Error pickling data')
->>>>>>> origin/testing
+			logger.exception('Error pickling data')
 
 	def update_sub(self):
 		for sem in self.subjects:
 			for i, sub in enumerate(self.subjects[sem]):
 				self.subjects[sem][i] = subject(sub.name, sub.short_name, sub.credits, sub.lab)
-<<<<<<< HEAD
-
-	def load_state(self, fname):
-		logger.info('Loading binary file')
-		file = open(fname, "rb")
-		state = pickle.load(file)
-		(	self.startMonth, self.startYear, self.endMonth, self.endYear, self.department, 
-			self.faculty_list_value,
-			self.subjects,
-			self.num_sections,
-			self.sections,
-			self.subjects_assigned,
-			self.faculty_subjects,
-			self.section_fixed_slots,
-			self.faculty_fixed_slots,
-			self.electives ) = state
-		file.close()
-=======
 		 
 	def merge_data(self, faculty_list_value, subjects, electives):
 		self.faculty_list_value = list(set(faculty_list_value).union(set(self.faculty_list_value)))
@@ -2032,90 +1942,11 @@ class ParentWindow(QMainWindow):
 			for group in electives[sem]:
 				n_groups += 1
 				self.electives[sem]['Elective ' + str(n_groups)] = electives[sem][group]
->>>>>>> origin/testing
 
 		self.subs = dict()
 		for sem in self.subjects:
 			for sub in self.subjects[sem]:
 				self.subs[sub.short_name] = sub
-<<<<<<< HEAD
-		#print(self.subs)
-		logger.info(self.faculty_subjects)
-		logger.info(self.faculty_fixed_slots)
-		#print(self.faculty_subjects)
-		#print(self.faculty_fixed_slots)
-
-		pass
-
-	def save_state_json(self, fname):
-		logger.info('Saving as JSON')
-		file = open(fname, 'w')
-		faculty_list_value = []
-		for teacher in self.faculty_list_value:
-			faculty_list_value.append(teacher.__repr__())
-		subjects = dict()
-		for sem in self.subjects:
-			subjects[sem] = []
-			for sub in self.subjects[sem]:
-				subjects[sem].append(sub.__repr__())
-		'''
-		faculty_fixed_slots = dict()
-		for teacher in self.faculty_fixed_slots:
-			if type(teacher) == type('str'):
-				faculty_fixed_slots[teacher] = self.faculty_fixed_slots[teacher]
-			else:
-				faculty_fixed_slots[teacher.name] = self.faculty_fixed_slots[teacher]
-		faculty_subjects = dict()
-		for teacher in self.faculty_subjects:
-			if type(teacher) == type('str'):
-				try:
-					name = self.faculty_list_value[self.faculty_list_value.index(teacher)].name
-				except ValueError:
-					pass
-				faculty_subjects[name] = self.faculty_subjects[teacher]
-			else:
-				faculty_subjects[teacher.name] = self.faculty_subjects[teacher]
-		'''
-		electives = dict()
-		for sem in self.electives:
-			electives[sem] = dict()
-			for group in self.electives[sem]:
-				electives[sem][group] = []
-				for sub in self.electives[sem][group]:
-					electives[sem][group].append(sub.__repr__())
-		state = (
-			self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
-			faculty_list_value,
-			subjects,
-			self.num_sections,
-			self.sections,
-			self.subjects_assigned,
-			self.faculty_subjects,
-			self.section_fixed_slots,
-			self.faculty_fixed_slots,
-			electives
-			)
-		
-		dump = json.dumps(state, indent = 4)
-		file.write(dump)
-		file.close()
-		pass
-
-	def load_state_json(self, fname):
-		logger.info('Loading JSON file')
-		file = open(fname, "r")
-		state = json.loads(file.read())
-		(	self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
-			faculty_list_value,
-			subjects,
-			self.num_sections,
-			self.sections,
-			self.subjects_assigned,
-			self.faculty_subjects,
-			sfs,
-			ffs,
-			electives) = state
-=======
 
 	def load_state(self, fname):
 		try:
@@ -2131,6 +1962,7 @@ class ParentWindow(QMainWindow):
 					self.section_fixed_slots,
 					self.faculty_fixed_slots,
 					electives ) = state
+			logger.info('Loading from binary file')
 			self.startMonth = startMonth or self.startMonth
 			self.startYear = startYear or self.startYear
 			self.endMonth = endMonth or self.endMonth
@@ -2141,14 +1973,17 @@ class ParentWindow(QMainWindow):
 
 			
 			#print(self.subs)
-			print(self.faculty_subjects)
-			print(self.faculty_fixed_slots)
->>>>>>> origin/testing
+			logger.info(self.faculty_subjects)
+			logger.info(self.faculty_fixed_slots)
+			#print(self.faculty_subjects)
+			#print(self.faculty_fixed_slots)
 
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
+			logger.exception(err)
 		except:
 			self.file_error_dialog('Error with the file or format')
+			logger.exception('Error with the file or format')
 
 	def save_state_json(self, fname):
 		try:
@@ -2197,14 +2032,16 @@ class ParentWindow(QMainWindow):
 				self.faculty_fixed_slots,
 				electives
 				)
-			
+			logger.info('Saving as json file')
 			dump = json.dumps(state, indent = 4)
 			with open(fname, 'w') as file:
 				file.write(dump)
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
+			logger.exception(err)
 		except Exception as err:
 			self.file_error_dialog('Error encoding json')
+			logger.exception('Error encoding json')
 
 	def load_state_json(self, fname):
 		try:
@@ -2221,6 +2058,7 @@ class ParentWindow(QMainWindow):
 				sfs,
 				ffs,
 				electives) = state
+			logger.info('Loading from json file')
 			self.startMonth = startMonth or self.startMonth
 			self.startYear = startYear or self.startYear
 			self.endMonth = endMonth or self.endMonth
@@ -2264,8 +2102,11 @@ class ParentWindow(QMainWindow):
 						self.faculty_fixed_slots[teacher][int(row)][int(col)] = ffs[teacher][row][col]
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
+			logger.exception(err)
 		except Exception as err:
 			self.file_error_dialog('Error with the file or format')
+			logger.exception('Error with the file or format')
+			logger.exception(err)
 
 	def file_error_dialog(self, error):
 		msg = QMessageBox()
@@ -2277,90 +2118,13 @@ class ParentWindow(QMainWindow):
 		msg.exec_()
 
 	def load_excel(self, fname):
-<<<<<<< HEAD
-		logger.info('Loading Excel file')
-		book = xlrd.open_workbook(fname)
-		sheet = book.sheet_by_index(0)
-		rows = sheet.nrows
-		cols = sheet.ncols
-		faculty = set()
-		subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
-		subs = dict()
-		electives = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
-		subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
-		faculty_subjects = dict()
-		sections = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
-		cur_sem = ''
-		cur_sub = ''
-		cur_sec = 1
-		for r in range(1, rows):
-			cur_sec += 1
-			if sheet.cell_value(r, 4).strip():
-				cur_sem = sheet.cell_value(r, 4).strip()
-				cur_sec = 1
-			if sheet.cell_value(r, 1).strip():
-				sub_code = sheet.cell_value(r, 0).strip()
-				sub_name = sheet.cell_value(r, 1).strip()
-				sub_short =  sheet.cell_value(r, 2).strip()
-				credits = sheet.cell_value(r, 3) or 0
-				credits = int(credits)
-				lab = sub_name.endswith('Lab')
-				if not cur_sub or sub_name != cur_sub.name:
-					if not sub_short.upper().startswith('ELE'):
-						if lab:
-							sub_short = sub_short.split('|')
-							sub_short = ' | '.join(map(str.strip, sub_short))
-						cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
-						subjects[cur_sem].append(cur_sub)
-						subs[sub_short] = cur_sub
-					else: # elective
-						sub_short = sub_short.split(',')
-						sub_short = list(map(str.strip, sub_short))
-						group = 'Elective ' + sub_short[0].split('-')[1].strip()
-						sub_short = sub_short[1]
-						cur_sub = subject(sub_name, sub_short, credits, lab, sub_code)
-						subjects[cur_sem].append(cur_sub)
-						subs[sub_short] = cur_sub
-						if group not in electives[cur_sem]:
-							electives[cur_sem][group] = []
-						electives[cur_sem][group].append(cur_sub)
-						pass
-
-			section = chr(64 + cur_sec)
-			if section not in subjects_assigned[cur_sem]:
-				subjects_assigned[cur_sem][section] = []
-				sections[cur_sem].append(section)
-			
-			f = sheet.cell_value(r, 5).strip()
-			f = f.split(',')
-			for i, fac_name in enumerate(f):
-				f[i] = fac_name.strip()
-				if fac_name not in faculty:
-					faculty.add(faculty_class(fac_name, ' '))
-					faculty_subjects[fac_name] = []
-				faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
-			subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
-
-		self.faculty_list_value = list(faculty)
-		self.subjects = subjects
-		self.subs = subs
-		self.electives = electives
-		self.subjects_assigned = subjects_assigned
-		logger.info(self.subjects_assigned)
-		#print(self.subjects_assigned)
-		self.faculty_subjects = faculty_subjects
-		self.sections = sections
-		num_sections = dict()
-		for sem in sections:
-			num_sections[sem] = len(sections[sem])
-		self.num_sections = num_sections
-=======
 		try:
 			with xlrd.open_workbook(fname) as book:
 				sheet = book.sheet_by_index(0)
 			rows = sheet.nrows
 			cols = sheet.ncols
 			faculty = set()
+			logger.info('Loading from Excel file')
 			subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
 			electives = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
 			subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
@@ -2417,7 +2181,8 @@ class ParentWindow(QMainWindow):
 
 			self.merge_data(faculty, subjects, electives)
 			self.subjects_assigned = subjects_assigned
-			print(self.subjects_assigned)
+			logger.info(self.subjects_assigned)
+			#print(self.subjects_assigned)
 			self.faculty_subjects = faculty_subjects
 			self.sections = sections
 			num_sections = dict()
@@ -2429,9 +2194,11 @@ class ParentWindow(QMainWindow):
 
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
+			logger.exception(err)
 		except Exception as err:
 			self.file_error_dialog('Error with the file or format')
->>>>>>> origin/testing
+			logger.exception('Error with the file or format')
+			logger.exception(err)
 
 	# end class
 
@@ -2455,16 +2222,11 @@ if __name__ == "__main__":
 
 	if os.path.isdir('logs') == False:
 		os.mkdir('logs')
-<<<<<<< HEAD
 	
 	global loc
 	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime()))
 	my_logger()
 
-=======
-	 
-	l = logger(os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime())))
->>>>>>> origin/testing
 	sys.excepthook = my_excepthook
 	
 	app = QApplication(sys.argv)
