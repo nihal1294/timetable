@@ -83,6 +83,7 @@ class faculty_class:
 	def __hash__(self):
 		return self.name.__hash__()
 
+
 class logger:
 	def __init__(self, logfilename):
 		self.terminal = sys.stdout
@@ -103,6 +104,7 @@ class logger:
 		self.log.flush()
 		self.terminal.flush()
 		pass
+
 
 #new singular class implementing QStackedLayout
 class ParentWindow(QMainWindow):
@@ -172,8 +174,7 @@ class ParentWindow(QMainWindow):
 		self.endYear = ''
 		self.department = ''
 
-
-	# setup functions
+	# setup first input window
 	def setup_first_window(self):
 		#FIRST WINDOW - List Entry
 		self.FirstWindow = QMainWindow()
@@ -250,6 +251,7 @@ class ParentWindow(QMainWindow):
 		self.setup_elective_window()
 		self.setup_about_window()
 
+	#setup elective input window
 	def setup_elective_window(self):
 		#ELECTIVE WINDOW - Elective Entry
 		self.ElectiveWindow = QWidget()
@@ -292,6 +294,7 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.electiveGroup_combobox.activated[str].connect(self.electivegroup_combobox_event)
 		self.ui_elec.resetBtn.clicked.connect(self.reset_Btn_event)
 
+	#setup assignment input window
 	def setup_second_window(self):
 		#SECOND WINDOW - Faculty assignment
 		self.SecondWindow = QMainWindow()
@@ -320,6 +323,7 @@ class ParentWindow(QMainWindow):
 
 		self.ui2.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
+	#setup subject constraint window
 	def setup_third_window(self):
 		#THIRD WINDOW - Subject Constraints
 		self.ThirdWindow = QMainWindow()
@@ -345,6 +349,7 @@ class ParentWindow(QMainWindow):
 
 		self.ui3.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
+	#setup faculty constraint window
 	def setup_fourth_window(self):
 		#FOURTH WINDOW - Faculty Constraints
 		self.FourthWindow = QMainWindow()
@@ -366,6 +371,7 @@ class ParentWindow(QMainWindow):
 
 		self.ui4.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
+	#setup timetable display window
 	def setup_fifth_window(self):
 		#FIFTH WINDOW - Generated timetable
 		self.FifthWindow = QMainWindow()
@@ -399,6 +405,7 @@ class ParentWindow(QMainWindow):
 
 		self.ui5.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
+	#setup about window	
 	def setup_about_window(self):
 		# ABOUT WINDOW
 		self.AboutWindow = QDialog()
@@ -409,7 +416,6 @@ class ParentWindow(QMainWindow):
 
 		self.ui_about.closeBtn.clicked.connect(self.AboutWindow.hide)
 
-
 	def reset_first_window(self):
 		self.ui.semester_combobox.setEnabled(False)
 		self.ui.sections_spinbox.setEnabled(False)
@@ -418,6 +424,7 @@ class ParentWindow(QMainWindow):
 		self.ui.subject_code_input.setEnabled(False)
 		self.ui.subject_short_input.setEnabled(False)
 		self.ui.lab_checkbox.setEnabled(False)
+		self.ui.desig_combobox.setEnabled(False)
 		self.ui.credits_spinbox.setEnabled(False)
 		self.ui.label_3.setEnabled(False)
 		self.ui.label_4.setEnabled(False)
@@ -425,6 +432,7 @@ class ParentWindow(QMainWindow):
 		self.ui.label_6.setEnabled(False)
 		self.ui.label_7.setEnabled(False)
 		self.ui.label_8.setEnabled(False)
+		self.ui.label_9.setEnabled(False)
 		self.ui.line.setEnabled(False)
 		self.ui.line_2.setEnabled(False)
 		self.ui.electiveBtn.setEnabled(False)
@@ -476,6 +484,7 @@ class ParentWindow(QMainWindow):
 				self.ui.lab_checkbox.setEnabled(False)
 				self.ui.line.setEnabled(True)
 				self.ui.line_2.setEnabled(False)
+				self.ui.electiveBtn.setEnabled(False)
 				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter faculty name")
 				
@@ -527,6 +536,8 @@ class ParentWindow(QMainWindow):
 				self.ui5.label_4.setEnabled(False)
 				self.ui5.faculty_combobox.setEnabled(True)
 				self.ui5.label_5.setEnabled(True)
+				self.ui5.roomno_textbox.setEnabled(False)
+				self.ui5.label_6.setEnabled(False)
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
 				self.ui5.generated_table.clearContents()
 
@@ -540,6 +551,8 @@ class ParentWindow(QMainWindow):
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
 				self.ui5.faculty_combobox.setEnabled(False)
 				self.ui5.label_5.setEnabled(False)
+				self.ui5.roomno_textbox.setEnabled(True)
+				self.ui5.label_6.setEnabled(True)
 				self.ui5.generated_table.clearContents()
 
 	def semester_combobox_event(self):   #function for semester combobox
@@ -1542,7 +1555,7 @@ class ParentWindow(QMainWindow):
 			self.selected_cell = ''
 		else:
 			self.selected_cell = (row, column, 1)
-			
+
 
 	def print_btn_event_plaintext(self):
 		inputType = self.ui5.inputType_combobox.currentText()
@@ -1643,7 +1656,7 @@ class ParentWindow(QMainWindow):
 	def show_printerror_dialog(self, error):
 		msg = QMessageBox()
 		msg.setIcon(QMessageBox.Critical)
-		msg.setText('There was an error with printing')
+		msg.setText('There was an error with printing. Please close the docx file before printing it again.')
 		msg.setInformativeText(error.strerror + ': ' + error.filename)
 		msg.setWindowTitle("Error")
 		msg.setStandardButtons(QMessageBox.Ok)
