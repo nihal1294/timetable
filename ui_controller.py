@@ -811,15 +811,6 @@ class ParentWindow(QMainWindow):
 						if index >= 0:
 							self.ui.desig_combobox.setCurrentIndex(index)
 						break
-		'''if msvcrt.kbhit() and ord(msvcrt.getch()) == 27:
-			self.ui.subject_short_input.clear()
-			self.ui.credits_spinbox.setValue(1)
-			self.ui.input_textbox.clear()
-			self.ui.lab_checkbox.setChecked(False)
-			self.ui.input_list.clearSelection()
-			del self.row[0]
-			print(self.row)
-			self.ui.input_list.repaint()'''
 
 	def elective_btn_event(self):
 		if self.ElectiveWindow.isVisible():
@@ -1489,7 +1480,8 @@ class ParentWindow(QMainWindow):
 					self.ui5.generated_table.setItem(row, column, item)
 
 	def show_swap_conflict_dialog(self, conflicts):
-		print(conflicts)
+		#print(conflicts)
+		logger.info(conflicts)
 		msg = QMessageBox()
 		msg.setIcon(QMessageBox.Critical)
 		msg.setText('Conflicts:')
@@ -1829,7 +1821,9 @@ class ParentWindow(QMainWindow):
 		#print(option)
 		if option == "Exit":
 			sys.exit()
-		elif option == "Save":
+		elif option == "Save": #add save here
+			pass
+		elif option == "Save As":
 			dialog = QtWidgets.QFileDialog(caption = "Choose save file")
 			dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
 			if dialog.exec_():
@@ -1899,6 +1893,8 @@ class ParentWindow(QMainWindow):
 			else:
 				logger.debug('Clear All cancelled')
 				pass
+		elif option == "Print All": #add print all here
+			pass
 		elif option == "Set Year/Department":
 			self.YearWindow.show()
 		elif option == "About":
