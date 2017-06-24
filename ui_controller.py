@@ -1488,156 +1488,158 @@ class ParentWindow(QMainWindow):
 					column = timeslot-1
 					self.ui5.generated_table.setItem(row, column, item)
 
+	def show_swap_conflict_dialog(self, conflicts):
+		print(conflicts)
+		msg = QMessageBox()
+		msg.setIcon(QMessageBox.Critical)
+		msg.setText('Conflicts:')
+		msg.setInformativeText('\n'.join(map(lambda x: '%s %s %s: %s' % x, conflicts)))
+		msg.setWindowTitle("Conflicts")
+		msg.setStandardButtons(QMessageBox.Ok)
+		msg.exec_()
+
 	def cellClick5_event(self, row, column):
 		if self.selected_cell:
-			r, c, i = self.selected_cell
-			logger.info('%s %s %s', r, c, i)
-			#print(r, c, i)
+			r, c = self.selected_cell
+			logger.info('%s %s', r, c)
+			#print(r, c)
 			logger.info('%s %s', str(row), str(column))
 			#print(str(row), str(column))
-			if r == row and c == column:
+			if r == row and c == column: # if same cell is selected twice
 				self.ui5.generated_table.clearSelection()
 				self.selected_cell = ''
-			elif i == 1:
-				if self.ui5.inputType_combobox.currentText() == "Faculty":
+			else: # if 2 different cells are selected
+				if self.ui5.inputType_combobox.currentText() == "Faculty": # faculty timetable
 					faculty = self.ui5.faculty_combobox.currentText()
 					if faculty in self.faculty_timetables:
-						a = self.ui5.generated_table.currentItem()
-						x = a.text() # x = current subject
+						cur_cell = self.ui5.generated_table.currentItem() 
 						for day, ro in tt.day_row_num.items():
 							if r == ro:
-								d = day
+								prev_d = day
 							if row == ro:
 								cur_d = day
-						timeslot = c + 1
-						cur_timeslot = column + 1
-						cur_sub = self.faculty_timetables[faculty][cur_d][cur_timeslot]
+						prev_t = c + 1
+						cur_t = column + 1
+						cur_sub = self.faculty_timetables[faculty][cur_d][cur_t]
+						can_swap = True
+						conflicts = []
 						if cur_sub != '':
 							sec = cur_sub[0]
 							sec = sec.split(' ')
-							sem = sec[0]
-							sec = sec[1]
-							sub = self.faculty_timetables[faculty][cur_d][cur_timeslot]
-							logger.info('%s %s %s', sem, sec, sub)
-							#print(sem, sec, sub)
-						else:
-							sub = '-'
-						
-						
-						prev_sub = self.faculty_timetables[faculty][d][timeslot]
+							cur_sem = sec[0]
+							cur_sec = sec[1]
+							logger.info('%s %s %s', cur_sem, cur_sec, cur_sub)
+							#print(cur_sem, cur_sec, cur_sub)
+							if self.timetables[cur_sem][cur_sec][prev_d][prev_t]:
+								can_swap = False
+								conflicts.append((cur_sem + ' ' + cur_sec, prev_d, prev_t, self.timetables[cur_sem][cur_sec][prev_d][prev_t][3]))
+						prev_sub = self.faculty_timetables[faculty][prev_d][prev_t]
 						if prev_sub != '':
-							sec1 = prev_sub[0]
-							sec1 = sec1.split(' ')
-							sem1 = sec1[0]
-							sec1 = sec1[1]
-							sub1 = self.faculty_timetables[faculty][d][timeslot]
-							b = '{} ({})'.format(sub1[1][3], sem1 + ' ' + sec1) # previous cell
-							logger.info('%s %s %s', sem1, sec1, sub1)
-							#print(sem1, sec1, sub1)
+							sec = prev_sub[0]
+							sec = sec.split(' ')
+							prev_sem = sec[0]
+							prev_sec = sec[1]
+							prev_cell_text = '{} ({})'.format(prev_sub[1][3], prev_sem + ' ' + prev_sec) 
+							logger.info('%s %s %s', prev_sem, prev_sec, prev_sub)
+							#print(prev_sem, prev_sec, prev_sub)
+							if self.timetables[prev_sem][prev_sec][cur_d][cur_t]:
+								can_swap = False
+								conflicts.append((prev_sem + ' ' + prev_sec, cur_d, cur_t, self.timetables[prev_sem][prev_sec][cur_d][cur_t][3]))
 						else:
-							b = '-'
-							sub1 = '-'
-						item = QtWidgets.QTableWidgetItem()
-						item.setText(b) # previous cell contents
-						i = QtWidgets.QTableWidgetItem()
-						i.setText(x) # current cell contents
-						
+							prev_cell_text = '-'
 
-						self.ui5.generated_table.setItem(r, c, i)
-						self.ui5.generated_table.setItem(row, column, item)
-						self.faculty_timetables[faculty][d][timeslot] = sub
-						self.faculty_timetables[faculty][cur_d][cur_timeslot] = sub1
-						if prev_sub:
-							prev_cell_cur_sub = self.timetables[sem1][sec1][cur_d][cur_timeslot]
-							if prev_cell_cur_sub != '':
-								self.faculty_timetables[prev_cell_cur_sub[2]][cur_d][cur_timeslot] = ''
-							if self.timetables[sem1][sec1][cur_d][cur_timeslot] != '':
-								self.systemtray_icon.show()
-								clashing_sub = self.timetables[sem1][sec1][cur_d][cur_timeslot]
-								logger.info(clashing_sub)
-								#print(clashing_sub)
-								self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + sem1 + ' ' + sec1 + '- ' + clashing_sub[3] + '- ' + clashing_sub[2])
-								logger.debug('Clash Warning! Overwrote %s %s - %s - %s', sem1, sec1, clashing_sub[3], clashing_sub[2])
-							self.timetables[sem1][sec1][cur_d][cur_timeslot] = sub1[1]
-							self.timetables[sem1][sec1][d][timeslot] = ''
-						if cur_sub:
-							cur_cell_prev_sub = self.timetables[sem][sec][d][timeslot]
-							if cur_cell_prev_sub != '':
-								self.faculty_timetables[cur_cell_prev_sub[2]][d][timeslot] = ''
-							if self.timetables[sem][sec][d][timeslot] != '':
-								self.systemtray_icon.show()
-								clashing_sub = self.timetables[sem][sec][d][timeslot]
-								logger.info(clashing_sub)
-								#print(clashing_sub)
-								self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + sem + ' ' + sec + '- ' + clashing_sub[3] + '- ' + clashing_sub[2])
-								logger.debug('Clash Warning! Overwrote %s %s - %s - %s', sem, sec, clashing_sub[3], clashing_sub[2])
-							self.timetables[sem][sec][d][timeslot] = sub[1]
-							self.timetables[sem][sec][cur_d][cur_timeslot] = ''
+						if cur_sub and prev_sub and cur_sem == prev_sem and cur_sec == prev_sec:
+							can_swap = True
 
-						logger.info('Swapped\n%s\n%s\n%s', self.faculty_timetables[faculty][d][timeslot], item.text(), i.text())
-						#print("Swapped")
-						#print(self.faculty_timetables[faculty][d][timeslot])
-						#print(item.text())
-						#print(i.text())
+						if can_swap:
+							prev_cell = QtWidgets.QTableWidgetItem()
+							prev_cell.setText(prev_cell_text) # previous cell contents
+							new_cell = QtWidgets.QTableWidgetItem()
+							new_cell.setText(cur_cell.text())
+							self.ui5.generated_table.setItem(r, c, new_cell)
+							self.ui5.generated_table.setItem(row, column, prev_cell) # swap cell contents in table
+							f = self.faculty_timetables[faculty]
+							f[cur_d][cur_t], f[prev_d][prev_t] = f[prev_d][prev_t], f[cur_d][cur_t] # swap in faculty timetable
+							if prev_sub:
+								self.timetables[prev_sem][prev_sec][cur_d][cur_t] = self.timetables[prev_sem][prev_sec][prev_d][prev_t]
+								self.timetables[prev_sem][prev_sec][prev_d][prev_t] = ''
+							if cur_sub:
+								self.timetables[cur_sem][cur_sec][prev_d][prev_t] = self.timetables[cur_sem][cur_sec][cur_d][cur_t]
+								self.timetables[cur_sem][cur_sec][cur_d][cur_t] = ''
+						else:
+							self.show_swap_conflict_dialog(conflicts)
 						
 						self.ui5.generated_table.clearSelection()
 
-				else: # section
+				else: # section timetable
 					sem = self.ui5.semester_combobox.currentText()
 					section = self.ui5.section_combobox.currentText()
 				
-					a = self.ui5.generated_table.currentItem()
-					x = a.text()
+					cur_cell = self.ui5.generated_table.currentItem()
 					for day, ro in tt.day_row_num.items():
 						if r == ro:
-							d = day
+							prev_d = day
 						if row == ro:
 							cur_d = day
-					timeslot = c + 1
-					cur_timeslot = column + 1
-					logger.info(self.timetables[sem][section][d][timeslot])
-					#print(self.timetables[sem][section][d][timeslot])
-					prev_sub = self.timetables[sem][section][d][timeslot]
-					cur_sub = self.timetables[sem][section][cur_d][cur_timeslot]
+					prev_t = c + 1
+					cur_t = column + 1
+					prev_sub = self.timetables[sem][section][prev_d][prev_t]
+					cur_sub = self.timetables[sem][section][cur_d][cur_t]
+					can_swap = True
+					conflicts = []
 					if prev_sub != '':
-						b = prev_sub[3]
+						#print(prev_sub)
+						prev_cell_text = prev_sub[3]
+						if self.subs[prev_sub[3]].lab == True:
+							can_swap = False
+						else:
+							prev_teacher = prev_sub[2]
+							if self.faculty_timetables[prev_teacher][cur_d][cur_t]:
+								sec, sub = self.faculty_timetables[prev_teacher][cur_d][cur_t]
+								can_swap = False
+								conflicts.append((prev_teacher, cur_d, cur_t, sec + ' ' + sub[3]))
 					else:
-						b = '-'
-					item = QtWidgets.QTableWidgetItem()
-					item.setText(b) # previous cell
-					self.ui5.generated_table.setItem(row, column, item)
-					i = QtWidgets.QTableWidgetItem()
-					i.setText(x) # current cell
-					self.ui5.generated_table.setItem(r, c, i)
-
-					self.timetables[sem][section][cur_d][cur_timeslot] = prev_sub
-					self.timetables[sem][section][d][timeslot] = cur_sub
-					if prev_sub != '':
-						f = prev_sub[2]
-						self.faculty_timetables[f][d][timeslot] = ''
-						if self.faculty_timetables[f][cur_d][cur_timeslot] != '':
-							self.systemtray_icon.show()
-							clashing_sub = self.faculty_timetables[f][cur_d][cur_timeslot]
-							self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + clashing_sub[0] + '- ' + clashing_sub[1][3] + '- ' + clashing_sub[1][2])
-							logger.debug('Clas Warning! Overwrote %s - %s - %s', clashing_sub[0], clashing_sub[1][3], clashing_sub[1][2])
-						self.faculty_timetables[f][cur_d][cur_timeslot] = (sem + ' ' + section, prev_sub)
+						prev_cell_text = '-'
 					if cur_sub != '':
-						f = cur_sub[2]
-						self.faculty_timetables[f][cur_d][cur_timeslot] = ''
-						if self.faculty_timetables[f][d][timeslot] != '':
-							self.systemtray_icon.show()
-							clashing_sub = self.faculty_timetables[f][d][timeslot]
-							self.systemtray_icon.showMessage('Clash warning!', 'Overwrote ' + clashing_sub[0] + '- ' + clashing_sub[1][3] + '- ' + clashing_sub[1][2])
-							logger.debug('Clas Warning! Overwrote %s - %s - %s', clashing_sub[0], clashing_sub[1][3], clashing_sub[1][2])
-						self.faculty_timetables[f][d][timeslot] = (sem + ' ' + section, cur_sub)
-					logger.info('%s\n%s\nSwapped', item.text(), i.text())
-					#print(item.text())
-					#print(i.text())
-					#print("Swapped")
+						if self.subs[cur_sub[3]].lab == True:
+							can_swap = False
+						else:
+							cur_teacher = cur_sub[2]
+							if self.faculty_timetables[cur_teacher][prev_d][prev_t]:
+								sec, sub = self.faculty_timetables[cur_teacher][prev_d][prev_t]
+								can_swap = False
+								conflicts.append((cur_teacher, prev_d, prev_t, sec + ' ' + sub[3]))
+
+					'''
+					if prev_sub and cur_sub and prev_teacher == cur_teacher:
+						can_swap = True
+					'''
+
+					if can_swap:
+						prev_cell = QtWidgets.QTableWidgetItem()
+						prev_cell.setText(prev_cell_text) # previous cell
+						new_cell = QtWidgets.QTableWidgetItem()
+						new_cell.setText(cur_cell.text()) # current cell
+						self.ui5.generated_table.setItem(r, c, new_cell)
+						self.ui5.generated_table.setItem(row, column, prev_cell)
+
+						self.timetables[sem][section][cur_d][cur_t] = prev_sub
+						self.timetables[sem][section][prev_d][prev_t] = cur_sub # swap in section timetable
+
+						if prev_sub != '':
+							self.faculty_timetables[prev_teacher][cur_d][cur_t] = self.faculty_timetables[prev_teacher][prev_d][prev_t]
+							self.faculty_timetables[prev_teacher][prev_d][prev_t] = ''
+						if cur_sub != '':
+							self.faculty_timetables[cur_teacher][prev_d][prev_t] = self.faculty_timetables[cur_teacher][cur_d][cur_t]
+							self.faculty_timetables[cur_teacher][cur_d][cur_t] = ''
+					else:
+						self.show_swap_conflict_dialog(conflicts)
+
 					self.ui5.generated_table.clearSelection()
-			self.selected_cell = ''
+
+			self.selected_cell = '' # after 2 clicks, reset the selection
 		else:
-			self.selected_cell = (row, column, 1)
+			self.selected_cell = (row, column) # first click
 
 	def print_btn_event_plaintext(self):
 		inputType = self.ui5.inputType_combobox.currentText()
@@ -1977,7 +1979,7 @@ class ParentWindow(QMainWindow):
 			logger.info(self.faculty_fixed_slots)
 			#print(self.faculty_subjects)
 			#print(self.faculty_fixed_slots)
-
+			return True
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
@@ -2097,9 +2099,10 @@ class ParentWindow(QMainWindow):
 			for teacher in ffs:
 				self.faculty_fixed_slots[teacher] = dict()
 				for row in ffs[teacher]:
-					self.faculty_fixed_slots[teacher][in2t(row)] = dict()
+					self.faculty_fixed_slots[teacher][int(row)] = dict()
 					for col in ffs[teacher][row]:
 						self.faculty_fixed_slots[teacher][int(row)][int(col)] = ffs[teacher][row][col]
+			return True
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
@@ -2191,7 +2194,7 @@ class ParentWindow(QMainWindow):
 			self.num_sections = num_sections
 			self.section_fixed_slots = dict()
 			self.faculty_fixed_slots = dict()
-
+			return True
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
