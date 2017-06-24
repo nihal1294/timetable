@@ -1822,27 +1822,6 @@ class ParentWindow(QMainWindow):
 			self.FifthWindow.hide()
 			self.FourthWindow.show()
 
-	def show_save_file_dialog(self):
-		dialog = QtWidgets.QFileDialog(caption = "Choose save file")
-		dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
-		while dialog.exec_():
-			fname = dialog.selectedFiles()[0]
-			if os.path.isfile(fname):
-				buttonReply = QMessageBox.question(self, 'Save confirmation', 'File already exists. Are you sure you want to overwrite?', QMessageBox.Ok | QMessageBox.Cancel)
-				if buttonReply == QMessageBox.Cancel:
-					continue
-			logger.info(fname)
-			#print(fname)
-			if fname.endswith('.json'):
-				success = self.save_state_json(fname)
-			else:
-				success = self.save_state(fname)
-			if success:
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
-				logger.debug('Success. Saved to %s', fname)
-				self.cur_open_filename = fname
-			break
 		
 	#menubar function
 	def filemenuevent(self, option):
@@ -1852,24 +1831,10 @@ class ParentWindow(QMainWindow):
 		if option == "Exit":
 			logger.debug('Quitting Program by user\'s choice, no errors')
 			sys.exit()
-<<<<<<< HEAD
 		elif option == "Save":
-			pass
-		elif option == "Save As":
-			dialog = QtWidgets.QFileDialog(caption = "Choose save file")
-			dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
-			if dialog.exec_():
-				fname = dialog.selectedFiles()[0]
-				logger.info(fname)
-				#print(fname)
-				if fname.endswith('.json'):
-					self.save_state_json(fname)
-=======
-		elif option == "Save": #add save here
 			if self.cur_open_filename:
 				if self.cur_open_filename.endswith('.json'):
 					success = self.save_state_json(self.cur_open_filename)
->>>>>>> origin/testing
 				else:
 					success = self.save_state(self.cur_open_filename)
 				if success:
@@ -1975,6 +1940,29 @@ class ParentWindow(QMainWindow):
 
 
 	#save and load functions
+	def show_save_file_dialog(self):
+		dialog = QtWidgets.QFileDialog(caption = "Choose save file")
+		dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
+		while dialog.exec_():
+			fname = dialog.selectedFiles()[0]
+			logger.info(fname)
+			if os.path.isfile(fname):
+				buttonReply = QMessageBox.question(self, 'Save confirmation', 'File already exists. Are you sure you want to overwrite?', QMessageBox.Ok | QMessageBox.Cancel)
+				if buttonReply == QMessageBox.Cancel:
+					logger.debug('Save Cancelled')
+					continue
+			#print(fname)
+			if fname.endswith('.json'):
+				success = self.save_state_json(fname)
+			else:
+				success = self.save_state(fname)
+			if success:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
+				logger.debug('Success. Saved to %s', fname)
+				self.cur_open_filename = fname
+			break
+
 	def save_state(self, fname):
 		try:
 			with open(fname, "wb") as file:
