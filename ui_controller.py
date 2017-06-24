@@ -409,8 +409,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.label_5.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
 		self.ui5.inputType_combobox.addItem('Faculty')
-		for sem in self.sem_list:
-			self.ui5.semester_combobox.addItem(sem)
+		self.ui5.inputType_combobox.setCurrentIndex(-1)
 		self.ui5.semester_combobox.setCurrentIndex(-1)
 		self.ui5.section_combobox.setCurrentIndex(-1)
 		self.ui5.faculty_combobox.setCurrentIndex(-1)
@@ -553,7 +552,10 @@ class ParentWindow(QMainWindow):
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
 				self.ui5.generated_table.clearContents()
 
-			else:
+			else:	#input type subjects
+				self.ui5.semester_combobox.clear()
+				for sem in self.sem_list:
+					self.ui5.semester_combobox.addItem(sem)
 				self.ui5.semester_combobox.setEnabled(True)
 				self.ui5.label_3.setEnabled(True)
 				self.ui5.semester_combobox.setCurrentIndex(-1)
@@ -640,7 +642,7 @@ class ParentWindow(QMainWindow):
 									self.update_subject_changes(subj, y)
 								self.ui.credits_spinbox.setValue(1)
 								break
-			else:
+			else:	#input type is faculty
 				for x in self.row:
 					fac = x.text()
 					for y in self.faculty_list_value:
@@ -883,15 +885,21 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
 		self.ui_elec.electiveGroup_combobox.clear()
 		sem = self.ui_elec.semester_combobox.currentText()
+		#self.ui_elec.elective_spinbox.setValue(0)
+		self.ui_elec.electiveGroup_combobox.setEnabled(False)
+		self.ui_elec.label_3.setEnabled(False)
+		#if len(self.electives[sem]) > 0:
 		for group in self.electives[sem]:
 			self.ui_elec.electiveGroup_combobox.addItem(group)
+			self.ui_elec.electiveGroup_combobox.setEnabled(True)
+			self.ui_elec.label_3.setEnabled(True)
 		self.ui_elec.elective_input_textbox.clear()
 		self.ui_elec.elective_input_textbox.setPlaceholderText("")
 		self.ui_elec.elective_input_textbox.setEnabled(False)
 		self.ui_elec.label_5.setEnabled(False)
 		self.ui_elec.elective_spinbox.setEnabled(True)
-		self.ui_elec.label_4.setEnabled(True)
 		self.ui_elec.elective_spinbox.setValue(len(self.electives[sem]))
+		self.ui_elec.label_4.setEnabled(True)
 		self.ui_elec.elective_code_input.clear()
 		self.ui_elec.elective_code_input.setEnabled(False)
 		self.ui_elec.label_8.setEnabled(False)
@@ -903,8 +911,6 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.label_7.setEnabled(False)
 		self.ui_elec.lab_checkbox.setChecked(False)
 		self.ui_elec.lab_checkbox.setEnabled(False)
-		self.ui_elec.electiveGroup_combobox.setEnabled(False)
-		self.ui_elec.label_3.setEnabled(False)
 		self.ui_elec.line.setEnabled(True)
 		self.ui_elec.line_2.setEnabled(False)
 		self.ui_elec.elective_list.clear()
@@ -931,7 +937,7 @@ class ParentWindow(QMainWindow):
 
 	def elective_spinbox_event(self):
 		no_of_ele_grp = self.ui_elec.elective_spinbox.value()
-		logger.info(no_of_ele_grp)
+		logger.info('No of elective groups %s',no_of_ele_grp)
 		#print(no_of_ele_grp)
 		self.ui_elec.electiveGroup_combobox.setEnabled(True)
 		self.ui_elec.label_3.setEnabled(True)
@@ -1756,6 +1762,7 @@ class ParentWindow(QMainWindow):
 
 	def reset_fifth_window(self):
 		self.ui5.inputType_combobox.setCurrentIndex(-1)
+		self.ui5.semester_combobox.clear()
 		self.ui5.semester_combobox.setCurrentIndex(-1)
 		self.ui5.section_combobox.setCurrentIndex(-1)
 		self.ui5.faculty_combobox.setCurrentIndex(-1)
@@ -1797,6 +1804,7 @@ class ParentWindow(QMainWindow):
 					self.ui5.faculty_combobox.addItem(faculty.name)
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
 		elif self.FifthWindow.isVisible():
+			logger.debug('Quitting Program by user\'s choice, no errors')
 			sys.exit()
 
 	def back_btn_event(self):
@@ -1820,8 +1828,9 @@ class ParentWindow(QMainWindow):
 		logger.info(option)
 		#print(option)
 		if option == "Exit":
+			logger.debug('Quitting Program by user\'s choice, no errors')
 			sys.exit()
-		elif option == "Save": #add save here
+		elif option == "Save":
 			pass
 		elif option == "Save As":
 			dialog = QtWidgets.QFileDialog(caption = "Choose save file")
@@ -1893,7 +1902,36 @@ class ParentWindow(QMainWindow):
 			else:
 				logger.debug('Clear All cancelled')
 				pass
-		elif option == "Print All": #add print all here
+		elif option == "Print All":
+			try:
+				fp = os.path.realpath(os.curdir) + '\\Output' 
+				s = os.path.realpath(os.curdir) + '\\Output\\Class Timetables'
+				logger.debug('Printing all class timetables to %s', s)
+				for sem in self.sem_list:
+					if self.sections[sem]:
+						for sec in self.timetables[sem]:
+							tt = self.timetables[sem][sec]
+							filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
+							year = '{}. {} - {}. {}'.format(self.startMonth[:3], self.startYear, self.endMonth[:3], self.endYear)
+							worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value, year)
+				
+				f = os.path.realpath(os.curdir) + '\\Output\\Personal Timetables'
+				logger.debug('Printing all faculty timetables to %s', f)
+				for faculty in self.faculty_timetables:
+					tt = self.faculty_timetables[faculty]
+					filepath = os.path.join('Output', 'Personal Timetables', '{}.docx'.format(faculty_class(tt.name).name))
+					i = self.faculty_list_value.index(faculty)
+					designation = self.faculty_list_value[i].designation
+					worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty', self.timetables, designation)
+				
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Print All', 'All timetables have been printed to ' + fp)
+				logger.debug('Print All-All timetables have been printed to %s', fp)
+				os.startfile(fp)
+			except OSError as err:
+				self.show_printerror_dialog(err)
+				logger.exception(err)
+		elif option == "Show Free Classrooms":
 			pass
 		elif option == "Set Year/Department":
 			self.YearWindow.show()
