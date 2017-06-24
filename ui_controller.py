@@ -238,6 +238,7 @@ class ParentWindow(QMainWindow):
 		for sem in self.sem_list:
 			self.ui.semester_combobox.addItem(sem)
 		self.ui.semester_combobox.setCurrentIndex(-1)
+		self.cur_open_filename = ''
 		self.faculty_list_value = []
 		self.subjects = OrderedDict()
 		self.subs = dict() # store link between subject short name and its object
@@ -1813,6 +1814,27 @@ class ParentWindow(QMainWindow):
 			self.FifthWindow.hide()
 			self.FourthWindow.show()
 
+	def show_save_file_dialog(self):
+		dialog = QtWidgets.QFileDialog(caption = "Choose save file")
+		dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
+		while dialog.exec_():
+			fname = dialog.selectedFiles()[0]
+			if os.path.isfile(fname):
+				buttonReply = QMessageBox.question(self, 'Save confirmation', 'File already exists. Are you sure you want to overwrite?', QMessageBox.Ok | QMessageBox.Cancel)
+				if buttonReply == QMessageBox.Cancel:
+					continue
+			logger.info(fname)
+			#print(fname)
+			if fname.endswith('.json'):
+				success = self.save_state_json(fname)
+			else:
+				success = self.save_state(fname)
+			if success:
+				self.systemtray_icon.show()
+				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
+				logger.debug('Success. Saved to %s', fname)
+				self.cur_open_filename = fname
+			break
 		
 	#menubar function
 	def filemenuevent(self, option):
@@ -1822,22 +1844,19 @@ class ParentWindow(QMainWindow):
 		if option == "Exit":
 			sys.exit()
 		elif option == "Save": #add save here
-			pass
-		elif option == "Save As":
-			dialog = QtWidgets.QFileDialog(caption = "Choose save file")
-			dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
-			if dialog.exec_():
-				fname = dialog.selectedFiles()[0]
-				logger.info(fname)
-				#print(fname)
-				if fname.endswith('.json'):
-					self.save_state_json(fname)
+			if self.cur_open_filename:
+				if self.cur_open_filename.endswith('.json'):
+					success = self.save_state_json(self.cur_open_filename)
 				else:
-					self.save_state(fname)
-				self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
-				logger.debug('Success. Saved to %s', fname)
-			pass
+					success = self.save_state(self.cur_open_filename)
+				if success:
+					#self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Success', 'Saved to ' + self.cur_open_filename)
+					logger.debug('Success. Saved to %s', self.cur_open_filename)
+			else:
+				self.show_save_file_dialog()
+		elif option == "Save As":
+			self.show_save_file_dialog()
 		elif option == "Load":
 			buttonReply = QMessageBox.question(self, 'Load Confirmation', "Are you sure you want to load data? All unsaved data will be lost on loading.", QMessageBox.Ok | QMessageBox.Cancel, QMessageBox.Cancel)
 			if buttonReply == QMessageBox.Ok:
@@ -1858,6 +1877,8 @@ class ParentWindow(QMainWindow):
 						self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Success', 'Loaded from ' + fname)
 						logger.debug('Success. Loaded from %s', fname)
+						if not fname.endswith('.xls') and not fname.endswith('.xlsx'):
+							self.cur_open_filename = fname
 						self.reset_first_window()
 						self.populate_second_window()
 						self.reset_third_window()
@@ -1918,6 +1939,7 @@ class ParentWindow(QMainWindow):
 						 self.electives)
 				pickle.dump(state, file)
 				logger.info('Saving as binary file')
+			return True
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
@@ -2034,6 +2056,7 @@ class ParentWindow(QMainWindow):
 			dump = json.dumps(state, indent = 4)
 			with open(fname, 'w') as file:
 				file.write(dump)
+			return True
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
