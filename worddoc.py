@@ -205,11 +205,40 @@ def print_section_wordxml(tt, subjects_assigned, subs, year, faculty):
 
 	return ET.tostring(root)
 
-def make_docx(tt, subjects_assigned, subs, filename, tt_type, dicts, year = None):
+def print_freeslots_wordxml(rooms, department):
+	'''
+
+	department: root[0][6][1][1].text
+	table: root[0][10]
+	2nd row: root[0][10][3]
+	2nd column: root[0][10][3][3]
+	2nd column text: root[0][10][3][3][1][2][1].text
+
+	'''
+	tree = ET.parse('template_freerooms.xml')
+	root = tree.getroot()
+	root[0][6][1][1].text = 'Department of ' + department
+	table = root[0][10]
+	for day in rooms:
+		r = day_row_num[day] + 3
+		row = table[r]
+		for timeslot in rooms[day]:
+			c = timeslot + 1
+			#print(r, c)
+			col = row[c][1][1][1]
+			freerooms = '\n'.join(rooms[day][timeslot])
+			print()
+			print(freerooms)
+			col.text = freerooms
+	return ET.tostring(root)
+
+def make_docx(tt, tt_type, filename, subjects_assigned = None, subs = None, dicts = None, year = None):
 	if tt_type == 'section':
 		xml_string = print_section_wordxml(tt, subjects_assigned, subs, year, dicts)
-	else:
+	elif tt_type == 'faculty':
 		xml_string = print_faculty_wordxml(tt, year, subjects_assigned, subs, dicts)
+	else:
+		xml_string = print_freeslots_wordxml(tt, subjects_assigned)
 	with open(os.path.join('template', 'word', 'document.xml'), 'wb') as f:
 		f.write(xml_string)
 	file_paths = []

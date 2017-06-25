@@ -246,13 +246,10 @@ class ParentWindow(QMainWindow):
 		for sem in self.sem_list:
 			self.subjects[sem] = []
 			self.num_sections[sem] = 0
-		self.sections = 0
 		self.inputType = ""
 		self.text = ""
 		self.sem = ""
 		self.row = self.ui.input_list.selectedItems()
-		self.lab = 0
-		self.credits = 1
 		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
 		for value in self.titles_list:
 			self.ui.title_combobox.addItem(value)
@@ -406,6 +403,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.section_combobox.activated[str].connect(self.section_combobox5_event)
 		self.ui5.faculty_combobox.activated[str].connect(self.faculty_combobox5_event)
 		self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
+		self.ui5.roomno_textbox.textEdited.connect(self.roomno_textbox_event)
 		self.ui5.faculty_combobox.setEnabled(False)
 		self.ui5.label_5.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
@@ -1454,6 +1452,8 @@ class ParentWindow(QMainWindow):
 		sem = self.ui5.semester_combobox.currentText()
 		section = self.ui5.section_combobox.currentText()
 		if sem in self.timetables and section in self.timetables[sem]:
+			if self.timetables[sem][section].roomno:
+				self.ui5.roomno_textbox.setText(self.timetables[sem][section].roomno)
 			for day in self.timetables[sem][section]:
 				for timeslot in self.timetables[sem][section][day]:
 					sub = self.timetables[sem][section][day][timeslot]
@@ -1640,6 +1640,43 @@ class ParentWindow(QMainWindow):
 		else:
 			self.selected_cell = (row, column) # first click
 
+	def roomno_textbox_event(self):
+		sem = self.ui5.semester_combobox.currentText()
+		sec = self.ui5.section_combobox.currentText()
+		if sem and sec:
+			roomno = self.ui5.roomno_textbox.text()
+			self.timetables[sem][sec].roomno = roomno
+
+	def get_free_rooms(self):
+		if isinstance(self.timetables, dict):
+			rooms = dict()
+			for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
+				rooms[day] = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: []}
+			rooms['saturday'] = {1: [], 2: [], 3: [], 4: []}
+
+			num_rooms = 0
+			for sem in self.timetables:
+				for sec in self.timetables[sem]:
+					tt = self.timetables[sem][sec]
+					if tt.roomno:
+						num_rooms += 1
+						for day in tt:
+							for timeslot in tt[day]:
+								if not tt[day][timeslot]: 
+									rooms[day][timeslot].append(tt.roomno)
+									#print(day, timeslot, tt.roomno)
+			for day in rooms:
+				for timeslot in rooms[day]:
+					if len(rooms[day][timeslot]) == num_rooms and num_rooms > 0: # at times such as lunch breaks
+						rooms[day][timeslot] = ['all']
+		try:
+			filepath = os.path.join('Output', 'free rooms.docx')
+			worddoc.make_docx(rooms, 'rooms', filepath, self.department)						
+			os.startfile(filepath)
+		except OSError as err:
+			self.show_printerror_dialog(err)
+			logger.exception(err)
+
 	def print_btn_event_plaintext(self):
 		inputType = self.ui5.inputType_combobox.currentText()
 		if inputType == "Students":
@@ -1715,9 +1752,9 @@ class ParentWindow(QMainWindow):
 				filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
 				try:
 					year = '{}. {} - {}. {}'.format(self.startMonth[:3], self.startYear, self.endMonth[:3], self.endYear)
-					roomno = self.ui5.roomno_textbox.text()
-					tt.roomno = roomno
-					worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value, year)
+					#roomno = self.ui5.roomno_textbox.text()
+					#tt.roomno = roomno
+					worddoc.make_docx(tt, 'section', filepath, self.subjects_assigned[sem][sec], self.subs, self.faculty_list_value, year)
 					os.startfile(filepath)
 				except OSError as err:
 					self.show_printerror_dialog(err)
@@ -1735,7 +1772,7 @@ class ParentWindow(QMainWindow):
 				try:
 					i = self.faculty_list_value.index(faculty)
 					designation = self.faculty_list_value[i].designation
-					worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty', self.timetables, designation)
+					worddoc.make_docx(tt, 'faculty', filepath, self.faculty_subjects[faculty], self.subs, self.timetables, designation)
 					os.startfile(filepath)
 				except OSError as err:
 					self.show_printerror_dialog(err)
@@ -1889,6 +1926,22 @@ class ParentWindow(QMainWindow):
 			if buttonReply == QMessageBox.Ok:
 				logger.debug('Clear All confirmed')
 				logger.info('Clearing all unsaved data')
+				self.cur_open_filename = ''
+				self.faculty_list_value = []
+				self.subjects = dict()
+				self.subs = dict()
+				self.num_sections = dict()
+				self.electives = dict()
+				for sem in self.sem_list:
+					self.subjects[sem] = []
+					self.num_sections[sem] = 0
+					self.electives[sem] = dict()
+				self.row = self.ui.input_list.selectedItems()
+				self.sections = dict()
+				self.subjects_assigned = dict()
+				self.faculty_subjects = dict()
+				self.section_fixed_slots = dict()
+				self.faculty_fixed_slots = dict()
 				self.reset_first_window()
 				self.populate_second_window()
 				self.reset_third_window()
@@ -1896,7 +1949,7 @@ class ParentWindow(QMainWindow):
 				self.reset_fifth_window()
 				self.reset_Btn_event()	#reset elective window
 				self.reset_year_window()
-				self.systemtray_icon.show()
+				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Reset', 'All unsaved data have been cleared.')
 				logger.debug('Reset-All unsaved data have been cleared.')
 			else:
@@ -1907,13 +1960,12 @@ class ParentWindow(QMainWindow):
 				fp = os.path.realpath(os.curdir) + '\\Output' 
 				s = os.path.realpath(os.curdir) + '\\Output\\Class Timetables'
 				logger.debug('Printing all class timetables to %s', s)
-				for sem in self.sem_list:
-					if self.sections[sem]:
-						for sec in self.timetables[sem]:
-							tt = self.timetables[sem][sec]
-							filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
-							year = '{}. {} - {}. {}'.format(self.startMonth[:3], self.startYear, self.endMonth[:3], self.endYear)
-							worddoc.make_docx(tt, self.subjects_assigned[sem][sec], self.subs, filepath, 'section', self.faculty_list_value, year)
+				for sem in self.timetables:
+					for sec in self.timetables[sem]:
+						tt = self.timetables[sem][sec]
+						filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
+						year = '{}. {} - {}. {}'.format(self.startMonth[:3], self.startYear, self.endMonth[:3], self.endYear)
+						worddoc.make_docx(tt, 'section', filepath, self.subjects_assigned[sem][sec], self.subs, self.faculty_list_value, year)
 				
 				f = os.path.realpath(os.curdir) + '\\Output\\Personal Timetables'
 				logger.debug('Printing all faculty timetables to %s', f)
@@ -1922,7 +1974,7 @@ class ParentWindow(QMainWindow):
 					filepath = os.path.join('Output', 'Personal Timetables', '{}.docx'.format(faculty_class(tt.name).name))
 					i = self.faculty_list_value.index(faculty)
 					designation = self.faculty_list_value[i].designation
-					worddoc.make_docx(tt, self.faculty_subjects[faculty], self.subs, filepath, 'faculty', self.timetables, designation)
+					worddoc.make_docx(tt, 'faculty', filepath, self.faculty_subjects[faculty], self.subs, self.timetables, designation)
 				
 				self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Print All', 'All timetables have been printed to ' + fp)
@@ -1932,7 +1984,7 @@ class ParentWindow(QMainWindow):
 				self.show_printerror_dialog(err)
 				logger.exception(err)
 		elif option == "Show Free Classrooms":
-			pass
+			self.get_free_rooms()
 		elif option == "Set Year/Department":
 			self.YearWindow.show()
 		elif option == "About":
@@ -2284,7 +2336,16 @@ if __name__ == "__main__":
 
 	if os.path.isdir('logs') == False:
 		os.mkdir('logs')
-	
+	if os.path.isdir('Output') == False:
+		os.mkdir('Output')
+		os.mkdir('Output\\Class Timetables')
+		os.mkdir('Output\\Personal Timetables')
+	else:
+		if os.path.isdir('Output\\Class Timetables') == False:
+			os.mkdir('Output\\Class Timetables')
+		if os.path.isdir('Output\\Personal Timetables') == False:
+			os.mkdir('Output\\Personal Timetables')
+
 	global loc
 	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime()))
 	my_logger()
