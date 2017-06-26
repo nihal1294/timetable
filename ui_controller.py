@@ -159,6 +159,10 @@ class ParentWindow(QMainWindow):
 		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('icons/favicon.ico'))
 		self.systemtray_icon.show()
 
+		app.aboutToQuit.connect(self.finish_btn_event)
+
+		self.current_window = ''
+
 		#self.central_window.setLayout(self.layered_windows)
 		#self.setCentralWidget(self.central_window)
 
@@ -233,6 +237,8 @@ class ParentWindow(QMainWindow):
 		self.ui.inputType_combobox.addItem("Faculty")
 		self.ui.inputType_combobox.addItem("Subjects")
 		self.ui.inputType_combobox.setCurrentIndex(-1)
+		self.ui.desig_combobox.setCurrentIndex(-1)
+		self.ui.title_combobox.setCurrentIndex(-1)
 		self.ui.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
 		self.ui.semester_combobox.activated[str].connect(self.semester_combobox_event)
 		self.ui.input_textbox.returnPressed.connect(self.ui.addBtn.click)
@@ -403,7 +409,7 @@ class ParentWindow(QMainWindow):
 		self.ui5 = Ui_window5()
 		self.ui5.setupUi(self.FifthWindow)
 
-		self.ui5.finishBtn.clicked.connect(self.next_btn_event)
+		self.ui5.finishBtn.clicked.connect(self.finish_btn_event)
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
 		self.ui5.printBtn.clicked.connect(self.print_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
@@ -504,6 +510,8 @@ class ParentWindow(QMainWindow):
 				self.ui.line.setEnabled(True)
 				self.ui.line_2.setEnabled(False)
 				self.ui.electiveBtn.setEnabled(False)
+				self.ui.desig_combobox.setCurrentIndex(-1)
+				self.ui.title_combobox.setCurrentIndex(-1)
 				self.ui.input_textbox.clear()
 				self.ui.input_textbox.setPlaceholderText("Please enter faculty name")
 				
@@ -616,7 +624,7 @@ class ParentWindow(QMainWindow):
 		text = self.ui.input_textbox.text()
 
 		if self.row:   #when editing a currently selected value in list
-			looger.debug('Editing selected item')
+			logger.debug('Editing selected item')
 			logger.debug('Input type: %s', self.inputType)
 			if self.inputType == "Subjects":
 				for x in self.row:
@@ -738,6 +746,8 @@ class ParentWindow(QMainWindow):
 				logger.debug('Input-Please enter the input type.')
 				
 		self.ui.input_list.sortItems()
+		self.ui.desig_combobox.setCurrentIndex(-1)
+		self.ui.title_combobox.setCurrentIndex(-1)
 		self.ui.subject_short_input.clear()
 		self.ui.input_textbox.clear()
 		self.ui.subject_code_input.clear()
@@ -824,9 +834,13 @@ class ParentWindow(QMainWindow):
 						index = self.ui.title_combobox.findText(y.title)
 						if index >= 0:
 							self.ui.title_combobox.setCurrentIndex(index)
+						else:
+							self.ui.title_combobox.setCurrentIndex(-1)
 						index = self.ui.desig_combobox.findText(y.designation)
 						if index >= 0:
 							self.ui.desig_combobox.setCurrentIndex(index)
+						else:
+							self.ui.desig_combobox.setCurrentIndex(-1)
 						break
 
 	def elective_btn_event(self):
@@ -981,7 +995,7 @@ class ParentWindow(QMainWindow):
 			logger.debug('Input-Please select the semester.')
 			return
 		if not short_sub:
-			self.systemtray_icon.show()
+			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please enter the elective short form.')
 			logger.debug('Input-Please enter the subject short form.')
 			return
@@ -1870,32 +1884,73 @@ class ParentWindow(QMainWindow):
 		self.ui5.generated_table.clearContents()
 		self.ui5.roomno_textbox.clear()
 
+	def finish_btn_event(self):
+		if self.FirstWindow.isVisible():
+			self.FirstWindow.show()
+		logger.debug('User has clicked on Exit/Finish/\'X\'')
+		buttonReply = QMessageBox.warning(self, 'EXIT Confirmation', "Are you sure you want to EXIT? All unsaved data will be lost on quitting. If you would like to save and quit, please click on Save.", QMessageBox.Yes | QMessageBox.Save | QMessageBox.Cancel, QMessageBox.Cancel)
+		if buttonReply == QMessageBox.Yes:
+			logger.debug('User clicked Yes')
+			logger.debug('Quitting Program by user\'s choice, no errors')
+			sys.exit()
+		if buttonReply == QMessageBox.Save:
+			logger.debug('User clicked Save. Program will save and exit')
+			if self.cur_open_filename:
+				if self.cur_open_filename.endswith('.json'):
+					success = self.save_state_json(self.cur_open_filename)
+				else:
+					success = self.save_state(self.cur_open_filename)
+				if success:
+					#self.systemtray_icon.show()
+					self.systemtray_icon.showMessage('Success', 'Saved to ' + self.cur_open_filename)
+					logger.debug('Success. Saved to %s', self.cur_open_filename)
+			else:
+				self.show_save_file_dialog()
+			logger.debug('Quitting Program by user\'s choice, no errors')
+			sys.exit()
+		if buttonReply == QMessageBox.Cancel:
+			logger.debug('Current Window: %s', self.current_window)
+			if self.current_window == 'Year':
+				self.YearWindow.show()
+			elif self.current_window == 'First':
+				self.FirstWindow.show()
+			elif self.current_window == 'Second':
+				self.SecondWindow.show()
+			elif self.current_window == 'Third':
+				self.ThirdWindow.show()
+			elif self.current_window == 'Fourth':
+				self.FourthWindow.show()
+			elif self.current_window == 'Fifth':
+				self.FifthWindow.show()
+			logger.debug('Exit Cancelled')
+
 
 	#common functions
 	def next_btn_event(self):
-		if self.YearWindow.isVisible(): # if year window is opened from menu option
-			if self.FirstWindow.isVisible() or \
-			self.SecondWindow.isVisible() or \
-			self.ThirdWindow.isVisible() or \
-			self.FourthWindow.isVisible() or \
-			self.FifthWindow.isVisible():
+		if self.YearWindow.isVisible():
+			self.current_window = 'Year'
+			if self.FirstWindow.isVisible() or self.SecondWindow.isVisible() or self.ThirdWindow.isVisible() or self.FourthWindow.isVisible() or self.FifthWindow.isVisible(): # if year window is opened from menu option
 				self.YearWindow.hide()
 			else:						# when year window is opened when app is started
 				self.YearWindow.hide()
 				self.FirstWindow.show()
+				self.current_window = 'First'
 				logger.debug('First Window')
 		elif self.FirstWindow.isVisible():
 			self.FirstWindow.hide()
 			self.SecondWindow.show()
+			self.current_window = 'Second'
 			logger.debug('Second Window')
 			self.populate_second_window()
 		elif self.SecondWindow.isVisible():
 			self.SecondWindow.hide()
 			self.ThirdWindow.show()
+			self.current_window = 'Third'
 			logger.debug('Third Window')
 		elif self.ThirdWindow.isVisible():
 			self.ThirdWindow.hide()
 			self.FourthWindow.show()
+			self.current_window = 'Fourth'
 			logger.debug('Fourth Window')
 			if self.ui4.faculty_combobox.currentText() == "" and self.ui4.faculty_combobox.count() == 0:
 				for faculty in self.faculty_list_value:
@@ -1904,31 +1959,33 @@ class ParentWindow(QMainWindow):
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
+			self.current_window = 'Fifth'
 			logger.debug('Fifth Window')
 			if self.ui5.faculty_combobox.currentText() == "" and self.ui5.faculty_combobox.count() == 0:
 				for faculty in self.faculty_list_value:
 					self.ui5.faculty_combobox.addItem(faculty.name)
 				self.ui5.faculty_combobox.setCurrentIndex(-1)
-		elif self.FifthWindow.isVisible():
-			logger.debug('Quitting Program by user\'s choice, no errors')
-			sys.exit()
 
 	def back_btn_event(self):
 		if self.SecondWindow.isVisible():
 			self.SecondWindow.hide()
 			self.FirstWindow.show()
+			self.current_window = 'First'
 			logger.debug('First Window')
 		elif self.ThirdWindow.isVisible():
 			self.ThirdWindow.hide()
 			self.SecondWindow.show()
+			self.current_window = 'Second'
 			logger.debug('Second Window')
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.ThirdWindow.show()
+			self.current_window = 'Third'
 			logger.debug('Third Window')
 		elif self.FifthWindow.isVisible():
 			self.FifthWindow.hide()
 			self.FourthWindow.show()
+			self.current_window = 'Fourth'
 			logger.debug('Fourth Window')
 
 		
@@ -1938,8 +1995,7 @@ class ParentWindow(QMainWindow):
 		logger.info('File Menu option clicked: %s', option)
 		#print(option)
 		if option == "Exit":
-			logger.debug('Quitting Program by user\'s choice, no errors')
-			sys.exit()
+			self.finish_btn_event()
 		elif option == "Save":
 			if self.cur_open_filename:
 				if self.cur_open_filename.endswith('.json'):
