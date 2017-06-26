@@ -1188,10 +1188,10 @@ class ParentWindow(QMainWindow):
 		# display assigned subjects in list widget
 		sem = self.ui2.semester_combobox.currentText()
 		section = self.ui2.section_combobox.currentText()
-		logger.info('Displaying assigned subjects for %s %s', sem, section)
-		logger.info('Subject assignments: %s', self.subjects_assigned[sem][section])
 		if sem and section:
 			self.ui2.assigned_list.clear()
+			logger.info('Displaying assigned subjects for %s %s', sem, section)
+			logger.info('Subject assignments: %s', self.subjects_assigned[sem][section])
 			for sub in self.subjects_assigned[sem][section]:
 				self.ui2.assigned_list.addItem(sub)
 		else:
@@ -1350,7 +1350,7 @@ class ParentWindow(QMainWindow):
 
 	def cellClick3_event(self, row, column):
 		slot = self.ui3.slotType_combobox.currentText()
-		logger.info('Assinging subject constraints')
+		logger.info('Assigning subject constraints')
 		logger.info('%s %s', str(row), str(column))
 		#print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
@@ -1444,7 +1444,7 @@ class ParentWindow(QMainWindow):
 					self.ui4.faculty_table.setItem(row, column, item)
 
 	def cellClick4_event(self, row, column):
-		logger.info('Assinging faculty constraints')
+		logger.info('Assigning faculty constraints')
 		logger.info('%s %s', str(row), str(column))
 		#print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
