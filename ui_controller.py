@@ -159,7 +159,13 @@ class ParentWindow(QMainWindow):
 		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('icons/favicon.ico'))
 		self.systemtray_icon.show()
 
-		app.aboutToQuit.connect(self.finish_btn_event)
+		app.aboutToQuit.connect(lambda: self.systemtray_icon.hide())
+		self.YearWindow.closeEvent = self.finish_btn_event
+		self.FirstWindow.closeEvent = self.finish_btn_event
+		self.SecondWindow.closeEvent = self.finish_btn_event
+		self.ThirdWindow.closeEvent = self.finish_btn_event
+		self.FourthWindow.closeEvent = self.finish_btn_event
+		self.FifthWindow.closeEvent = self.finish_btn_event
 
 		self.current_window = ''
 
@@ -409,7 +415,7 @@ class ParentWindow(QMainWindow):
 		self.ui5 = Ui_window5()
 		self.ui5.setupUi(self.FifthWindow)
 
-		self.ui5.finishBtn.clicked.connect(self.finish_btn_event)
+		self.ui5.finishBtn.clicked.connect(lambda: self.FifthWindow.close())
 		self.ui5.backBtn.clicked.connect(self.back_btn_event)
 		self.ui5.printBtn.clicked.connect(self.print_btn_event)
 		self.ui5.inputType_combobox.activated[str].connect(self.inputType_combobox_event)
@@ -682,7 +688,7 @@ class ParentWindow(QMainWindow):
 			self.ui.input_list.repaint()
 
 		else: #when adding a new item
-			looger.debug('Adding new item')
+			logger.debug('Adding new item')
 			logger.debug('Input type: %s', self.inputType)
 			if self.inputType == "Subjects":
 				sem = self.ui.semester_combobox.currentText()
@@ -1884,16 +1890,14 @@ class ParentWindow(QMainWindow):
 		self.ui5.generated_table.clearContents()
 		self.ui5.roomno_textbox.clear()
 
-	def finish_btn_event(self):
-		if self.FirstWindow.isVisible():
-			self.FirstWindow.show()
+	def finish_btn_event(self, event):
 		logger.debug('User has clicked on Exit/Finish/\'X\'')
 		buttonReply = QMessageBox.warning(self, 'EXIT Confirmation', "Are you sure you want to EXIT? All unsaved data will be lost on quitting. If you would like to save and quit, please click on Save.", QMessageBox.Yes | QMessageBox.Save | QMessageBox.Cancel, QMessageBox.Cancel)
 		if buttonReply == QMessageBox.Yes:
 			logger.debug('User clicked Yes')
 			logger.debug('Quitting Program by user\'s choice, no errors')
-			sys.exit()
-		if buttonReply == QMessageBox.Save:
+			#sys.exit()
+		elif buttonReply == QMessageBox.Save:
 			logger.debug('User clicked Save. Program will save and exit')
 			if self.cur_open_filename:
 				if self.cur_open_filename.endswith('.json'):
@@ -1904,53 +1908,44 @@ class ParentWindow(QMainWindow):
 					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Success', 'Saved to ' + self.cur_open_filename)
 					logger.debug('Success. Saved to %s', self.cur_open_filename)
+				else:
+					event.ignore()
 			else:
-				self.show_save_file_dialog()
+				saved = self.show_save_file_dialog()
+				if not saved:
+					event.ignore()
 			logger.debug('Quitting Program by user\'s choice, no errors')
-			sys.exit()
-		if buttonReply == QMessageBox.Cancel:
-			logger.debug('Current Window: %s', self.current_window)
-			if self.current_window == 'Year':
-				self.YearWindow.show()
-			elif self.current_window == 'First':
-				self.FirstWindow.show()
-			elif self.current_window == 'Second':
-				self.SecondWindow.show()
-			elif self.current_window == 'Third':
-				self.ThirdWindow.show()
-			elif self.current_window == 'Fourth':
-				self.FourthWindow.show()
-			elif self.current_window == 'Fifth':
-				self.FifthWindow.show()
+			#sys.exit()
+		elif buttonReply == QMessageBox.Cancel:
 			logger.debug('Exit Cancelled')
+			event.ignore()
 
 
 	#common functions
 	def next_btn_event(self):
 		if self.YearWindow.isVisible():
-			self.current_window = 'Year'
 			if self.FirstWindow.isVisible() or self.SecondWindow.isVisible() or self.ThirdWindow.isVisible() or self.FourthWindow.isVisible() or self.FifthWindow.isVisible(): # if year window is opened from menu option
 				self.YearWindow.hide()
 			else:						# when year window is opened when app is started
 				self.YearWindow.hide()
 				self.FirstWindow.show()
-				self.current_window = 'First'
+				self.current_window = self.FirstWindow
 				logger.debug('First Window')
 		elif self.FirstWindow.isVisible():
 			self.FirstWindow.hide()
 			self.SecondWindow.show()
-			self.current_window = 'Second'
+			self.current_window = self.SecondWindow
 			logger.debug('Second Window')
 			self.populate_second_window()
 		elif self.SecondWindow.isVisible():
 			self.SecondWindow.hide()
 			self.ThirdWindow.show()
-			self.current_window = 'Third'
+			self.current_window = self.ThirdWindow
 			logger.debug('Third Window')
 		elif self.ThirdWindow.isVisible():
 			self.ThirdWindow.hide()
 			self.FourthWindow.show()
-			self.current_window = 'Fourth'
+			self.current_window = self.FourthWindow
 			logger.debug('Fourth Window')
 			if self.ui4.faculty_combobox.currentText() == "" and self.ui4.faculty_combobox.count() == 0:
 				for faculty in self.faculty_list_value:
@@ -1959,7 +1954,7 @@ class ParentWindow(QMainWindow):
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
-			self.current_window = 'Fifth'
+			self.current_window = self.FifthWindow
 			logger.debug('Fifth Window')
 			if self.ui5.faculty_combobox.currentText() == "" and self.ui5.faculty_combobox.count() == 0:
 				for faculty in self.faculty_list_value:
@@ -1970,22 +1965,22 @@ class ParentWindow(QMainWindow):
 		if self.SecondWindow.isVisible():
 			self.SecondWindow.hide()
 			self.FirstWindow.show()
-			self.current_window = 'First'
+			self.current_window = self.FirstWindow
 			logger.debug('First Window')
 		elif self.ThirdWindow.isVisible():
 			self.ThirdWindow.hide()
 			self.SecondWindow.show()
-			self.current_window = 'Second'
+			self.current_window = self.SecondWindow
 			logger.debug('Second Window')
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.ThirdWindow.show()
-			self.current_window = 'Third'
+			self.current_window = self.ThirdWindow
 			logger.debug('Third Window')
 		elif self.FifthWindow.isVisible():
 			self.FifthWindow.hide()
 			self.FourthWindow.show()
-			self.current_window = 'Fourth'
+			self.current_window = self.FourthWindow
 			logger.debug('Fourth Window')
 
 		
@@ -1995,7 +1990,8 @@ class ParentWindow(QMainWindow):
 		logger.info('File Menu option clicked: %s', option)
 		#print(option)
 		if option == "Exit":
-			self.finish_btn_event()
+			#self.finish_btn_event()
+			self.current_window.close()
 		elif option == "Save":
 			if self.cur_open_filename:
 				if self.cur_open_filename.endswith('.json'):
@@ -2126,13 +2122,14 @@ class ParentWindow(QMainWindow):
 		logger.debug('Save file dialog')
 		dialog = QtWidgets.QFileDialog(caption = "Choose save file")
 		dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
+		success = False
 		while dialog.exec_():
 			fname = dialog.selectedFiles()[0]
 			logger.info('File name: %s', fname)
 			if os.path.isfile(fname):
 				buttonReply = QMessageBox.question(self, 'Save confirmation', 'File already exists. Are you sure you want to overwrite?', QMessageBox.Ok | QMessageBox.Cancel)
 				if buttonReply == QMessageBox.Cancel:
-					logger.debug('Save Cancelled')
+					logger.debug('Overwrite Cancelled')
 					continue
 			#print(fname)
 			if fname.endswith('.json'):
@@ -2145,6 +2142,7 @@ class ParentWindow(QMainWindow):
 				logger.debug('Success. Saved to %s', fname)
 				self.cur_open_filename = fname
 			break
+		return success
 
 	def save_state(self, fname):
 		try:
