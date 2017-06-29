@@ -13,7 +13,7 @@ class Ui_aboutWindow(object):
     def setupUi(self, aboutWindow):
         aboutWindow.setObjectName("aboutWindow")
         aboutWindow.resize(800, 450)
-        aboutWindow.setStyleSheet(lightstyle.css)
+        aboutWindow.setStyleSheet(lightstyle.css.replace('bgwlogo.png', 'img13.png'))
         aboutWindow.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -101,20 +101,20 @@ class Ui_aboutWindow(object):
         _translate = QtCore.QCoreApplication.translate
         aboutWindow.setWindowTitle(_translate("aboutWindow", "About"))
         self.closeBtn.setText(_translate("aboutWindow", "Close"))
-        self.label.setText(_translate("aboutWindow", "Timetable Generator"))
-        self.label_2.setText(_translate("aboutWindow", "Developed by:\n"
-"Nihal Rao I\n"
-"Sanjan S Poojari\n"
-"Shishir Upadhya\n"
+        self.label.setText(_translate("aboutWindow", "🆃🅸🅼🅴🆃🅰🅱🅻🅴 🅶🅴🅽🅴🆁🅰🆃🅾🆁"))
+        self.label_2.setText(_translate("aboutWindow", "𝑫𝒆𝒗𝒆𝒍𝒐𝒑𝒆𝒅 𝑩𝒚:\n"
+"🅽🅸🅷🅰🅻 🆁🅰🅾 🅸\n"
+"🆂🅰🅽🅹🅰🅽 🆂 🅿🅾🅾🅹🅰🆁🅸\n"
+"🆂🅷🅸🆂🅷🅸🆁 🆄🅿🅰🅳🅷🆈🅰\n"
 "\n"
-"Under the Guidance of:\n"
-"Mr. Ramesha Shettigar\n"
-"Assistant Professor\n"
-"Department of Computer Science & Engineering\n"
+"𝑼𝒏𝒅𝒆𝒓 𝒕𝒉𝒆 𝑮𝒖𝒊𝒅𝒂𝒏𝒄𝒆 𝒐𝒇:\n"
+"🅼🆁. 🆁🅰🅼🅴🆂🅷🅰 🆂🅷🅴🆃🆃🅸🅶🅰🆁\n"
+"𝗔𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁 𝗣𝗿𝗼𝗳𝗲𝘀𝘀𝗼𝗿\n"
+"𝗗𝗲𝗽𝗮𝗿𝘁𝗺𝗲𝗻𝘁 𝗼𝗳 𝗖𝗼𝗺𝗽𝘂𝘁𝗲𝗿 𝗦𝗰𝗶𝗲𝗻𝗰𝗲 & 𝗘𝗻𝗴𝗶𝗻𝗲𝗲𝗿𝗶𝗻𝗴\n"
 "\n"
-"For:\n"
-"NMAM Institute of Technology, Nitte\n"
-"2017"))
+#"𝑭𝒐𝒓:\n"
+"𝗡𝗠𝗔𝗠 𝗜𝗻𝘀𝘁𝗶𝘁𝘂𝘁𝗲 𝗼𝗳 𝗧𝗲𝗰𝗵𝗻𝗼𝗹𝗼𝗴𝘆, 𝗡𝗶𝘁𝘁𝗲"
+" 𝟮𝟬𝟭𝟳"))
 
 
 if __name__ == "__main__":
