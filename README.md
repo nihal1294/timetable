@@ -1,7 +1,7 @@
 # 🆃🅸🅼🅴🆃🅰🅱🅻🅴 🅶🅴🅽🅴🆁🅰🆃🅾🆁                                                                        
--🅽🅸🅷🅰🅻 🆁🅰🅾 🅸 
--🆂🅰🅽🅹🅰🅽 🆂 🅿🅾🅾🅹🅰🆁🅸 
--🆂🅷🅸🆂🅷🅸🆁 🆄🅿🅰🅳🅷🆈🅰
+- 🅽🅸🅷🅰🅻 🆁🅰🅾 🅸 
+- 🆂🅰🅽🅹🅰🅽 🆂 🅿🅾🅾🅹🅰🆁🅸 
+- 🆂🅷🅸🆂🅷🅸🆁 🆄🅿🅰🅳🅷🆈🅰
 ### 🅽🅼🅰🅼 🅸🅽🆂🆃🅸🆃🆄🆃🅴 🅾🅵 🆃🅴🅲🅷🅽🅾🅻🅾🅶🆈, 🅽🅸🆃🆃🅴, 🅺🅰🆁🅽🅰🆃🅰🅺🅰, 🅸🅽🅳🅸🅰
 
 Timetable for a given section of a semester must contain details about the subjects taught hourly during the days of a week and the faculty members assigned to each subject. Timetables must be such that no two subjects taught by a single lecturer overlap.The problem of timetable scheduling is described as a highly-constrained NP-hard problem. It is known as the timetabling problem by most researchers. A lot of complex constraints need to be addressed for development of an efficient algorithm to solve this problem. Presently, in many institutions, the faculty in-charge has to manually assign hourly slots to every subject while satisfying various constraints. If an overlap/clash is found among the timetable, changes must be made manually using trial and error methods. This tends to take a considerable amount of time and is therefore, inefficient. With the help of software, this process can be simplified, thus reducing time spent and increasing efficiency. Various algorithms have been developed which provide faster techniques to generate timetables. Using suitable programming and database technologies, we can implement these algorithms to obtain results from the inputs given by the user. This also simplifies error correction and future modification, thus aiding maintenance and usability.
