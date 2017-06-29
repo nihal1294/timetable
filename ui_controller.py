@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QDialog, QMessageBox
-from PyQt5 import Qt
+from PyQt5.Qt import QSystemTrayIcon, QIcon
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import sys
@@ -156,7 +156,7 @@ class ParentWindow(QMainWindow):
 		self.layered_windows.addWidget(self.FourthWindow)
 		self.layered_windows.addWidget(self.FifthWindow)
 
-		self.systemtray_icon = Qt.QSystemTrayIcon(Qt.QIcon('icons/favicon.ico'))
+		self.systemtray_icon = QSystemTrayIcon(QIcon('icons/favicon.ico'))
 		self.systemtray_icon.show()
 
 		app.aboutToQuit.connect(lambda: self.systemtray_icon.hide())
