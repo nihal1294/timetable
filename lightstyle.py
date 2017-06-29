@@ -1283,7 +1283,7 @@ QListWidget{
 }
 
 QTableWidget{
-    background:rgba(255,255,255,0.5)
+    background:rgba(255,255,255,0.75)
 }
 
 QComboBox:disabled, QLineEdit:disabled, QCheckBox:disabled, QSpinBox:disabled{
