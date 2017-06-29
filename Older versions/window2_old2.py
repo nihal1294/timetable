@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window2(object):
     def setupUi(self, window2):
         window2.setObjectName("window2")
-        window2.resize(920, 469)
+        window2.resize(920, 466)
         window2.setStyleSheet(lightstyle.css)
         window2.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window2)
@@ -144,15 +144,10 @@ class Ui_window2(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
-        self.menuHelp = QtWidgets.QMenu(self.menubar)
-        self.menuHelp.setObjectName("menuHelp")
         window2.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window2)
         self.actionSave.setObjectName("actionSave")
         self.actionSave.setShortcut("Ctrl+S")
-        self.actionSaveAs = QtWidgets.QAction(window2)
-        self.actionSaveAs.setObjectName("actionSaveAs")
-        self.actionSaveAs.setShortcut("Ctrl+Shift+S")
         self.actionLoad = QtWidgets.QAction(window2)
         self.actionLoad.setObjectName("actionLoad")
         self.actionLoad.setShortcut("Ctrl+L")
@@ -164,25 +159,10 @@ class Ui_window2(object):
         self.actionManual.setObjectName("actionManual")
         self.actionAbout_2 = QtWidgets.QAction(window2)
         self.actionAbout_2.setObjectName("actionAbout_2")
-        self.actionClear_All = QtWidgets.QAction(window2)
-        self.actionClear_All.setObjectName("actionClear_All")
-        self.actionClear_All.setShortcut("Ctrl+R")
-        self.actionSet_Year_Department = QtWidgets.QAction(window2)
-        self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
-        self.aboutMenu = QtWidgets.QAction(window2)
-        self.aboutMenu.setObjectName("aboutMenu")
         self.menuFile.addAction(self.actionSave)
-        self.menuFile.addAction(self.actionSaveAs)
         self.menuFile.addAction(self.actionLoad)
-        self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionSet_Year_Department)
-        self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionClear_All)
-        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
-        self.menuHelp.addAction(self.aboutMenu)
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window2)
         QtCore.QMetaObject.connectSlotsByName(window2)
@@ -208,17 +188,34 @@ class Ui_window2(object):
         self.label.setText(_translate("window2", "Faculty Assignment"))
         self.label_2.setText(_translate("window2", "Faculty:"))
         self.menuFile.setTitle(_translate("window2", "File"))
-        self.menuHelp.setTitle(_translate("window2", "Help"))
         self.actionSave.setText(_translate("window2", "Save"))
-        self.actionSaveAs.setText(_translate("window2", "Save As"))
         self.actionLoad.setText(_translate("window2", "Load"))
         self.actionExit.setText(_translate("window2", "Exit"))
         self.actionAbout.setText(_translate("window2", "About"))
         self.actionManual.setText(_translate("window2", "Manual"))
         self.actionAbout_2.setText(_translate("window2", "About"))
-        self.actionSet_Year_Department.setText(_translate("window2", "Set Year/Department"))
-        self.actionClear_All.setText(_translate("window2", "Clear All"))
-        self.aboutMenu.setText(_translate("window2", "About"))
+
+    '''
+    def closeEvent(self, event):
+        exit()
+    
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox()
+        close.setText("Are you sure you want to exit?")
+        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        close = close.exec()
+        if close == QtWidgets.QMessageBox.Yes:
+            app.quit()
+        else:
+            pass
+    '''
+    '''def closeEvent(self, event):
+        print("event")
+        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()'''
 
 
 if __name__ == "__main__":

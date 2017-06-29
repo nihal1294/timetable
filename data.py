@@ -3,20 +3,24 @@ from collections import OrderedDict
 class timetable(OrderedDict):
     def __init__(self, name, fixedslots = False):
         self.name = name
+        self.roomno = ''
+        self.dept = ''
         self.final = OrderedDict()
         for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
             self[day] = OrderedDict({1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: ''})
             self.final[day] = OrderedDict({1: fixedslots, 2: fixedslots, 3: fixedslots, 4: fixedslots, 5: fixedslots, 6: fixedslots, 7: fixedslots, 8: fixedslots})
         self['saturday'] = {1: '', 2: '', 3: '', 4: ''}
         self.final['saturday'] = OrderedDict({1: fixedslots, 2: fixedslots, 3: fixedslots, 4: fixedslots})
+        self.workload = 0
 
-    def calc_flexibility(self):
-      flexibility = 0
+    def calc_workload(self):
+      workload = 0
       for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday':
         for timeslot in self[day]:
-          if self.final[day][timeslot] == False:
-            flexibility += 1
-      self.flexibility = flexibility/100.0
+          if self.final[day][timeslot] == True:
+            workload += 1
+      self.workload += workload
+      self.workload /= 44
 
 faculty = { 'Mr. Venugopala P S': timetable('Mr. Venugopala P S'),
     'Mr. Ravi B': timetable('Mr. Ravi B'),
@@ -160,29 +164,30 @@ subjects = {'4A': (
                     ('', 1, 'Mrs. Shilpa M K', 'ESD'),
                     ('', 0, ('Mrs. Jyothi Shetty', 'Mr. Chandra Naik'), 'CG/CN Lab'),
                     ('', 0, ('Mr. Sampath Kini',), 'JIT Lab')
-                    ),
-            '8A': (
-                    ('', 3, 'Mr. Rama Krishna', 'EM'),
-                    ('', 3, 'Dr. Mohammed Javed', 'BA'),
-                    ('', 3, 'Mr. Naveen Chandavarkar', 'BAI'),
-                    ('', 3, '', 'OE'),
-                    ),
-            '8B': (
-                    ('', 3, 'Mr. Rama Krishna', 'EM'),
-                    ('', 3, 'Mrs. Anisha P Rodrigues', 'BA'),
-                    ('', 3, 'Mr. Sunil Kumar Aithal', 'BAI'),
-                    ('', 3, '', 'OE'),
-                    ),
-            '8C': (
-                    ('', 3, 'Mr. Rama Krishna', 'EM'),
-                    ('', 3, 'Mrs. Pallavi K N', 'IOT'),
-                    ('', 3, "Mrs. Divya Jennifer D'Souza", 'SIC'),
-                    ('', 3, '', 'OE'),
-                    ),
-            '8D': (
-                    ('', 3, 'Mr. Rama Krishna', 'EM'),
-                    ('', 3, 'Mrs. Asmitha Poojari', 'IOT'),
-                    ('', 3, 'Mr. Vijay Murari T', 'SIC'),
-                    ('', 3, '', 'OE'),
                     )
+
+            # '8A': (
+            #         ('', 3, 'Mr. Rama Krishna', 'EM'),
+            #         ('', 3, 'Dr. Mohammed Javed', 'BA'),
+            #         ('', 3, 'Mr. Naveen Chandavarkar', 'BAI'),
+            #         ('', 3, '', 'OE'),
+            #         ),
+            # '8B': (
+            #         ('', 3, 'Mr. Rama Krishna', 'EM'),
+            #         ('', 3, 'Mrs. Anisha P Rodrigues', 'BA'),
+            #         ('', 3, 'Mr. Sunil Kumar Aithal', 'BAI'),
+            #         ('', 3, '', 'OE'),
+            #         ),
+            # '8C': (
+            #         ('', 3, 'Mr. Rama Krishna', 'EM'),
+            #         ('', 3, 'Mrs. Pallavi K N', 'IOT'),
+            #         ('', 3, "Mrs. Divya Jennifer D'Souza", 'SIC'),
+            #         ('', 3, '', 'OE'),
+            #         ),
+            # '8D': (
+            #         ('', 3, 'Mr. Rama Krishna', 'EM'),
+            #         ('', 3, 'Mrs. Asmitha Poojari', 'IOT'),
+            #         ('', 3, 'Mr. Vijay Murari T', 'SIC'),
+            #         ('', 3, '', 'OE'),
+            #         )
 }

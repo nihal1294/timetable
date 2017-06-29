@@ -1,0 +1,859 @@
+[
+    "April",
+    2017,
+    "October",
+    2017,
+    "Computer Science & Engineering",
+    [
+        "faculty_class('', '', 'Assistant Professor')",
+        "faculty_class('Anisha P Rodrigues', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Anitha D Bayar', 'Ms.', 'Assistant Professor')",
+        "faculty_class('Ankitha A Nayak', 'Ms.', 'Assistant Professor')",
+        "faculty_class(\"Apoorva D'Souza\", 'Ms.', 'Assistant Professor')",
+        "faculty_class('Asmitha Poojari', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Chandra Naik', 'Mr.', 'Assistant Professor')",
+        "faculty_class('D K Sreekantha', 'Dr.', 'Assistant Professor')",
+        "faculty_class(\"Divya Jennifer D'Souza\", 'Mrs.', 'Assistant Professor')",
+        "faculty_class('H R Manjunath Prasad', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Humanities', '', 'Assistant Professor')",
+        "faculty_class('Jyothi Shetty', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('K R Raghunandan', 'Mr.', 'Assistant Professor')",
+        "faculty_class('K R Uday Kumar Reddy', 'Dr.', 'Assistant Professor')",
+        "faculty_class('Keerthana B C', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Krishna Prasad Rao', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Mahesh Kini', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Minu P Abraham', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Mohammed Javed', 'Dr.', 'Assistant Professor')",
+        "faculty_class('Naveen Chandavarkar', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Pallavi K N', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Pawan Hegde', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Pradeep Kanchan', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Pradeep Nazareth', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Puneeth R P', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Radhakrishna Dodmane', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Raghunandan K R', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Rajalaxmi Hegde', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Rajashree', 'Ms.', 'Assistant Professor')",
+        "faculty_class('Raju K', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Rama Krishna', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Ramesha Shettigar', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Ranjan Kumar H S', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Ravi B', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Roshan Fernandes', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Sampath Kini', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Sandeep Hegde', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Sannidhan M S', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Sarika Hegde', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Savitha Shetty', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Shabari Shedthi B', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Sharada Uday Shenoy', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Shashank Shetty', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Shashirekha B Rai', 'Dr.', 'Assistant Professor')",
+        "faculty_class('Shilpa M K', 'Mrs.', 'Assistant Professor')",
+        "faculty_class('Smitha G V', 'Ms.', 'Assistant Professor')",
+        "faculty_class('Sudeepa K B', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Sunil Kumar Aithal', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Swathi Pai M', 'Ms.', 'Assistant Professor')",
+        "faculty_class('Uday Kumar Shenoy', 'Dr.', 'Assistant Professor')",
+        "faculty_class('Venugopala P S', 'Mr.', 'Assistant Professor')",
+        "faculty_class('Vijay Murari T', 'Mr.', 'Assistant Professor')"
+    ],
+    {
+        "V": [],
+        "IV": [
+            "subject('Probability Theory and Numberical Methods', 'Maths', 0, False, '15CS401')",
+            "subject('Design & Analysis of Algorithms', 'DAA', 4, False, '15CS402')",
+            "subject('Finite Automata & Formal languages', 'FAFL', 4, False, '15CS403')",
+            "subject('Data Communications', 'DC', 4, False, '15CS404')",
+            "subject('Computer Organization & Architecture', 'CO', 4, False, '15CS405')",
+            "subject('Unix Programming', 'Unix', 4, False, '15CS406')",
+            "subject('Algorithms|Unix Lab', 'DAA|Unix Lab', 0, True, '')",
+            "subject('Enhancing Self Competence', 'ESC', 0, False, '15HU411')"
+        ],
+        "VIII": [
+            "subject('Engineering Management', 'EM', 3, False, '13HU801')",
+            "subject('Big Data Analytics', 'BA', 3, False, '13CS817')",
+            "subject('BA for Industries', 'BAI', 3, False, '13CS827')",
+            "subject('Open Elective', 'OE', 0, False, '')",
+            "subject('Internet of Things', 'IOT', 3, False, '13CS816')",
+            "subject('Security in Cloud', 'SIC', 3, False, '13CS826')"
+        ],
+        "VI": [
+            "subject('Computer Graphics', 'CG', 4, False, '14CS601')",
+            "subject('Computer Networks', 'CN', 4, False, '14CS602')",
+            "subject('Java and Internet Technologies', 'JIT', 4, False, '14CS603')",
+            "subject('Software Testing', 'ST', 4, False, '14CS604')",
+            "subject('', 'CCIM', 0, False, '')",
+            "subject('', 'MC', 0, False, '')",
+            "subject('Employability Skill Development', 'ESD', 0, False, '14IL002')",
+            "subject('Computer Graphics|Networks Lab', 'CG|CN Lab', 0, True, '')",
+            "subject('Java Lab', 'JIT Lab', 0, True, '')"
+        ],
+        "III": [],
+        "VII": []
+    },
+    {
+        "V": 0,
+        "IV": 4,
+        "VIII": 4,
+        "VI": 4,
+        "III": 0,
+        "VII": 0
+    },
+    {
+        "V": [],
+        "IV": [
+            "A",
+            "B",
+            "C",
+            "D"
+        ],
+        "VIII": [
+            "A",
+            "B",
+            "C",
+            "D"
+        ],
+        "VI": [
+            "A",
+            "B",
+            "C",
+            "D"
+        ],
+        "III": [],
+        "VII": []
+    },
+    {
+        "V": {},
+        "IV": {
+            "D": [
+                "Probability Theory and Numberical Methods - Maths - Apoorva D'Souza",
+                "Design & Analysis of Algorithms - DAA - Pallavi K N",
+                "Finite Automata & Formal languages - FAFL - Ramesha Shettigar",
+                "Data Communications - DC - Krishna Prasad Rao",
+                "Computer Organization & Architecture - CO - Sarika Hegde",
+                "Unix Programming - Unix - Savitha Shetty",
+                "Algorithms|Unix Lab - DAA|Unix Lab - Pallavi K N, Savitha Shetty",
+                "Enhancing Self Competence - ESC - "
+            ],
+            "A": [
+                "Probability Theory and Numberical Methods - Maths - Smitha G V",
+                "Design & Analysis of Algorithms - DAA - Venugopala P S",
+                "Finite Automata & Formal languages - FAFL - Ravi B",
+                "Data Communications - DC - Radhakrishna Dodmane",
+                "Computer Organization & Architecture - CO - Pradeep Nazareth",
+                "Unix Programming - Unix - Sannidhan M S",
+                "Algorithms|Unix Lab - DAA|Unix Lab - Venugopala P S, Sannidhan M S",
+                "Enhancing Self Competence - ESC - "
+            ],
+            "B": [
+                "Probability Theory and Numberical Methods - Maths - Shashirekha B Rai",
+                "Design & Analysis of Algorithms - DAA - Roshan Fernandes",
+                "Finite Automata & Formal languages - FAFL - Radhakrishna Dodmane",
+                "Data Communications - DC - Uday Kumar Shenoy",
+                "Computer Organization & Architecture - CO - Raghunandan K R",
+                "Unix Programming - Unix - Shabari Shedthi B",
+                "Algorithms|Unix Lab - DAA|Unix Lab - Shabari Shedthi B, Roshan Fernandes",
+                "Enhancing Self Competence - ESC - "
+            ],
+            "C": [
+                "Probability Theory and Numberical Methods - Maths - Anitha D Bayar",
+                "Design & Analysis of Algorithms - DAA - Asmitha Poojari",
+                "Finite Automata & Formal languages - FAFL - K R Uday Kumar Reddy",
+                "Data Communications - DC - Sharada Uday Shenoy",
+                "Computer Organization & Architecture - CO - Raju K",
+                "Unix Programming - Unix - Ranjan Kumar H S",
+                "Algorithms|Unix Lab - DAA|Unix Lab - Asmitha Poojari, Ranjan Kumar H S",
+                "Enhancing Self Competence - ESC - "
+            ]
+        },
+        "VIII": {
+            "D": [
+                "Engineering Management - EM - Rama Krishna",
+                "Internet of Things - IOT - Asmitha Poojari",
+                "Security in Cloud - SIC - Vijay Murari T",
+                "Open Elective - OE - "
+            ],
+            "A": [
+                "Engineering Management - EM - Rama Krishna",
+                "Big Data Analytics - BA - Mohammed Javed",
+                "BA for Industries - BAI - Naveen Chandavarkar",
+                "Open Elective - OE - "
+            ],
+            "B": [
+                "Engineering Management - EM - Rama Krishna",
+                "Big Data Analytics - BA - Anisha P Rodrigues",
+                "BA for Industries - BAI - Sunil Kumar Aithal",
+                "Open Elective - OE - "
+            ],
+            "C": [
+                "Engineering Management - EM - Rama Krishna",
+                "Internet of Things - IOT - Pallavi K N",
+                "Security in Cloud - SIC - Divya Jennifer D'Souza",
+                "Open Elective - OE - "
+            ]
+        },
+        "VI": {
+            "D": [
+                "Computer Graphics - CG - Jyothi Shetty",
+                "Computer Networks - CN - Chandra Naik",
+                "Java and Internet Technologies - JIT - Sampath Kini",
+                "Software Testing - ST - D K Sreekantha",
+                " - CCIM - Pawan Hegde",
+                " - MC - Sharada Uday Shenoy",
+                "Employability Skill Development - ESD - Shilpa M K",
+                "Computer Graphics|Networks Lab - CG|CN Lab - Jyothi Shetty, Chandra Naik",
+                "Java Lab - JIT Lab - Sampath Kini"
+            ],
+            "A": [
+                "Computer Graphics - CG - Shilpa M K",
+                "Computer Networks - CN - Sudeepa K B",
+                "Java and Internet Technologies - JIT - Sandeep Hegde",
+                "Software Testing - ST - Pradeep Nazareth",
+                " - CCIM - Roshan Fernandes",
+                " - MC - Ravi B",
+                "Employability Skill Development - ESD - Krishna Prasad Rao",
+                "Computer Graphics|Networks Lab - CG|CN Lab - Shilpa M K, Sudeepa K B",
+                "Java Lab - JIT Lab - Sandeep Hegde"
+            ],
+            "B": [
+                "Computer Graphics - CG - Sannidhan M S",
+                "Computer Networks - CN - Chandra Naik",
+                "Java and Internet Technologies - JIT - Ramesha Shettigar",
+                "Software Testing - ST - Rajalaxmi Hegde",
+                " - CCIM - Minu P Abraham",
+                " - MC - Uday Kumar Shenoy",
+                "Employability Skill Development - ESD - Sunil Kumar Aithal",
+                "Computer Graphics|Networks Lab - CG|CN Lab - Sannidhan M S, Chandra Naik",
+                "Java Lab - JIT Lab - Ramesha Shettigar"
+            ],
+            "C": [
+                "Computer Graphics - CG - Pawan Hegde",
+                "Computer Networks - CN - Vijay Murari T",
+                "Java and Internet Technologies - JIT - Mahesh Kini",
+                "Software Testing - ST - Shabari Shedthi B",
+                " - CCIM - Venugopala P S",
+                " - MC - Sharada Uday Shenoy",
+                "Employability Skill Development - ESD - Sunil Kumar Aithal",
+                "Computer Graphics|Networks Lab - CG|CN Lab - Pawan Hegde, Vijay Murari T",
+                "Java Lab - JIT Lab - Mahesh Kini"
+            ]
+        },
+        "III": {},
+        "VII": {}
+    },
+    {
+        "": [
+            "Open Elective - OE - VIII C",
+            "Open Elective - OE - VIII D",
+            "Open Elective - OE - VIII A",
+            "Open Elective - OE - VIII B"
+        ],
+        "H R Manjunath Prasad": [],
+        "Sarika Hegde": [
+            "Computer Organization & Architecture - CO - IV D"
+        ],
+        "Anitha D Bayar": [
+            "Probability Theory and Numberical Methods - Maths - IV C"
+        ],
+        "Shashank Shetty": [],
+        "Pawan Hegde": [
+            " - CCIM - VI D",
+            "Computer Graphics - CG - VI C",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI C"
+        ],
+        "Vijay Murari T": [
+            "Security in Cloud - SIC - VIII D",
+            "Computer Networks - CN - VI C",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI C"
+        ],
+        "Anisha P Rodrigues": [
+            "Big Data Analytics - BA - VIII B"
+        ],
+        "K R Raghunandan": [],
+        "Apoorva D'Souza": [
+            "Probability Theory and Numberical Methods - Maths - IV D"
+        ],
+        "Swathi Pai M": [],
+        "Divya Jennifer D'Souza": [
+            "Security in Cloud - SIC - VIII C"
+        ],
+        "Savitha Shetty": [
+            "Unix Programming - Unix - IV D",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV D"
+        ],
+        "Smitha G V": [
+            "Probability Theory and Numberical Methods - Maths - IV A"
+        ],
+        "Ankitha A Nayak": [],
+        "D K Sreekantha": [
+            "Software Testing - ST - VI D"
+        ],
+        "Rajashree": [],
+        "Shashirekha B Rai": [
+            "Probability Theory and Numberical Methods - Maths - IV B"
+        ],
+        "Keerthana B C": [],
+        "Krishna Prasad Rao": [
+            "Data Communications - DC - IV D",
+            "Employability Skill Development - ESD - VI A"
+        ],
+        "Chandra Naik": [
+            "Computer Networks - CN - VI D",
+            "Computer Networks - CN - VI B",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI B",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI D"
+        ],
+        "Ramesha Shettigar": [
+            "Finite Automata & Formal languages - FAFL - IV D",
+            "Java and Internet Technologies - JIT - VI B",
+            "Java Lab - JIT Lab - VI B"
+        ],
+        "Raju K": [
+            "Computer Organization & Architecture - CO - IV C"
+        ],
+        "K R Uday Kumar Reddy": [
+            "Finite Automata & Formal languages - FAFL - IV C"
+        ],
+        "Pradeep Nazareth": [
+            "Computer Organization & Architecture - CO - IV A",
+            "Software Testing - ST - VI A"
+        ],
+        "Sampath Kini": [
+            "Java and Internet Technologies - JIT - VI D",
+            "Java Lab - JIT Lab - VI D"
+        ],
+        "Venugopala P S": [
+            "Design & Analysis of Algorithms - DAA - IV A",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV A",
+            " - CCIM - VI C"
+        ],
+        "Asmitha Poojari": [
+            "Design & Analysis of Algorithms - DAA - IV C",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV C",
+            "Internet of Things - IOT - VIII D"
+        ],
+        "Shilpa M K": [
+            "Computer Graphics - CG - VI A",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI A",
+            "Employability Skill Development - ESD - VI D"
+        ],
+        "Sannidhan M S": [
+            "Unix Programming - Unix - IV A",
+            "Computer Graphics - CG - VI B",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI B",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV A"
+        ],
+        "Shabari Shedthi B": [
+            "Unix Programming - Unix - IV B",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV B",
+            "Software Testing - ST - VI C"
+        ],
+        "Humanities": [
+            " - ESC - IV D",
+            " - ESC - IV C",
+            " - ESC - IV B",
+            " - ESC - IV A"
+        ],
+        "Ranjan Kumar H S": [
+            "Unix Programming - Unix - IV C",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV C"
+        ],
+        "Jyothi Shetty": [
+            "Computer Graphics - CG - VI D",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI D"
+        ],
+        "Pallavi K N": [
+            "Internet of Things - IOT - VIII C",
+            "Design & Analysis of Algorithms - DAA - IV D",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV D"
+        ],
+        "Pradeep Kanchan": [],
+        "Minu P Abraham": [
+            " - CCIM - VI B"
+        ],
+        "Mahesh Kini": [
+            "Java and Internet Technologies - JIT - VI C",
+            "Java Lab - JIT Lab - VI C"
+        ],
+        "Ravi B": [
+            "Finite Automata & Formal languages - FAFL - IV A",
+            " - MC - VI A"
+        ],
+        "Uday Kumar Shenoy": [
+            "Data Communications - DC - IV B",
+            " - MC - VI B"
+        ],
+        "Puneeth R P": [],
+        "Roshan Fernandes": [
+            "Design & Analysis of Algorithms - DAA - IV B",
+            " - CCIM - VI A",
+            "Algorithms|Unix Lab - DAA|Unix Lab - IV B"
+        ],
+        "Naveen Chandavarkar": [
+            "BA for Industries - BAI - VIII A"
+        ],
+        "Raghunandan K R": [
+            "Computer Organization & Architecture - CO - IV B"
+        ],
+        "Sharada Uday Shenoy": [
+            "Data Communications - DC - IV C",
+            " - MC - VI D",
+            " - MC - VI C"
+        ],
+        "Sudeepa K B": [
+            "Computer Networks - CN - VI A",
+            "Computer Graphics|Networks Lab - CG|CN Lab - VI A"
+        ],
+        "Radhakrishna Dodmane": [
+            "Finite Automata & Formal languages - FAFL - IV B",
+            "Data Communications - DC - IV A"
+        ],
+        "Sandeep Hegde": [
+            "Java and Internet Technologies - JIT - VI A",
+            "Java Lab - JIT Lab - VI A"
+        ],
+        "Mohammed Javed": [
+            "Big Data Analytics - BA - VIII A"
+        ],
+        "Rajalaxmi Hegde": [
+            "Software Testing - ST - VI B"
+        ],
+        "Rama Krishna": [
+            "Engineering Management - EM - VIII C",
+            "Engineering Management - EM - VIII D",
+            "Engineering Management - EM - VIII A",
+            "Engineering Management - EM - VIII B"
+        ],
+        "Sunil Kumar Aithal": [
+            "BA for Industries - BAI - VIII B",
+            "Employability Skill Development - ESD - VI B",
+            "Employability Skill Development - ESD - VI C"
+        ]
+    },
+    {
+        "IV": {
+            "D": {
+                "0": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "1": {
+                    "1": "DAA|Unix Lab",
+                    "2": "DAA|Unix Lab",
+                    "3": "DAA|Unix Lab",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "DAA|Unix Lab",
+                    "6": "DAA|Unix Lab",
+                    "7": "DAA|Unix Lab"
+                },
+                "3": {
+                    "2": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "3": "Maths",
+                    "4": "-",
+                    "6": "ESC",
+                    "7": "ESC"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "A": {
+                "0": {
+                    "1": "Maths",
+                    "2": "ESC",
+                    "3": "ESC",
+                    "4": "-"
+                },
+                "1": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "2": {
+                    "1": "DAA|Unix Lab",
+                    "2": "DAA|Unix Lab",
+                    "3": "DAA|Unix Lab",
+                    "4": "-"
+                },
+                "3": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-",
+                    "5": "DAA|Unix Lab",
+                    "6": "DAA|Unix Lab",
+                    "7": "DAA|Unix Lab"
+                },
+                "5": {
+                    "2": "Maths",
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-",
+                    "5": "DAA|Unix Lab",
+                    "6": "DAA|Unix Lab",
+                    "7": "DAA|Unix Lab"
+                },
+                "1": {
+                    "3": "Maths",
+                    "4": "-"
+                },
+                "2": {
+                    "2": "ESC",
+                    "3": "ESC",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "3": {
+                    "0": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "1": "DAA|Unix Lab",
+                    "2": "DAA|Unix Lab",
+                    "3": "DAA|Unix Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "0": "Maths",
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "1": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "DAA|Unix Lab",
+                    "6": "DAA|Unix Lab",
+                    "7": "DAA|Unix Lab"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "Maths",
+                    "6": "ESC",
+                    "7": "ESC"
+                },
+                "3": {
+                    "1": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "0": "DAA|Unix Lab",
+                    "1": "DAA|Unix Lab",
+                    "2": "DAA|Unix Lab",
+                    "3": "-"
+                }
+            }
+        },
+        "VI": {
+            "D": {
+                "0": {
+                    "4": "-",
+                    "5": "CG|CN Lab",
+                    "6": "CG|CN Lab",
+                    "7": "CG|CN Lab"
+                },
+                "1": {
+                    "0": "JIT Lab",
+                    "1": "JIT Lab",
+                    "2": "JIT Lab",
+                    "3": "CCIM",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "CG|CN Lab",
+                    "6": "CG|CN Lab",
+                    "7": "CG|CN Lab"
+                },
+                "3": {
+                    "1": "CCIM",
+                    "2": "MC",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "0": "JIT Lab",
+                    "1": "JIT Lab",
+                    "2": "JIT Lab",
+                    "3": "MC",
+                    "4": "-"
+                },
+                "5": {
+                    "0": "MC",
+                    "1": "CCIM",
+                    "3": "-"
+                }
+            },
+            "A": {
+                "0": {
+                    "1": "CG|CN Lab",
+                    "2": "CG|CN Lab",
+                    "3": "CG|CN Lab",
+                    "4": "-"
+                },
+                "1": {
+                    "3": "CCIM",
+                    "4": "-",
+                    "5": "JIT Lab",
+                    "6": "JIT Lab",
+                    "7": "JIT Lab"
+                },
+                "2": {
+                    "1": "CG|CN Lab",
+                    "2": "CG|CN Lab",
+                    "3": "CG|CN Lab",
+                    "4": "-"
+                },
+                "3": {
+                    "1": "CCIM",
+                    "2": "MC",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "3": "MC",
+                    "4": "-",
+                    "5": "JIT Lab",
+                    "6": "JIT Lab",
+                    "7": "JIT Lab"
+                },
+                "5": {
+                    "0": "MC",
+                    "1": "CCIM",
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-",
+                    "5": "JIT Lab",
+                    "6": "JIT Lab",
+                    "7": "JIT Lab"
+                },
+                "1": {
+                    "0": "CG|CN Lab",
+                    "1": "CG|CN Lab",
+                    "2": "CG|CN Lab",
+                    "3": "CCIM",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "JIT Lab",
+                    "6": "JIT Lab",
+                    "7": "JIT Lab"
+                },
+                "3": {
+                    "1": "CCIM",
+                    "2": "MC",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "0": "CG|CN Lab",
+                    "1": "CG|CN Lab",
+                    "2": "CG|CN Lab",
+                    "3": "MC",
+                    "4": "-"
+                },
+                "5": {
+                    "0": "MC",
+                    "1": "CCIM",
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "0": "JIT Lab",
+                    "1": "JIT Lab",
+                    "2": "JIT Lab",
+                    "4": "-"
+                },
+                "1": {
+                    "3": "CCIM",
+                    "4": "-",
+                    "5": "CG|CN Lab",
+                    "6": "CG|CN Lab",
+                    "7": "CG|CN Lab"
+                },
+                "2": {
+                    "0": "JIT Lab",
+                    "1": "JIT Lab",
+                    "2": "JIT Lab",
+                    "4": "-"
+                },
+                "3": {
+                    "1": "CCIM",
+                    "2": "MC",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "3": "MC",
+                    "4": "-",
+                    "5": "CG|CN Lab",
+                    "6": "CG|CN Lab",
+                    "7": "CG|CN Lab"
+                },
+                "5": {
+                    "0": "MC",
+                    "1": "CCIM",
+                    "3": "-"
+                }
+            }
+        },
+        "VIII": {
+            "D": {
+                "0": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "1": {
+                    "4": "-"
+                },
+                "2": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "A": {
+                "0": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "1": {
+                    "4": "-"
+                },
+                "2": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "1": {
+                    "4": "-"
+                },
+                "2": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "1": {
+                    "4": "-"
+                },
+                "2": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "3": {
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "2": "OE",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            }
+        }
+    },
+    {},
+    {
+        "V": {},
+        "IV": {},
+        "VIII": {},
+        "VI": {},
+        "III": {},
+        "VII": {}
+    }
+]

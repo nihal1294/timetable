@@ -12,7 +12,7 @@ import lightstyle
 class Ui_window4(object):
     def setupUi(self, window4):
         window4.setObjectName("window4")
-        window4.resize(920, 472)
+        window4.resize(920, 476)
         window4.setStyleSheet(lightstyle.css)
         window4.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         self.centralwidget = QtWidgets.QWidget(window4)
@@ -102,7 +102,7 @@ class Ui_window4(object):
         self.faculty_table.verticalHeader().setMinimumSectionSize(27)
         self.gridLayout.addWidget(self.faculty_table, 2, 0, 1, 2)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(0, 48))
+        self.label.setMinimumSize(QtCore.QSize(0, 52))
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
         font.setPointSize(14)
@@ -140,24 +140,44 @@ class Ui_window4(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         window4.setMenuBar(self.menubar)
         self.actionSave = QtWidgets.QAction(window4)
         self.actionSave.setObjectName("actionSave")
         self.actionSave.setShortcut("Ctrl+S")
+        self.actionSaveAs = QtWidgets.QAction(window4)
+        self.actionSaveAs.setObjectName("actionSaveAs")
+        self.actionSaveAs.setShortcut("Ctrl+Shift+S")
         self.actionLoad = QtWidgets.QAction(window4)
         self.actionLoad.setObjectName("actionLoad")
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window4)
         self.actionExit.setObjectName("actionExit")
-        self.actionExit.triggered.connect(self.closeEvent)
+        #self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window4)
         self.actionAbout.setObjectName("actionAbout")
         self.actionManual = QtWidgets.QAction(window4)
         self.actionManual.setObjectName("actionManual")
+        self.actionClear_All = QtWidgets.QAction(window4)
+        self.actionClear_All.setObjectName("actionClear_All")
+        self.actionClear_All.setShortcut("Ctrl+R")
+        self.actionSet_Year_Department = QtWidgets.QAction(window4)
+        self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
+        self.aboutMenu = QtWidgets.QAction(window4)
+        self.aboutMenu.setObjectName("aboutMenu")
         self.menuFile.addAction(self.actionSave)
+        self.menuFile.addAction(self.actionSaveAs)
         self.menuFile.addAction(self.actionLoad)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionSet_Year_Department)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionClear_All)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.aboutMenu)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(window4)
         QtCore.QMetaObject.connectSlotsByName(window4)
@@ -201,35 +221,16 @@ class Ui_window4(object):
         self.backBtn.setText(_translate("window4", "Back"))
         self.generateBtn.setText(_translate("window4", "Generate"))
         self.menuFile.setTitle(_translate("window4", "File"))
+        self.menuHelp.setTitle(_translate("window4", "Help"))
         self.actionSave.setText(_translate("window4", "Save"))
+        self.actionSaveAs.setText(_translate("window4", "Save As"))
         self.actionLoad.setText(_translate("window4", "Load"))
         self.actionExit.setText(_translate("window4", "Exit"))
         self.actionAbout.setText(_translate("window4", "About"))
         self.actionManual.setText(_translate("window4", "Manual"))
-
-
-    def closeEvent(self, event):
-        exit()
-    
-    '''
-    def closeEvent(self, event):
-        close = QtWidgets.QMessageBox()
-        close.setText("Are you sure you want to exit?")
-        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
-        close = close.exec()
-        if close == QtWidgets.QMessageBox.Yes:
-            app.quit()
-        else:
-            pass
-    '''
-    '''def closeEvent(self, event):
-        print("event")
-        reply = QtWidgets.QMessageBox.question(self, 'Message', "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
-        if reply == QtWidgets.QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()'''
-
+        self.actionSet_Year_Department.setText(_translate("window4", "Set Year/Department"))
+        self.actionClear_All.setText(_translate("window4", "Clear All"))
+        self.aboutMenu.setText(_translate("window4", "About"))
 
 
 if __name__ == "__main__":

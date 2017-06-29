@@ -42,7 +42,7 @@ QWidget
     border-image: none;
     border: 0px transparent black;
     outline: 0;
-    background-image:url("wallpapers/img5.jpg");
+    background-image:url("wallpapers/bgwlogo.png");
     background-position: left;
 }
 
@@ -1283,15 +1283,13 @@ QListWidget{
 }
 
 QTableWidget{
-    background:rgba(255,255,255,0.5)
+    background:rgba(255,255,255,0.75)
 }
-
 
 QComboBox:disabled, QLineEdit:disabled, QCheckBox:disabled, QSpinBox:disabled{
     background: transparent;
     color: transparent;
     border: none;
-
 }
 
 QLabel:disabled{
@@ -1307,9 +1305,15 @@ QCheckBox::indicator:unchecked:disabled{
     image: none;
 }
 
+QMenuBar{
+    background:none;
+}
+
 #line:disabled, #line_2:disabled{
     background: transparent;
     border: none;
 }
+
+
 
 '''

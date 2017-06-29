@@ -1,0 +1,943 @@
+[
+    "August",
+    2017,
+    "November",
+    2017,
+    "Computer Science & Engineering",
+    [
+        "faculty_class(' Keerthana B C', ' ', '')",
+        "faculty_class(' Pradeep Nazareth', ' ', '')",
+        "faculty_class(' Radhakrishna Dodmane', ' ', '')",
+        "faculty_class(' Raghunandan K R', ' ', '')",
+        "faculty_class(' Rajashree', ' ', '')",
+        "faculty_class(' Sannidhan M S', ' ', '')",
+        "faculty_class(' Sudeepa K B', ' ', '')",
+        "faculty_class(' Swathi Pai M', ' ', '')",
+        "faculty_class('-', ' ', '')",
+        "faculty_class('Anisha P Rodrigues', ' ', '')",
+        "faculty_class('Ankitha A Nayak', ' ', '')",
+        "faculty_class('Asmitha Poojari', ' ', '')",
+        "faculty_class('Chandra Naik', ' ', '')",
+        "faculty_class('D K Sreekantha', ' ', '')",
+        "faculty_class(\"Divya Jennifer D'Souza\", ' ', '')",
+        "faculty_class('Jyothi Shetty', ' ', '')",
+        "faculty_class('Keerthana B C', ' ', '')",
+        "faculty_class('Krishna Prasad Rao', ' ', '')",
+        "faculty_class('Maths Faculty', ' ', '')",
+        "faculty_class('Minu P Abraham', ' ', '')",
+        "faculty_class('Mohammed Javed', ' ', '')",
+        "faculty_class('Naveen Chandavarkar', ' ', '')",
+        "faculty_class('Pallavi K N', ' ', '')",
+        "faculty_class('Pawan Hegde', ' ', '')",
+        "faculty_class('Pradeep Nazareth', ' ', '')",
+        "faculty_class('Puneeth R P', ' ', '')",
+        "faculty_class('Radhakrishna Dodmane', ' ', '')",
+        "faculty_class('Raghunandan K R', ' ', '')",
+        "faculty_class('Rajalaxmi Hegde', ' ', '')",
+        "faculty_class('Rajashree', ' ', '')",
+        "faculty_class('Ramesha Shettigar', ' ', '')",
+        "faculty_class('Ranjan Kumar H S', ' ', '')",
+        "faculty_class('Ravi B', ' ', '')",
+        "faculty_class('Roshan Fernandes', ' ', '')",
+        "faculty_class('Sampath Kini', ' ', '')",
+        "faculty_class('Sandeep Hegde', ' ', '')",
+        "faculty_class('Sannidhan M S', ' ', '')",
+        "faculty_class('Sarika Hegde', ' ', '')",
+        "faculty_class('Shabari Shedthi B', ' ', '')",
+        "faculty_class('Sharada Uday Shenoy', ' ', '')",
+        "faculty_class('Shashank Shetty', ' ', '')",
+        "faculty_class('Shilpa M K', ' ', '')",
+        "faculty_class('Shruthi', ' ', '')",
+        "faculty_class('Sudeepa K B', ' ', '')",
+        "faculty_class('Sunil Kumar Aithal', ' ', '')",
+        "faculty_class('Swathi Pai M', ' ', '')",
+        "faculty_class('Uday Kumar Reddy', ' ', '')",
+        "faculty_class('Uday Kumar Shenoy', ' ', '')",
+        "faculty_class('Venugopala P S', ' ', '')",
+        "faculty_class('Vijay Murari T', ' ', '')"
+    ],
+    {
+        "IV": [],
+        "VII": [
+            "subject('Object Oriented Modeling and Design', 'OOMD', 4, False, '14CS701')",
+            "subject('Advanced Computer Architecture', 'ACA', 4, False, '14CS702')",
+            "subject('Software Architecture', 'SA', 4, False, '14CS703')",
+            "subject('Python Programming', 'PP', 3, False, '14CS704')",
+            "subject('Advanced Web Techniques', 'AWT', 0, False, '14CS710')",
+            "subject('Machine Learning', 'ML', 0, False, '14CS711')",
+            "subject('Mobile Application Development', 'MAD', 0, False, '14CS712')",
+            "subject('Image Processing', 'IP', 0, False, '14CS713')",
+            "subject('Python Programming Lab', 'PP Lab', 0, True, '14CS704')"
+        ],
+        "VIII": [],
+        "VI": [],
+        "III": [
+            "subject('Generating Functions and Transform Techniques Combinatorics', 'Maths', 0, False, '16CS301')",
+            "subject('Digital System Design', 'DSD', 4, False, '16CS302')",
+            "subject('Discrete Mathematical Stuctures & Graph Theory', 'DMS', 4, False, '16CS303')",
+            "subject('Computer Organization and Design', 'CO', 4, False, '16CS304')",
+            "subject('Data Structures', 'DS', 4, False, '16CS305')",
+            "subject('Data Communication', 'DC', 4, False, '16CS306')",
+            "subject('Data Structures | Digital System Design Lab', 'DS | DSD Lab', 0, True, '')"
+        ],
+        "V": [
+            "subject('Compiler Design', 'CD', 4, False, '15CS501')",
+            "subject('Relational Database Management System', 'RDBMS', 4, False, '15CS502')",
+            "subject('Microprocessors and Peripherals', 'MP', 4, False, '15CS503')",
+            "subject('Software Engineering', 'SE', 4, False, '15CS504')",
+            "subject('Operating Systems', 'OS', 4, False, '15CS505')",
+            "subject('Advanced Unix Programming', 'AUP', 0, False, '15CS511')",
+            "subject('Operations Research', 'OR', 0, False, '15CS515')",
+            "subject('Employability Skill Development', 'ESD', 0, False, '15IL001')",
+            "subject('Microprocessors and Peripherals Lab', 'MP Lab', 0, True, '15CS503')",
+            "subject('Compiler Design | Relational Database Management System Lab', 'CD | RDBMS Lab', 0, True, '15CS501, 15CS502')"
+        ]
+    },
+    {
+        "IV": 0,
+        "VII": 5,
+        "VIII": 0,
+        "VI": 0,
+        "V": 4,
+        "III": 4
+    },
+    {
+        "IV": [],
+        "VII": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+        ],
+        "VIII": [],
+        "VI": [],
+        "V": [
+            "A",
+            "B",
+            "C",
+            "D"
+        ],
+        "III": [
+            "A",
+            "B",
+            "C",
+            "D"
+        ]
+    },
+    {
+        "IV": {},
+        "VII": {
+            "E": [
+                "Mobile Application Development - MAD - Rajashree"
+            ],
+            "A": [
+                "Object Oriented Modeling and Design - OOMD - Ranjan Kumar H S",
+                "Advanced Computer Architecture - ACA - Sandeep Hegde",
+                "Software Architecture - SA - Sandeep Hegde",
+                "Python Programming - PP - Pawan Hegde",
+                "Advanced Web Techniques - AWT - Roshan Fernandes",
+                "Machine Learning - ML - Sarika Hegde",
+                "Mobile Application Development - MAD - Shabari Shedthi B",
+                "Image Processing - IP - Mohammed Javed",
+                "Python Programming Lab - PP Lab - Pawan Hegde"
+            ],
+            "B": [
+                "Object Oriented Modeling and Design - OOMD - Keerthana B C",
+                "Advanced Computer Architecture - ACA - Rajalaxmi Hegde",
+                "Software Architecture - SA - Shilpa M K",
+                "Python Programming - PP - Vijay Murari T",
+                "Advanced Web Techniques - AWT - Shashank Shetty",
+                "Machine Learning - ML - Minu P Abraham",
+                "Mobile Application Development - MAD - Ravi B",
+                "Python Programming Lab - PP Lab - Vijay Murari T"
+            ],
+            "D": [
+                "Object Oriented Modeling and Design - OOMD - Puneeth R P",
+                "Advanced Computer Architecture - ACA - Shabari Shedthi B",
+                "Software Architecture - SA - Rajalaxmi Hegde",
+                "Python Programming - PP - Venugopala P S",
+                "Mobile Application Development - MAD - Ankitha A Nayak",
+                "Python Programming Lab - PP Lab - Venugopala P S"
+            ],
+            "C": [
+                "Object Oriented Modeling and Design - OOMD - Sunil Kumar Aithal",
+                "Advanced Computer Architecture - ACA - Mohammed Javed",
+                "Software Architecture - SA - Sampath Kini",
+                "Python Programming - PP - Ranjan Kumar H S",
+                "Mobile Application Development - MAD - Venugopala P S",
+                "Python Programming Lab - PP Lab - Ranjan Kumar H S"
+            ]
+        },
+        "VIII": {},
+        "VI": {},
+        "V": {
+            "A": [
+                "Compiler Design - CD - Chandra Naik",
+                "Relational Database Management System - RDBMS - Radhakrishna Dodmane",
+                "Microprocessors and Peripherals - MP - Roshan Fernandes",
+                "Software Engineering - SE - Sudeepa K B",
+                "Operating Systems - OS - Jyothi Shetty",
+                "Advanced Unix Programming - AUP - Divya Jennifer D'Souza",
+                "Operations Research - OR - Vijay Murari T",
+                "Employability Skill Development - ESD - -",
+                "Microprocessors and Peripherals Lab - MP Lab - Roshan Fernandes",
+                "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - Chandra Naik, Radhakrishna Dodmane"
+            ],
+            "B": [
+                "Compiler Design - CD - Jyothi Shetty",
+                "Relational Database Management System - RDBMS - Swathi Pai M",
+                "Microprocessors and Peripherals - MP - Anisha P Rodrigues",
+                "Software Engineering - SE - Sunil Kumar Aithal",
+                "Operating Systems - OS - Sampath Kini",
+                "Operations Research - OR - Asmitha Poojari",
+                "Employability Skill Development - ESD - -",
+                "Microprocessors and Peripherals Lab - MP Lab - Anisha P Rodrigues",
+                "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - Jyothi Shetty, Swathi Pai M"
+            ],
+            "D": [
+                "Compiler Design - CD - Shashank Shetty",
+                "Relational Database Management System - RDBMS - Sudeepa K B",
+                "Microprocessors and Peripherals - MP - Shilpa M K",
+                "Software Engineering - SE - Naveen Chandavarkar",
+                "Operating Systems - OS - Sharada Uday Shenoy",
+                "Employability Skill Development - ESD - -",
+                "Microprocessors and Peripherals Lab - MP Lab - Shilpa M K",
+                "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - Shashank Shetty, Sudeepa K B"
+            ],
+            "C": [
+                "Compiler Design - CD - Pallavi K N",
+                "Relational Database Management System - RDBMS - Rajashree",
+                "Microprocessors and Peripherals - MP - Krishna Prasad Rao",
+                "Software Engineering - SE - D K Sreekantha",
+                "Operating Systems - OS - Ramesha Shettigar",
+                "Operations Research - OR - Pawan Hegde",
+                "Employability Skill Development - ESD - -",
+                "Microprocessors and Peripherals Lab - MP Lab - Krishna Prasad Rao",
+                "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - Pallavi K N, Rajashree"
+            ]
+        },
+        "III": {
+            "A": [
+                "Generating Functions and Transform Techniques Combinatorics - Maths - Maths Faculty",
+                "Digital System Design - DSD - Raghunandan K R",
+                "Discrete Mathematical Stuctures & Graph Theory - DMS - Uday Kumar Reddy",
+                "Computer Organization and Design - CO - Pradeep Nazareth",
+                "Data Structures - DS - Sannidhan M S",
+                "Data Communication - DC - Uday Kumar Shenoy",
+                "Data Structures | Digital System Design Lab - DS | DSD Lab - Sannidhan M S, Raghunandan K R"
+            ],
+            "B": [
+                "Generating Functions and Transform Techniques Combinatorics - Maths - Maths Faculty",
+                "Digital System Design - DSD - Sannidhan M S",
+                "Discrete Mathematical Stuctures & Graph Theory - DMS - Minu P Abraham",
+                "Computer Organization and Design - CO - Raghunandan K R",
+                "Data Structures - DS - Asmitha Poojari",
+                "Data Communication - DC - Radhakrishna Dodmane",
+                "Data Structures | Digital System Design Lab - DS | DSD Lab - Asmitha Poojari, Sannidhan M S"
+            ],
+            "D": [
+                "Generating Functions and Transform Techniques Combinatorics - Maths - Maths Faculty",
+                "Digital System Design - DSD - Pradeep Nazareth",
+                "Discrete Mathematical Stuctures & Graph Theory - DMS - Chandra Naik",
+                "Computer Organization and Design - CO - Uday Kumar Shenoy",
+                "Data Structures - DS - Shruthi",
+                "Data Communication - DC - Krishna Prasad Rao",
+                "Data Structures | Digital System Design Lab - DS | DSD Lab - Shruthi, Pradeep Nazareth"
+            ],
+            "C": [
+                "Generating Functions and Transform Techniques Combinatorics - Maths - Maths Faculty",
+                "Digital System Design - DSD - Keerthana B C",
+                "Discrete Mathematical Stuctures & Graph Theory - DMS - Ravi B",
+                "Computer Organization and Design - CO - Anisha P Rodrigues",
+                "Data Structures - DS - Ramesha Shettigar",
+                "Data Communication - DC - Puneeth R P",
+                "Data Structures | Digital System Design Lab - DS | DSD Lab - Ramesha Shettigar, Keerthana B C"
+            ]
+        }
+    },
+    {
+        "Minu P Abraham": [
+            "Discrete Mathematical Stuctures & Graph Theory - DMS - III B",
+            "Machine Learning - ML - VII B"
+        ],
+        "Shruthi": [
+            "Data Structures - DS - III D",
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III D"
+        ],
+        "Puneeth R P": [
+            "Data Communication - DC - III C",
+            "Object Oriented Modeling and Design - OOMD - VII D"
+        ],
+        " Pradeep Nazareth": [
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III D"
+        ],
+        "Vijay Murari T": [
+            "Operations Research - OR - V A",
+            "Python Programming - PP - VII B",
+            "Python Programming Lab - PP Lab - VII B"
+        ],
+        "Sannidhan M S": [
+            "Digital System Design - DSD - III B",
+            "Data Structures - DS - III A",
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III A"
+        ],
+        "Mohammed Javed": [
+            "Advanced Computer Architecture - ACA - VII C",
+            "Image Processing - IP - VII A"
+        ],
+        "Ramesha Shettigar": [
+            "Data Structures - DS - III C",
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III C",
+            "Operating Systems - OS - V C"
+        ],
+        "Shashank Shetty": [
+            "Compiler Design - CD - V D",
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V D",
+            "Advanced Web Techniques - AWT - VII B"
+        ],
+        "Uday Kumar Shenoy": [
+            "Computer Organization and Design - CO - III D",
+            "Data Communication - DC - III A"
+        ],
+        "Shilpa M K": [
+            "Microprocessors and Peripherals - MP - V D",
+            "Microprocessors and Peripherals Lab - MP Lab - V D",
+            "Software Architecture - SA - VII B"
+        ],
+        " Swathi Pai M": [
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V B"
+        ],
+        "Uday Kumar Reddy": [
+            "Discrete Mathematical Stuctures & Graph Theory - DMS - III A"
+        ],
+        "Anisha P Rodrigues": [
+            "Computer Organization and Design - CO - III C",
+            "Microprocessors and Peripherals - MP - V B",
+            "Microprocessors and Peripherals Lab - MP Lab - V B"
+        ],
+        "Ankitha A Nayak": [
+            "Mobile Application Development - MAD - VII D"
+        ],
+        "Rajashree": [
+            "Relational Database Management System - RDBMS - V C",
+            "Mobile Application Development - MAD - VII E"
+        ],
+        "Krishna Prasad Rao": [
+            "Data Communication - DC - III D",
+            "Microprocessors and Peripherals - MP - V C",
+            "Microprocessors and Peripherals Lab - MP Lab - V C"
+        ],
+        "Raghunandan K R": [
+            "Digital System Design - DSD - III A",
+            "Computer Organization and Design - CO - III B"
+        ],
+        "Ravi B": [
+            "Discrete Mathematical Stuctures & Graph Theory - DMS - III C",
+            "Mobile Application Development - MAD - VII B"
+        ],
+        " Raghunandan K R": [
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III A"
+        ],
+        "Sunil Kumar Aithal": [
+            "Software Engineering - SE - V B",
+            "Object Oriented Modeling and Design - OOMD - VII C"
+        ],
+        "Jyothi Shetty": [
+            "Compiler Design - CD - V B",
+            "Operating Systems - OS - V A",
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V B"
+        ],
+        "Pradeep Nazareth": [
+            "Digital System Design - DSD - III D",
+            "Computer Organization and Design - CO - III A"
+        ],
+        " Keerthana B C": [
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III C"
+        ],
+        "Radhakrishna Dodmane": [
+            "Data Communication - DC - III B",
+            "Relational Database Management System - RDBMS - V A"
+        ],
+        "Shabari Shedthi B": [
+            "Advanced Computer Architecture - ACA - VII D",
+            "Mobile Application Development - MAD - VII A"
+        ],
+        "D K Sreekantha": [
+            "Software Engineering - SE - V C"
+        ],
+        "Sudeepa K B": [
+            "Relational Database Management System - RDBMS - V D",
+            "Software Engineering - SE - V A"
+        ],
+        "Asmitha Poojari": [
+            "Data Structures - DS - III B",
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III B",
+            "Operations Research - OR - V B"
+        ],
+        "Chandra Naik": [
+            "Discrete Mathematical Stuctures & Graph Theory - DMS - III D",
+            "Compiler Design - CD - V A",
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V A"
+        ],
+        "Sampath Kini": [
+            "Operating Systems - OS - V B",
+            "Software Architecture - SA - VII C"
+        ],
+        " Sudeepa K B": [
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V D"
+        ],
+        "Venugopala P S": [
+            "Python Programming - PP - VII D",
+            "Mobile Application Development - MAD - VII C",
+            "Python Programming Lab - PP Lab - VII D"
+        ],
+        "Sharada Uday Shenoy": [
+            "Operating Systems - OS - V D"
+        ],
+        "Pallavi K N": [
+            "Compiler Design - CD - V C",
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V C"
+        ],
+        "-": [
+            "Employability Skill Development - ESD - V A",
+            "Employability Skill Development - ESD - V B",
+            "Employability Skill Development - ESD - V C",
+            "Employability Skill Development - ESD - V D"
+        ],
+        "Pawan Hegde": [
+            "Operations Research - OR - V C",
+            "Python Programming - PP - VII A",
+            "Python Programming Lab - PP Lab - VII A"
+        ],
+        "Maths Faculty": [
+            "Generating Functions and Transform Techniques Combinatorics - Maths - III A",
+            "Generating Functions and Transform Techniques Combinatorics - Maths - III B",
+            "Generating Functions and Transform Techniques Combinatorics - Maths - III C",
+            "Generating Functions and Transform Techniques Combinatorics - Maths - III D"
+        ],
+        "Ranjan Kumar H S": [
+            "Object Oriented Modeling and Design - OOMD - VII A",
+            "Python Programming - PP - VII C",
+            "Python Programming Lab - PP Lab - VII C"
+        ],
+        " Radhakrishna Dodmane": [
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V A"
+        ],
+        "Roshan Fernandes": [
+            "Microprocessors and Peripherals - MP - V A",
+            "Microprocessors and Peripherals Lab - MP Lab - V A",
+            "Advanced Web Techniques - AWT - VII A"
+        ],
+        " Rajashree": [
+            "Compiler Design | Relational Database Management System Lab - CD | RDBMS Lab - V C"
+        ],
+        "Divya Jennifer D'Souza": [
+            "Advanced Unix Programming - AUP - V A"
+        ],
+        "Swathi Pai M": [
+            "Relational Database Management System - RDBMS - V B"
+        ],
+        "Rajalaxmi Hegde": [
+            "Advanced Computer Architecture - ACA - VII B",
+            "Software Architecture - SA - VII D"
+        ],
+        "Sarika Hegde": [
+            "Machine Learning - ML - VII A"
+        ],
+        "Sandeep Hegde": [
+            "Advanced Computer Architecture - ACA - VII A",
+            "Software Architecture - SA - VII A"
+        ],
+        " Sannidhan M S": [
+            "Data Structures | Digital System Design Lab - DS | DSD Lab - III B"
+        ],
+        "Keerthana B C": [
+            "Digital System Design - DSD - III C",
+            "Object Oriented Modeling and Design - OOMD - VII B"
+        ],
+        "Naveen Chandavarkar": [
+            "Software Engineering - SE - V D"
+        ]
+    },
+    {
+        "VII": {
+            "E": {
+                "0": {
+                    "4": "-"
+                },
+                "1": {
+                    "2": "AWT/ML",
+                    "3": "MAD/IP",
+                    "4": "-"
+                },
+                "2": {
+                    "3": "AWT/ML",
+                    "4": "-"
+                },
+                "3": {
+                    "1": "AWT/ML",
+                    "2": "MAD/IP",
+                    "3": "MAD/IP",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "A": {
+                "0": {
+                    "4": "-",
+                    "5": "PP Lab",
+                    "6": "PP Lab",
+                    "7": "PP Lab"
+                },
+                "1": {
+                    "2": "AWT/ML",
+                    "3": "MAD/IP",
+                    "4": "-"
+                },
+                "2": {
+                    "3": "AWT/ML",
+                    "4": "-"
+                },
+                "3": {
+                    "1": "AWT/ML",
+                    "2": "MAD/IP",
+                    "3": "MAD/IP",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "0": "PP Lab",
+                    "1": "PP Lab",
+                    "2": "PP Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-"
+                },
+                "1": {
+                    "2": "AWT/ML",
+                    "3": "MAD/IP",
+                    "4": "-",
+                    "5": "PP Lab",
+                    "6": "PP Lab",
+                    "7": "PP Lab"
+                },
+                "2": {
+                    "0": "PP Lab",
+                    "1": "PP Lab",
+                    "2": "PP Lab",
+                    "3": "AWT/ML",
+                    "4": "-"
+                },
+                "3": {
+                    "1": "AWT/ML",
+                    "2": "MAD/IP",
+                    "3": "MAD/IP",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "D": {
+                "0": {
+                    "4": "-"
+                },
+                "1": {
+                    "2": "AWT/ML",
+                    "3": "MAD/IP",
+                    "4": "-"
+                },
+                "2": {
+                    "0": "PP Lab",
+                    "1": "PP Lab",
+                    "2": "PP Lab",
+                    "3": "AWT/ML",
+                    "4": "-"
+                },
+                "3": {
+                    "1": "AWT/ML",
+                    "2": "MAD/IP",
+                    "3": "MAD/IP",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-",
+                    "5": "PP Lab",
+                    "6": "PP Lab",
+                    "7": "PP Lab"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "0": "PP Lab",
+                    "1": "PP Lab",
+                    "2": "PP Lab",
+                    "4": "-"
+                },
+                "1": {
+                    "2": "AWT/ML",
+                    "3": "MAD/IP",
+                    "4": "-"
+                },
+                "2": {
+                    "3": "AWT/ML",
+                    "4": "-",
+                    "5": "PP Lab",
+                    "6": "PP Lab",
+                    "7": "PP Lab"
+                },
+                "3": {
+                    "1": "AWT/ML",
+                    "2": "MAD/IP",
+                    "3": "MAD/IP",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            }
+        },
+        "III": {
+            "A": {
+                "0": {
+                    "0": "Maths",
+                    "1": "DS | DSD Lab",
+                    "2": "DS | DSD Lab",
+                    "3": "DS | DSD Lab",
+                    "4": "-"
+                },
+                "1": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "DS | DSD Lab",
+                    "6": "DS | DSD Lab",
+                    "7": "DS | DSD Lab"
+                },
+                "3": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "2": "Maths",
+                    "3": "-"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-",
+                    "5": "DS | DSD Lab",
+                    "6": "DS | DSD Lab",
+                    "7": "DS | DSD Lab"
+                },
+                "1": {
+                    "3": "Maths",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "3": {
+                    "0": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "1": "DS | DSD Lab",
+                    "2": "DS | DSD Lab",
+                    "3": "DS | DSD Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "0": "Maths",
+                    "3": "-"
+                }
+            },
+            "D": {
+                "0": {
+                    "1": "Maths",
+                    "4": "-"
+                },
+                "1": {
+                    "1": "DS | DSD Lab",
+                    "2": "DS | DSD Lab",
+                    "3": "DS | DSD Lab",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "2": {
+                    "4": "-"
+                },
+                "3": {
+                    "2": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "DS | DSD Lab",
+                    "6": "DS | DSD Lab",
+                    "7": "DS | DSD Lab"
+                },
+                "5": {
+                    "3": "-"
+                }
+            },
+            "C": {
+                "0": {
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "1": {
+                    "3": "Maths",
+                    "4": "-",
+                    "5": "DS | DSD Lab",
+                    "6": "DS | DSD Lab",
+                    "7": "DS | DSD Lab"
+                },
+                "2": {
+                    "1": "DS | DSD Lab",
+                    "2": "DS | DSD Lab",
+                    "3": "DS | DSD Lab",
+                    "4": "-",
+                    "5": "Maths"
+                },
+                "3": {
+                    "1": "Maths",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-"
+                },
+                "5": {
+                    "3": "-"
+                }
+            }
+        },
+        "V": {
+            "A": {
+                "0": {
+                    "4": "-",
+                    "5": "CD | RDBMS Lab",
+                    "6": "CD | RDBMS Lab",
+                    "7": "CD | RDBMS Lab"
+                },
+                "1": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "3": "AUP/OR",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "MP Lab",
+                    "6": "MP Lab",
+                    "7": "MP Lab"
+                },
+                "3": {
+                    "2": "AUP/OR",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "1": "CD | RDBMS Lab",
+                    "2": "CD | RDBMS Lab",
+                    "3": "CD | RDBMS Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "AUP/OR"
+                }
+            },
+            "B": {
+                "0": {
+                    "4": "-",
+                    "5": "MP Lab",
+                    "6": "MP Lab",
+                    "7": "MP Lab"
+                },
+                "1": {
+                    "3": "AUP/OR",
+                    "4": "-",
+                    "5": "CD | RDBMS Lab",
+                    "6": "CD | RDBMS Lab",
+                    "7": "CD | RDBMS Lab"
+                },
+                "2": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "4": "-"
+                },
+                "3": {
+                    "2": "AUP/OR",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "0": "CD | RDBMS Lab",
+                    "1": "CD | RDBMS Lab",
+                    "2": "CD | RDBMS Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "3": "AUP/OR"
+                }
+            },
+            "D": {
+                "0": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "4": "-"
+                },
+                "1": {
+                    "0": "CD | RDBMS Lab",
+                    "1": "CD | RDBMS Lab",
+                    "2": "CD | RDBMS Lab",
+                    "3": "AUP/OR",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "MP Lab",
+                    "6": "MP Lab",
+                    "7": "MP Lab"
+                },
+                "3": {
+                    "2": "AUP/OR",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "4": "-",
+                    "5": "CD | RDBMS Lab",
+                    "6": "CD | RDBMS Lab",
+                    "7": "CD | RDBMS Lab"
+                },
+                "5": {
+                    "3": "AUP/OR"
+                }
+            },
+            "C": {
+                "0": {
+                    "4": "-"
+                },
+                "1": {
+                    "0": "CD | RDBMS Lab",
+                    "1": "CD | RDBMS Lab",
+                    "2": "CD | RDBMS Lab",
+                    "3": "AUP/OR",
+                    "4": "-"
+                },
+                "2": {
+                    "4": "-",
+                    "5": "CD | RDBMS Lab",
+                    "6": "CD | RDBMS Lab",
+                    "7": "CD | RDBMS Lab"
+                },
+                "3": {
+                    "2": "AUP/OR",
+                    "4": "-",
+                    "5": "-",
+                    "6": "-",
+                    "7": "-"
+                },
+                "4": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "4": "-"
+                },
+                "5": {
+                    "0": "MP Lab",
+                    "1": "MP Lab",
+                    "2": "MP Lab",
+                    "3": "AUP/OR"
+                }
+            }
+        }
+    },
+    {},
+    {
+        "IV": {},
+        "VII": {
+            "Elective 1": [
+                "subject('Advanced Web Techniques', 'AWT', 0, False, '14CS710')",
+                "subject('Machine Learning', 'ML', 0, False, '14CS711')"
+            ],
+            "Elective 2": [
+                "subject('Mobile Application Development', 'MAD', 0, False, '14CS712')",
+                "subject('Image Processing', 'IP', 0, False, '14CS713')"
+            ]
+        },
+        "VIII": {},
+        "VI": {},
+        "III": {},
+        "V": {
+            "Elective 1": [
+                "subject('Advanced Unix Programming', 'AUP', 0, False, '15CS511')",
+                "subject('Operations Research', 'OR', 0, False, '15CS515')"
+            ]
+        }
+    }
+]
