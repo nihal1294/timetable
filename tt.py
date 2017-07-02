@@ -149,7 +149,7 @@ def print_timetable(tt, location, style = 'section', name = ''):
 def rehabilitate(day, section, subject, faculty):
 	teacher = faculty[subject[2]]
 	for timeslot in teacher[day]:
-		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot): # and getnumhours(section, subject, day)[0] < 1: # teacher is available
+		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot) and getnumhours(section, subject, day)[0] < 2: # teacher is available
 			if section.final[day][timeslot] != True: # time slot for that section is not finalized
 				clashing_subject = section[day][timeslot]
 				if teacher.workload > section.final[day][timeslot]: # whatever subject has been allotted, move it to clash
@@ -316,14 +316,14 @@ def produce_timetable(ui, loc):
 	for member in ui.faculty_list_value:
 		faculty[member] = timetable(str(member))
 		faculty[member].dept = ui.department
-	subjects = dict()
+	subjects = OrderedDict()
 	subjects_ref = dict()
-	timetables = dict()
+	timetables = OrderedDict()
 	for sem in ui.num_sections:
 		if ui.num_sections[sem] > 0:
-			subjects[sem] = dict()
+			subjects[sem] = OrderedDict()
 			subjects_ref[sem] = dict()
-			timetables[sem] = dict()
+			timetables[sem] = OrderedDict()
 			for section in ui.sections[sem]:
 				subjects[sem][section] = []
 				subjects_ref[sem][section] = dict()

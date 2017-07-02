@@ -53,16 +53,15 @@ class subject:
 	def __hash__(self):
 		return self.name.__hash__()
 
-
+titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
 class faculty_class:
 	def __init__(self, name, title = '', designation = ''):
 		if title == '':
-			name = name.split(' ')
-			if len(name) > 1:
-				title = name[0]
-				name = ' '.join(name[1:])
-			else:
-				name = name[0]
+			for t in titles_list:
+				if name.startswith(t):
+					name = name[len(t):].strip()
+					title = t
+					break
 		self.name = name
 		self.title = title
 		self.designation = designation
@@ -259,7 +258,7 @@ class ParentWindow(QMainWindow):
 		self.faculty_list_value = []
 		self.subjects = OrderedDict()
 		self.subs = dict() # store link between subject short name and its object
-		self.num_sections = dict()
+		self.num_sections = OrderedDict()
 		for sem in self.sem_list:
 			self.subjects[sem] = []
 			self.num_sections[sem] = 0
@@ -267,8 +266,7 @@ class ParentWindow(QMainWindow):
 		self.text = ""
 		self.sem = ""
 		self.row = self.ui.input_list.selectedItems()
-		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
-		for value in self.titles_list:
+		for value in titles_list:
 			self.ui.title_combobox.addItem(value)
 		self.desig_list = ['Assistant Professor', 'Professor', 'Associate Professor', 'Head of Department', 'Principal']
 		for val in self.desig_list:
@@ -309,7 +307,7 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.line.setEnabled(False)
 		self.ui_elec.line_2.setEnabled(False)
 		
-		self.electives = OrderedDict()
+		self.electives = dict()
 		for sem in self.sem_list:
 			self.ui_elec.semester_combobox.addItem(sem)
 			self.electives[sem] = dict()
@@ -348,8 +346,8 @@ class ParentWindow(QMainWindow):
 		self.ui2.section_combobox.activated[str].connect(self.section_combobox2_event)
 		self.ui2.faculty_combobox.activated[str].connect(self.faculty_combobox2_event)
 
-		self.sections = dict()
-		self.subjects_assigned = dict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
+		self.sections = OrderedDict()
+		self.subjects_assigned = OrderedDict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
 		self.faculty_subjects = dict() # stores subjects assigned to each faculty
 
 		self.SecondWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
@@ -1297,18 +1295,21 @@ class ParentWindow(QMainWindow):
 				self.ui2.assigned_list.takeItem(self.ui2.assigned_list.row(x))
 				x = x.text()
 				x = x.split(' - ')
-				if len(x) == 3: # deleting from section view
+				section = self.ui2.section_combobox.currentText()
+				sem = self.ui2.semester_combobox.currentText()
+				if sem and section: # deleting from section view
 					sub = x[0] + ' - ' + x[1]
-					faculty = x[2]
-					section = self.ui2.section_combobox.currentText()
-					sem = self.ui2.semester_combobox.currentText()
+					f = x[2]
+					if len(f) == 1:
+						f = [f]
+					for faculty in f: 
+						self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
+					faculty = ', '.join(faculty)
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
-					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
 				else: # deleting from faculty view
 					sub = x[0] + ' - ' + x[1]
-					sem = x[2]
-					section = x[3]
+					sem, section = x[2].split(' ')
 					faculty = self.ui2.faculty_combobox.currentText()
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
 					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
@@ -1737,7 +1738,7 @@ class ParentWindow(QMainWindow):
 						num_rooms += 1
 						for day in tt:
 							for timeslot in tt[day]:
-								if not tt[day][timeslot]: 
+								if not tt[day][timeslot] or self.subs[tt[day][timeslot][3]].lab: 
 									rooms[day][timeslot].append(tt.roomno)
 									#print(day, timeslot, tt.roomno)
 			for day in rooms:
@@ -2055,15 +2056,15 @@ class ParentWindow(QMainWindow):
 				self.faculty_list_value = []
 				self.subjects = dict()
 				self.subs = dict()
-				self.num_sections = dict()
+				self.num_sections = OrderedDict()
 				self.electives = dict()
 				for sem in self.sem_list:
 					self.subjects[sem] = []
 					self.num_sections[sem] = 0
 					self.electives[sem] = dict()
 				self.row = self.ui.input_list.selectedItems()
-				self.sections = dict()
-				self.subjects_assigned = dict()
+				self.sections = OrderedDict()
+				self.subjects_assigned = OrderedDict()
 				self.faculty_subjects = dict()
 				self.section_fixed_slots = dict()
 				self.faculty_fixed_slots = dict()
@@ -2288,7 +2289,7 @@ class ParentWindow(QMainWindow):
 	def load_state_json(self, fname):
 		try:
 			with open(fname, "r") as file:
-				state = json.loads(file.read())
+				state = json.loads(file.read(), object_pairs_hook = OrderedDict)
 
 			(startMonth, startYear, endMonth, endYear, department,
 				faculty_list_value,
@@ -2371,9 +2372,9 @@ class ParentWindow(QMainWindow):
 			logger.info('Loading from Excel file')
 			subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
 			electives = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
-			subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
+			subjects_assigned = OrderedDict({'III': OrderedDict(), 'IV': OrderedDict(), 'V': OrderedDict(), 'VI': OrderedDict(), 'VII': OrderedDict(), 'VIII': OrderedDict()})
 			faculty_subjects = dict()
-			sections = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
+			sections = OrderedDict({'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []})
 			cur_sem = ''
 			cur_sub = ''
 			cur_sec = 1
@@ -2416,11 +2417,12 @@ class ParentWindow(QMainWindow):
 				f = f.split(',')
 				for i, fac_name in enumerate(f):
 					fac_name = fac_name.strip()
-					f[i] = fac_name
-					if fac_name not in faculty:
-						faculty.add(faculty_class(fac_name, ' '))
-						faculty_subjects[fac_name] = []
-					faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
+					fac = faculty_class(fac_name)
+					f[i] = fac.name
+					if fac.name not in faculty:
+						faculty.add(fac)
+						faculty_subjects[fac.name] = []
+					faculty_subjects[fac.name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
 				subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
 
 			self.merge_data(faculty, subjects, electives)
@@ -2429,7 +2431,7 @@ class ParentWindow(QMainWindow):
 			#print(self.subjects_assigned)
 			self.faculty_subjects = faculty_subjects
 			self.sections = sections
-			num_sections = dict()
+			num_sections = OrderedDict()
 			for sem in sections:
 				num_sections[sem] = len(sections[sem])
 			self.num_sections = num_sections
