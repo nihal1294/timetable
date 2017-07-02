@@ -1295,22 +1295,22 @@ class ParentWindow(QMainWindow):
 				self.ui2.assigned_list.takeItem(self.ui2.assigned_list.row(x))
 				x = x.text()
 				x = x.split(' - ')
-				section = self.ui2.section_combobox.currentText()
-				sem = self.ui2.semester_combobox.currentText()
-				if sem and section: # deleting from section view
+				if x[2].split(' ')[0] not in self.sem_list: # deleting from section view
+					section = self.ui2.section_combobox.currentText()
+					sem = self.ui2.semester_combobox.currentText()
 					sub = x[0] + ' - ' + x[1]
 					f = x[2]
-					if len(f) == 1:
-						f = [f]
+					f = f.split(', ')
 					for faculty in f: 
 						self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
-					faculty = ', '.join(faculty)
+					faculty = ', '.join(f)
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
 					pass
 				else: # deleting from faculty view
+					faculty = self.ui2.faculty_combobox.currentText()
 					sub = x[0] + ' - ' + x[1]
 					sem, section = x[2].split(' ')
-					faculty = self.ui2.faculty_combobox.currentText()
+					print(faculty)
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
 					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
