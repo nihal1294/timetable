@@ -54,6 +54,7 @@ class subject:
 		return self.name.__hash__()
 
 titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
+
 class faculty_class:
 	def __init__(self, name, title = '', designation = ''):
 		if title == '':
@@ -422,6 +423,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.faculty_combobox.activated[str].connect(self.faculty_combobox5_event)
 		self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
 		self.ui5.roomno_textbox.textEdited.connect(self.roomno_textbox_event)
+		self.ui5.roomno_textbox.returnPressed.connect(self.roomno_textbox_event)
 		self.ui5.faculty_combobox.setEnabled(False)
 		self.ui5.label_5.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
@@ -676,7 +678,7 @@ class ParentWindow(QMainWindow):
 							y.designation = self.ui.desig_combobox.currentText()
 							self.ui.input_list.takeItem(self.ui.input_list.row(x))
 							self.ui.input_list.addItem(text)
-							self.update_faculty_changes(fac, y.name)
+							self.update_faculty_changes(fac, y)
 							logger.debug('Faculty details(title, name, designation): %s %s %s', y.title, y.name, y.designation)
 							break
 			self.ui.input_list.clearSelection()
@@ -1505,6 +1507,7 @@ class ParentWindow(QMainWindow):
 		sem = self.ui5.semester_combobox.currentText()
 		logger.debug('Populating section combobox for %s semester', sem)
 		self.ui5.section_combobox.clear()
+		self.ui5.roomno_textbox.clear()
 		for section in self.sections[sem]:
 			self.ui5.section_combobox.addItem(section)
 		section = self.ui5.section_combobox.currentText()
@@ -1514,6 +1517,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.generated_table.clearContents()
 		sem = self.ui5.semester_combobox.currentText()
 		section = self.ui5.section_combobox.currentText()
+		self.ui5.roomno_textbox.clear()
 		logger.debug('Displaying timetable for %s %s', sem, section)
 		if sem in self.timetables and section in self.timetables[sem]:
 			if self.timetables[sem][section].roomno:
@@ -1724,6 +1728,7 @@ class ParentWindow(QMainWindow):
 
 	def get_free_rooms(self):
 		logger.info('Finding free classrooms during every slot on each day')
+		print(self.subs)
 		if isinstance(self.timetables, dict):
 			rooms = dict()
 			for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
@@ -1738,9 +1743,12 @@ class ParentWindow(QMainWindow):
 						num_rooms += 1
 						for day in tt:
 							for timeslot in tt[day]:
-								if not tt[day][timeslot] or self.subs[tt[day][timeslot][3]].lab: 
+								if not tt[day][timeslot]:
 									rooms[day][timeslot].append(tt.roomno)
 									#print(day, timeslot, tt.roomno)
+								if tt[day][timeslot][3] in self.subs:
+									if self.subs[tt[day][timeslot][3]].lab:
+										rooms[day][timeslot].append(tt.roomno) 
 			for day in rooms:
 				for timeslot in rooms[day]:
 					if len(rooms[day][timeslot]) == num_rooms and num_rooms > 0: # at times such as lunch breaks
@@ -1955,6 +1963,7 @@ class ParentWindow(QMainWindow):
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
+			self.reset_fifth_window()
 			self.current_window = self.FifthWindow
 			logger.debug('Fifth Window')
 			if self.ui5.faculty_combobox.currentText() == "" and self.ui5.faculty_combobox.count() == 0:
