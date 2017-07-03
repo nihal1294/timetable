@@ -1728,7 +1728,6 @@ class ParentWindow(QMainWindow):
 
 	def get_free_rooms(self):
 		logger.info('Finding free classrooms during every slot on each day')
-		print(self.subs)
 		if isinstance(self.timetables, dict):
 			rooms = dict()
 			for day in 'monday', 'tuesday', 'wednesday', 'thursday', 'friday':
@@ -1743,12 +1742,12 @@ class ParentWindow(QMainWindow):
 						num_rooms += 1
 						for day in tt:
 							for timeslot in tt[day]:
-								if not tt[day][timeslot]:
-									rooms[day][timeslot].append(tt.roomno)
-									#print(day, timeslot, tt.roomno)
-								if tt[day][timeslot][3] in self.subs:
-									if self.subs[tt[day][timeslot][3]].lab:
-										rooms[day][timeslot].append(tt.roomno) 
+								try:
+									if not tt[day][timeslot] or self.subs[tt[day][timeslot][3]].lab:
+										rooms[day][timeslot].append(tt.roomno)
+										#print(day, timeslot, tt.roomno)
+								except KeyError as err:
+									continue
 			for day in rooms:
 				for timeslot in rooms[day]:
 					if len(rooms[day][timeslot]) == num_rooms and num_rooms > 0: # at times such as lunch breaks
