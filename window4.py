@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'window4.ui'
-#
-# Created by: PyQt5 UI code generator 5.7.1
-#
-# WARNING! All changes made in this file will be lost!
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
@@ -166,6 +160,8 @@ class Ui_window4(object):
         self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
         self.aboutMenu = QtWidgets.QAction(window4)
         self.aboutMenu.setObjectName("aboutMenu")
+        self.LicenseMenu = QtWidgets.QAction(window4)
+        self.LicenseMenu.setObjectName("LicenseMenu")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSaveAs)
         self.menuFile.addAction(self.actionLoad)
@@ -176,6 +172,7 @@ class Ui_window4(object):
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.aboutMenu)
+        self.menuHelp.addAction(self.LicenseMenu)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
@@ -231,6 +228,7 @@ class Ui_window4(object):
         self.actionSet_Year_Department.setText(_translate("window4", "Set Year/Department"))
         self.actionClear_All.setText(_translate("window4", "Clear All"))
         self.aboutMenu.setText(_translate("window4", "About"))
+        self.LicenseMenu.setText(_translate("window4", "License"))
 
 
 if __name__ == "__main__":

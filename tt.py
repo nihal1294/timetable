@@ -1,3 +1,5 @@
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
+
 import random
 from data import *
 from collections import deque

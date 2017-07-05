@@ -1,3 +1,5 @@
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
+
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
@@ -25,6 +27,7 @@ from window5 import Ui_window5
 from elective_window import Ui_elective_window
 from year_window import Ui_year_window
 from about_window import Ui_aboutWindow
+from license_window import Ui_licenseWindow
 
 
 class subject:
@@ -281,6 +284,7 @@ class ParentWindow(QMainWindow):
 		#setting up elective window and about window during first window setup
 		self.setup_elective_window()
 		self.setup_about_window()
+		self.setup_license_window()
 
 	#setup elective input window
 	def setup_elective_window(self):
@@ -453,6 +457,30 @@ class ParentWindow(QMainWindow):
 		self.ui_about.logoLabel.setPixmap(QtGui.QPixmap('icons/nittelogo.png'))
 
 		self.ui_about.closeBtn.clicked.connect(self.AboutWindow.hide)
+
+	#setup license window
+	def setup_license_window(self):
+		# LICENSE WINDOW
+		logger.debug('Initializing and setting up license window')
+		self.LicenseWindow = QDialog()
+		self.ui_license = Ui_licenseWindow()
+		self.ui_license.setupUi(self.LicenseWindow)
+
+		self.ui_license.logoLabel.setPixmap(QtGui.QPixmap('icons/nittelogo.png'))
+
+		self.ui_license.licenseBtn.clicked.connect(self.license_btn_event)
+		self.ui_license.closeBtn.clicked.connect(self.LicenseWindow.hide)
+
+
+	#license window function
+	def license_btn_event(self):
+		try:
+			l = os.path.realpath(os.curdir) + '\\license.txt' 
+			os.startfile(l)
+			logger.debug('%s opened', l)
+		except Exception as err:
+			self.file_error_dialog(err)
+			logger.exception(err)
 
 
 	# year window functions
@@ -1747,6 +1775,7 @@ class ParentWindow(QMainWindow):
 										rooms[day][timeslot].append(tt.roomno)
 										#print(day, timeslot, tt.roomno)
 								except KeyError as err:
+									logger.exception(err)
 									continue
 			for day in rooms:
 				for timeslot in rooms[day]:
@@ -2124,6 +2153,8 @@ class ParentWindow(QMainWindow):
 			self.YearWindow.show()
 		elif option == "About":
 			self.AboutWindow.show()
+		elif option == "License":
+			self.LicenseWindow.show()
 
 
 	#save and load functions
@@ -2173,9 +2204,10 @@ class ParentWindow(QMainWindow):
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
-		except:
+		except Exception as err:
 			self.file_error_dialog('Error pickling data')
 			logger.exception('Error pickling data')
+			logger.exception(err)
 
 	def update_sub(self):
 		for sem in self.subjects:
@@ -2231,9 +2263,10 @@ class ParentWindow(QMainWindow):
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
-		except:
+		except Exception as err:
 			self.file_error_dialog('Error with the file or format')
 			logger.exception('Error with the file or format')
+			logger.exception(err)
 
 	def save_state_json(self, fname):
 		try:
@@ -2293,6 +2326,7 @@ class ParentWindow(QMainWindow):
 		except Exception as err:
 			self.file_error_dialog('Error encoding json')
 			logger.exception('Error encoding json')
+			logger.exception(err)
 
 	def load_state_json(self, fname):
 		try:
@@ -2365,7 +2399,7 @@ class ParentWindow(QMainWindow):
 		msg = QMessageBox()
 		msg.setIcon(QMessageBox.Critical)
 		msg.setText('There was an error opening the file')
-		msg.setInformativeText(error)
+		msg.setInformativeText(str(error))
 		msg.setWindowTitle("Error")
 		msg.setStandardButtons(QMessageBox.Ok)
 		msg.exec_()
@@ -2487,7 +2521,7 @@ if __name__ == "__main__":
 			os.mkdir('Output\\Personal Timetables')
 
 	global loc
-	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime()))
+	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.log", time.localtime()))
 	my_logger()
 
 	sys.excepthook = my_excepthook

@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'year_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.7.1
-#
-# WARNING! All changes made in this file will be lost!
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
