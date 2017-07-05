@@ -1,4 +1,10 @@
-#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'window.ui'
+#
+# Created by: PyQt5 UI code generator 5.7.1
+#
+# WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
@@ -327,8 +333,6 @@ class Ui_window(object):
         self.actionClear_All.setShortcut("Ctrl+R")
         self.aboutMenu = QtWidgets.QAction(window)
         self.aboutMenu.setObjectName("aboutMenu")
-        self.LicenseMenu = QtWidgets.QAction(window)
-        self.LicenseMenu.setObjectName("LicenseMenu")
         self.actionSet_Year_Dept = QtWidgets.QAction(window)
         self.actionSet_Year_Dept.setObjectName("actionSet_Year_Dept")
         self.menuFile.addAction(self.actionSave)
@@ -341,7 +345,6 @@ class Ui_window(object):
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.aboutMenu)
-        self.menuHelp.addAction(self.LicenseMenu)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
@@ -390,7 +393,6 @@ class Ui_window(object):
         self.actionAbout_2.setText(_translate("window", "About"))
         self.actionClear_All.setText(_translate("window", "Clear All"))
         self.aboutMenu.setText(_translate("window", "About"))
-        self.LicenseMenu.setText(_translate("window", "License"))
         self.actionSet_Year_Dept.setText(_translate("window", "Set Year/Department"))
 
 

@@ -1,4 +1,3 @@
-#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
 css = '''
 QPushButton{
 	background-color: #3a3a3a ;

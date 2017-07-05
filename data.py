@@ -1,5 +1,3 @@
-#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
-
 from collections import OrderedDict
 
 class timetable(OrderedDict):
