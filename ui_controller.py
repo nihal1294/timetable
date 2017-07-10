@@ -1,3 +1,5 @@
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
+
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QStackedLayout
@@ -25,6 +27,7 @@ from window5 import Ui_window5
 from elective_window import Ui_elective_window
 from year_window import Ui_year_window
 from about_window import Ui_aboutWindow
+from license_window import Ui_licenseWindow
 
 
 class subject:
@@ -54,15 +57,17 @@ class subject:
 		return self.name.__hash__()
 
 
+titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
+
+
 class faculty_class:
 	def __init__(self, name, title = '', designation = ''):
 		if title == '':
-			name = name.split(' ')
-			if len(name) > 1:
-				title = name[0]
-				name = ' '.join(name[1:])
-			else:
-				name = name[0]
+			for t in titles_list:
+				if name.startswith(t):
+					name = name[len(t):].strip()
+					title = t
+					break
 		self.name = name
 		self.title = title
 		self.designation = designation
@@ -86,35 +91,11 @@ class faculty_class:
 		return self.name.__hash__()
 
 
-'''class logger:
-	def __init__(self, logfilename):
-		self.terminal = sys.stdout
-		self.err = sys.stderr
-		self.log = open(logfilename, 'w')
-		sys.stdout = self
-		sys.stderr = self
-
-	def __del__(self):
-		self.log.close()
-
-	def write(self, message):
-		self.terminal.write(message)
-		self.log.write(message)
-		self.flush()
-
-	def flush(self):
-		self.log.flush()
-		self.terminal.flush()
-		pass
-'''
-
-
 #new singular class implementing QStackedLayout
 class ParentWindow(QMainWindow):
 
 	def __init__(self, parent = None):
 		super(ParentWindow,self).__init__(parent)
-		#self.central_window = QMainWindow()
 		self.layered_windows = QStackedLayout()
 
 		logger.info('********************************************************************************************************************')
@@ -135,12 +116,8 @@ class ParentWindow(QMainWindow):
 		self.screen_width = QDesktopWidget().screenGeometry().width()
 		self.screen_height = QDesktopWidget().screenGeometry().height()
 		logger.info('Current screen resolution: %s %s', self.screen_width, self.screen_height)
-		#print('current screen res: ',self.screen_width, self.screen_height)
-		#self.adjusted_width = (screen_width/1366)
-		#self.adjusted_height = (screen_height/768)
-		self.resize_ratio = 0.7 #70% resizing ... need a more accurate resize ratio than this.
+		self.resize_ratio = 0.7 #70% resizing
 		logger.info('Resize ratio: %s', self.resize_ratio)
-		#print('resize ratio: ',self.resize_ratio)
 
 		self.setup_year_window()
 		self.setup_first_window()
@@ -169,13 +146,6 @@ class ParentWindow(QMainWindow):
 
 		self.current_window = ''
 
-		#self.central_window.setLayout(self.layered_windows)
-		#self.setCentralWidget(self.central_window)
-
-		#intended original size for the app = (920, 500)
-		#self.resize(916*self.adjusted_width, 460*self.adjusted_height)
-		#self.resize()
-
 	# setup year input window
 	def setup_year_window(self):
 		#YEAR WINDOW - ACADEMIC YEAR INPUT
@@ -195,7 +165,6 @@ class ParentWindow(QMainWindow):
 			self.ui_year.dept_combobox.addItem(d)
 
 		self.ui_year.startYear_dateedit.setDate(QtCore.QDate.currentDate())
-		#self.ui_year.startYear_dateedit.setDate(QtCore.QDate.fromString('2015', 'yyyy'))
 		self.ui_year.endYear_dateedit.setDate(QtCore.QDate.currentDate())
 
 		self.ui_year.continueBtn.clicked.connect(self.continue_btn_event)
@@ -214,7 +183,6 @@ class ParentWindow(QMainWindow):
 		self.FirstWindow = QMainWindow()
 		self.ui = Ui_window()
 		self.ui.setupUi(self.FirstWindow)
-		#self.ui.input_list.resize(self.adjusted_width*self.ui.input_list.width(), self.adjusted_height*self.ui.input_list.height())
 
 		self.ui.semester_combobox.setEnabled(False)
 		self.ui.label_3.setEnabled(False)
@@ -259,7 +227,7 @@ class ParentWindow(QMainWindow):
 		self.faculty_list_value = []
 		self.subjects = OrderedDict()
 		self.subs = dict() # store link between subject short name and its object
-		self.num_sections = dict()
+		self.num_sections = OrderedDict()
 		for sem in self.sem_list:
 			self.subjects[sem] = []
 			self.num_sections[sem] = 0
@@ -267,8 +235,7 @@ class ParentWindow(QMainWindow):
 		self.text = ""
 		self.sem = ""
 		self.row = self.ui.input_list.selectedItems()
-		self.titles_list = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.' ]
-		for value in self.titles_list:
+		for value in titles_list:
 			self.ui.title_combobox.addItem(value)
 		self.desig_list = ['Assistant Professor', 'Professor', 'Associate Professor', 'Head of Department', 'Principal']
 		for val in self.desig_list:
@@ -279,9 +246,10 @@ class ParentWindow(QMainWindow):
 
 		self.ui.menubar.triggered[QtWidgets.QAction].connect(self.filemenuevent)
 
-		#setting up elective window and about window during first window setup
+		#setting up elective window, about window and license window during first window setup
 		self.setup_elective_window()
 		self.setup_about_window()
+		self.setup_license_window()
 
 	#setup elective input window
 	def setup_elective_window(self):
@@ -309,7 +277,7 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.line.setEnabled(False)
 		self.ui_elec.line_2.setEnabled(False)
 		
-		self.electives = OrderedDict()
+		self.electives = dict()
 		for sem in self.sem_list:
 			self.ui_elec.semester_combobox.addItem(sem)
 			self.electives[sem] = dict()
@@ -348,8 +316,8 @@ class ParentWindow(QMainWindow):
 		self.ui2.section_combobox.activated[str].connect(self.section_combobox2_event)
 		self.ui2.faculty_combobox.activated[str].connect(self.faculty_combobox2_event)
 
-		self.sections = dict()
-		self.subjects_assigned = dict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
+		self.sections = OrderedDict()
+		self.subjects_assigned = OrderedDict() # this dict will be like {'III': {'A': [subjects], 'B': [subjects]}, 'IV': {} ..etc}
 		self.faculty_subjects = dict() # stores subjects assigned to each faculty
 
 		self.SecondWindow.resize(self.screen_width*self.resize_ratio, self.screen_height*self.resize_ratio)
@@ -424,6 +392,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.faculty_combobox.activated[str].connect(self.faculty_combobox5_event)
 		self.ui5.generated_table.cellClicked.connect(self.cellClick5_event)
 		self.ui5.roomno_textbox.textEdited.connect(self.roomno_textbox_event)
+		self.ui5.roomno_textbox.returnPressed.connect(self.roomno_textbox_event)
 		self.ui5.faculty_combobox.setEnabled(False)
 		self.ui5.label_5.setEnabled(False)
 		self.ui5.inputType_combobox.addItem('Students')
@@ -453,6 +422,30 @@ class ParentWindow(QMainWindow):
 		self.ui_about.logoLabel.setPixmap(QtGui.QPixmap('icons/nittelogo.png'))
 
 		self.ui_about.closeBtn.clicked.connect(self.AboutWindow.hide)
+
+	#setup license window
+	def setup_license_window(self):
+		# LICENSE WINDOW
+		logger.debug('Initializing and setting up license window')
+		self.LicenseWindow = QDialog()
+		self.ui_license = Ui_licenseWindow()
+		self.ui_license.setupUi(self.LicenseWindow)
+
+		self.ui_license.logoLabel.setPixmap(QtGui.QPixmap('icons/nittelogo.png'))
+
+		self.ui_license.licenseBtn.clicked.connect(self.license_btn_event)
+		self.ui_license.closeBtn.clicked.connect(self.LicenseWindow.hide)
+
+
+	#license window function
+	def license_btn_event(self):
+		try:
+			l = os.path.realpath(os.curdir) + '\\license.txt' 
+			os.startfile(l)
+			logger.debug('%s opened', l)
+		except Exception as err:
+			self.file_error_dialog(err)
+			logger.exception(err)
 
 
 	# year window functions
@@ -490,12 +483,9 @@ class ParentWindow(QMainWindow):
 
 			self.inputType = self.ui.inputType_combobox.currentText()
 			logger.info('Input type: %s', self.inputType)
-			#print(self.inputType)
 			if self.row:
 					del self.row[0]
 			logger.info('Selected row in list: %s', self.row)
-			#print(self.row)
-			#print(dir(self.ui.inputType_combobox))
 			if self.inputType == "Faculty":
 				self.ui.semester_combobox.setEnabled(False)
 				self.ui.label_3.setEnabled(False)
@@ -560,7 +550,6 @@ class ParentWindow(QMainWindow):
 		if self.FifthWindow.isVisible():
 			self.inputType = self.ui5.inputType_combobox.currentText()
 			logger.info(self.inputType)
-			#print(self.inputType)
 			if self.inputType == "Faculty":
 				self.ui5.semester_combobox.setCurrentIndex(-1)
 				self.ui5.section_combobox.setCurrentIndex(-1)
@@ -597,7 +586,6 @@ class ParentWindow(QMainWindow):
 		if self.sem != '' and self.sem not in self.num_sections:
 			self.num_sections[self.sem] = self.ui.sections_spinbox.value()
 			logger.info('No. of sections in %s: %s', self.sem, self.num_sections[self.sem])
-			#print(self.sem, self.num_sections[self.sem])
 		self.sem = self.ui.semester_combobox.currentText()
 		if self.sem in self.num_sections:
 			self.ui.sections_spinbox.setValue(self.num_sections[self.sem])
@@ -615,17 +603,13 @@ class ParentWindow(QMainWindow):
 			self.ui.subject_short_input.clear()
 			self.ui.credits_spinbox.setValue(1)
 		logger.info('Selected row in list: %s', self.row)
-		#print(self.row)
-		#self.ui.input_list.repaint()
 
 	def section_spinbox_event(self):    #function for sections spinbox
 		if self.sem != '':
 			self.num_sections[self.sem] = self.ui.sections_spinbox.value()  #saves the number of sections when "add" button is clicked
 			logger.info('%s %s', self.sem, self.num_sections[self.sem])
-			#print(self.sem, self.num_sections[self.sem])
 
 	def add_btn_event(self):   #function for add button
-		#print(dir(self.ui.input_textbox))
 		logger.debug('Add button first form')
 		text = self.ui.input_textbox.text()
 
@@ -634,21 +618,20 @@ class ParentWindow(QMainWindow):
 			logger.debug('Input type: %s', self.inputType)
 			if self.inputType == "Subjects":
 				for x in self.row:
-					#print(x.text())
 					subj = subject(x.text())
 					sem = self.ui.semester_combobox.currentText()
 					for y in self.subjects[sem]:
 						if subj == y:
 							if not sem:
-								#self.systemtray_icon.show()
 								self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+								self.systemtray_icon.hide()
 								logger.debug('Input-Please select the semester.')
 								return
 							if text != '':
 								short_sub = self.ui.subject_short_input.text()
 								if not short_sub:
-									#self.systemtray_icon.show()
 									self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
+									self.systemtray_icon.hide()
 									logger.debug('Input-Please enter the subject short form.')
 									return
 								subcode = self.ui.subject_code_input.text()
@@ -660,7 +643,6 @@ class ParentWindow(QMainWindow):
 								y.lab = lab
 								y.subcode = subcode
 								logger.info('Subject details(name, shortname, credits, lab) :%s %s %s %s', text, short_sub, credits, lab)
-								#print(text, short_sub, credits, lab)
 								t = text + " - " + short_sub
 								self.ui.input_list.takeItem(self.ui.input_list.row(x))
 								self.ui.input_list.addItem(t)
@@ -678,13 +660,12 @@ class ParentWindow(QMainWindow):
 							y.designation = self.ui.desig_combobox.currentText()
 							self.ui.input_list.takeItem(self.ui.input_list.row(x))
 							self.ui.input_list.addItem(text)
-							self.update_faculty_changes(fac, y.name)
+							self.update_faculty_changes(fac, y)
 							logger.debug('Faculty details(title, name, designation): %s %s %s', y.title, y.name, y.designation)
 							break
 			self.ui.input_list.clearSelection()
 			self.row = []
 			logger.info('Selected row in list: %s', self.row)
-			#print(self.row)
 			self.ui.input_list.repaint()
 
 		else: #when adding a new item
@@ -693,15 +674,15 @@ class ParentWindow(QMainWindow):
 			if self.inputType == "Subjects":
 				sem = self.ui.semester_combobox.currentText()
 				if not sem:
-					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+					self.systemtray_icon.hide()
 					logger.debug('Input-Please select the semester.')
 					return
 				if text != '':
 					short_sub = self.ui.subject_short_input.text()
 					if not short_sub:
-						#self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Input', 'Please enter the subject short form.')
+						self.systemtray_icon.hide()
 						logger.debug('Input-Please enter the subject short form.')
 						return
 					subcode = self.ui.subject_code_input.text()
@@ -709,12 +690,11 @@ class ParentWindow(QMainWindow):
 					lab = self.ui.lab_checkbox.isChecked()
 					sub = subject(text, short_sub, credits, lab, subcode)
 					logger.info('Subject details(name, shortname, credits, lab) :%s %s %s %s', text, short_sub, credits, lab)
-					#print(text, short_sub, credits, lab)
 					t = text + " - " + short_sub
 					for x in self.subjects[sem]:
 						if sub == x:
-							#self.systemtray_icon.show()
 							self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+							self.systemtray_icon.hide()
 							logger.debug('Warning! Duplicate value entered.')
 							break
 					else: # loop completed without finding duplicates
@@ -723,8 +703,8 @@ class ParentWindow(QMainWindow):
 						self.subs[sub.short_name] = sub
 						self.ui.credits_spinbox.setValue(1)
 				else:
-					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Input', 'Please enter the subject name.')
+					self.systemtray_icon.hide()
 					logger.debug('Input-Please enter the subject name.')
 					
 			elif self.inputType == "Faculty": # input type is Faculty
@@ -738,17 +718,17 @@ class ParentWindow(QMainWindow):
 						self.ui.input_list.addItem(text)
 						logger.debug('Faculty details(title, name, designation): %s %s', t, f.designation)
 					else:
-						#self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+						self.systemtray_icon.hide()
 						logger.debug('Warning! Duplicate value entered.')
 				else:
-					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Input', 'Please enter the faculty name.')
+					self.systemtray_icon.hide()
 					logger.debug('Input-Please enter the faculty name.')
 				self.ui.title_combobox.setCurrentIndex(0)
 			else:
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please select the input type.')
+				self.systemtray_icon.hide()
 				logger.debug('Input-Please enter the input type.')
 				
 		self.ui.input_list.sortItems()
@@ -762,8 +742,6 @@ class ParentWindow(QMainWindow):
 		
 		logger.info('Faculty list: %s', self.faculty_list_value)
 		logger.info('Subjects list: %s', self.subjects)
-		#print('faculty list: ', self.faculty_list_value)
-		#print('subjects list: ', self.subjects)
 
 	def update_subject_changes(self, old_sub, new_sub):
 		# changes in subs, section_fixed_slots, subjects_assigned, faculty_subjects
@@ -814,11 +792,9 @@ class ParentWindow(QMainWindow):
 
 	def handle_listclick_event(self):
 		self.row = self.ui.input_list.selectedItems()
-		#print(dir(self.ui.input_list))
 		sem = self.ui.semester_combobox.currentText()
 		if self.inputType == "Subjects":
 			for x in self.row:
-				#print(x.text())
 				subj = subject(x.text())
 				for y in self.subjects[sem]:
 					if subj.name == y.name:
@@ -863,25 +839,22 @@ class ParentWindow(QMainWindow):
 		row = self.ui.input_list.selectedItems()
 		self.row = []
 		if not row:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
+			self.systemtray_icon.hide()
 			logger.debug('Warning! Select item to remove.')
 		else:
-			#print (row)
 			for x in row:
-				#print(dir(x))
-				#print(x.text())
 				self.ui.input_list.takeItem(self.ui.input_list.row(x))
 				try:
 					if self.inputType == "Subjects":
-						#self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Subjects', x.text() + ' removed from the subject list')
+						self.systemtray_icon.hide()
 						logger.debug('Subjects-%s removed from the subject list.', x.text())
 						self.subjects[self.sem].remove(subject(x.text()))
 					else:
 						self.faculty_list_value.remove(x.text())
-						#self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Faculty', x.text() + ' removed from the faculty list')
+						self.systemtray_icon.hide()
 						logger.debug('Faculty-%s removed from the faculty list.', x.text())
 				finally: # not catching exceptions, we want to see the error
 					pass
@@ -889,8 +862,6 @@ class ParentWindow(QMainWindow):
 			self.ui.input_list.repaint()
 		logger.info('Faculty list: %s', self.faculty_list_value)
 		logger.info('Subjects list: %s', self.subjects)
-		#print('faculty list: ', self.faculty_list_value)
-		#print('subjects list: ', self.subjects)
 
 	def reset_first_window(self):
 		logger.debug('Resetting First Window')
@@ -924,10 +895,8 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.electiveGroup_combobox.setCurrentIndex(-1)
 		self.ui_elec.electiveGroup_combobox.clear()
 		sem = self.ui_elec.semester_combobox.currentText()
-		#self.ui_elec.elective_spinbox.setValue(0)
 		self.ui_elec.electiveGroup_combobox.setEnabled(False)
 		self.ui_elec.label_3.setEnabled(False)
-		#if len(self.electives[sem]) > 0:
 		for group in self.electives[sem]:
 			self.ui_elec.electiveGroup_combobox.addItem(group)
 			self.ui_elec.electiveGroup_combobox.setEnabled(True)
@@ -977,7 +946,6 @@ class ParentWindow(QMainWindow):
 	def elective_spinbox_event(self):
 		no_of_ele_grp = self.ui_elec.elective_spinbox.value()
 		logger.info('No of elective groups %s',no_of_ele_grp)
-		#print(no_of_ele_grp)
 		self.ui_elec.electiveGroup_combobox.setEnabled(True)
 		self.ui_elec.label_3.setEnabled(True)
 		self.ui_elec.electiveGroup_combobox.clear()
@@ -996,18 +964,18 @@ class ParentWindow(QMainWindow):
 		subcode = self.ui_elec.elective_code_input.text()
 		logger.debug('Adding %s elective to %s in %s', text, sem, elective_group)
 		if not sem:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please select the semester.')
 			return
 		if not short_sub:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please enter the elective short form.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please enter the subject short form.')
 			return
 		if not elective_group:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select the elective group.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please select the elective group.')
 			return
 
@@ -1026,21 +994,15 @@ class ParentWindow(QMainWindow):
 							y.lab = lab
 							y.subcode = subcode
 							logger.info('Elective details(name, shortname, credits, lab) :%s %s %s %s', text, short_sub, credits, lab)
-							#print(text, short_sub, credits, lab)
 							t = text + " - " + short_sub
 							self.ui_elec.elective_list.takeItem(self.ui_elec.elective_list.row(x))
 							self.ui_elec.elective_list.addItem(t)
-							'''
-							if subj in self.subjects[sem]:
-								self.subjects[sem].remove(subj)
-								self.subjects[sem].append(y)
-							'''
 							self.update_subject_changes(subj, y)
 							self.ui_elec.credits_spinbox.setValue(1)
 							break
 						else:
-							#self.systemtray_icon.show()
 							self.systemtray_icon.showMessage('Input', 'Please enter the elective name.')
+							self.systemtray_icon.hide()
 							logger.debug('Input-Please enter the elective name.')
 		else:
 			
@@ -1049,15 +1011,13 @@ class ParentWindow(QMainWindow):
 				lab = self.ui_elec.lab_checkbox.isChecked()
 				sub = subject(text, short_sub, credits, lab, subcode)
 				logger.info('Elective details(name, shortname, credits, lab) :%s %s %s %s', text, short_sub, credits, lab)
-				#print(text, short_sub, credits, lab)
 				t = text + " - " + short_sub
-				#if elective_group in self.electives[sem]:
 				for group in self.electives[sem]:
 					if group == elective_group:
 						for x in self.electives[sem][group]:
 							if sub == x:
-								#self.systemtray_icon.show()
 								self.systemtray_icon.showMessage('Warning!', 'Duplicate value entered.')
+								self.systemtray_icon.hide()
 								logger.debug('Warning! Duplicate value entered.')
 								break
 				else:
@@ -1069,8 +1029,8 @@ class ParentWindow(QMainWindow):
 					self.subs[sub.short_name] = sub
 					self.ui_elec.credits_spinbox.setValue(1)
 			else:
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Input', 'Please enter the elective name.')
+				self.systemtray_icon.hide()
 				logger.debug('Input-Please enter the elective name.')
 		self.ui_elec.elective_list.sortItems()
 		self.ui_elec.elective_short_input.clear()
@@ -1080,7 +1040,6 @@ class ParentWindow(QMainWindow):
 		self.ui_elec.elective_input_textbox.setFocus()
 		
 		logger.info('Electives list: %s', self.electives)
-		#print('electives list: ', self.electives)
 
 	def remove_btn_elective_event(self):
 		logger.debug('Remove button elective form')
@@ -1088,19 +1047,19 @@ class ParentWindow(QMainWindow):
 		sem = self.ui_elec.semester_combobox.currentText()
 		elective_group = self.ui_elec.electiveGroup_combobox.currentText()
 		if not row:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
+			self.systemtray_icon.hide()
 			logger.debug('Warning! Select item to remove.')
 		elif not elective_group:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Warning!', 'Select elective group.')
+			self.systemtray_icon.hide()
 			logger.debug('Warning! Select elective group.')
 		else:
 			for x in row:
 				self.ui_elec.elective_list.takeItem(self.ui_elec.elective_list.row(x))
 				try:
-					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Subjects', x.text() + ' removed from the subject list')
+					self.systemtray_icon.hide()
 					logger.debug('Subjects-%d removed from the subject list', x.text())
 					sub = subject(x.text())
 					self.electives[sem][elective_group].remove(sub)
@@ -1112,7 +1071,6 @@ class ParentWindow(QMainWindow):
 			self.ui_elec.elective_list.repaint()
 
 		logger.info('Electives list: %s', self.electives)
-		#print('electives list: ', self.electives)
 	
 	def handle_listclick_elective_event(self):
 		row = self.ui_elec.elective_list.selectedItems()
@@ -1191,7 +1149,7 @@ class ParentWindow(QMainWindow):
 		for faculty in self.faculty_list_value:
 			if faculty not in self.faculty_subjects:
 				self.faculty_subjects[faculty.name] = []
-		#print(self.subjects_assigned)
+		logger.info('Assigned Subjects: %s', self.subjects_assigned)
 		
 	def semester_combobox2_event(self): # semester combobox in second form
 		self.sem = self.ui2.semester_combobox.currentText()
@@ -1229,26 +1187,26 @@ class ParentWindow(QMainWindow):
 	def assign_btn_event(self):
 		faculty = self.ui2.faculty_combobox.currentText()
 		if faculty == '':
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select a faculty member.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please select a faculty member.')
 			return
 		sem = self.ui2.semester_combobox.currentText()
 		if sem == '':
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select the semester.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please select the semester.')
 			return
 		section = self.ui2.section_combobox.currentText()
 		if section == '':
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select a section.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please select a section.')
 			return
 		sub = self.ui2.subject_combobox.currentText()
 		if sub == '':
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Input', 'Please select a subject.')
+			self.systemtray_icon.hide()
 			logger.debug('Input-Please select a subject.')
 			return
 
@@ -1259,8 +1217,8 @@ class ParentWindow(QMainWindow):
 			if subj == sub:
 				try:
 					if self.subs[x[1]].lab == False or faculty in teachers: # if theory subject or teacher already assigned to subject
-						#self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Warning!', 'Duplicate assignment')
+						self.systemtray_icon.hide()
 						logger.debug('Warning! Duplicate assignment.')
 					else: # assigned additional teachers
 						self.subjects_assigned[sem][section][i] += ', ' + faculty
@@ -1269,7 +1227,6 @@ class ParentWindow(QMainWindow):
 				except KeyError as e:
 					logger.info(self.subs)
 					logger.exception(e)
-					#print(self.subs)
 					raise
 				break
 		else: # assigning a subject for the first time
@@ -1277,44 +1234,42 @@ class ParentWindow(QMainWindow):
 			self.subjects_assigned[sem][section].append(sub_faculty)
 			fac_subject = sub + ' - ' + sem + ' ' + section
 			self.faculty_subjects[faculty].append(fac_subject)
-		#self.ui2.assigned_list.addItem(sub)
 		self.section_combobox2_event()
 
 		logger.info('Subject assignments', self.subjects_assigned)
 		logger.info('Faculty subject allotments', self.faculty_subjects)
-		#print(self.subjects_assigned)
-		#print(self.faculty_subjects)
 		pass
 
 	def undo_btn_event(self):
 		selected = self.ui2.assigned_list.selectedItems()
 		if not selected:
-			#self.systemtray_icon.show()
 			self.systemtray_icon.showMessage('Warning!', 'Select item to remove.')
+			self.systemtray_icon.hide()
 			logger.debug('Warning! Select item to remove.')
 		else:
 			for x in selected:
 				self.ui2.assigned_list.takeItem(self.ui2.assigned_list.row(x))
 				x = x.text()
 				x = x.split(' - ')
-				if len(x) == 3: # deleting from section view
-					sub = x[0] + ' - ' + x[1]
-					faculty = x[2]
+				if x[2].split(' ')[0] not in self.sem_list: # deleting from section view
 					section = self.ui2.section_combobox.currentText()
 					sem = self.ui2.semester_combobox.currentText()
+					sub = x[0] + ' - ' + x[1]
+					f = x[2]
+					f = f.split(', ')
+					for faculty in f: 
+						self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
+					faculty = ', '.join(f)
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
-					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
 				else: # deleting from faculty view
-					sub = x[0] + ' - ' + x[1]
-					sem = x[2]
-					section = x[3]
 					faculty = self.ui2.faculty_combobox.currentText()
+					sub = x[0] + ' - ' + x[1]
+					sem, section = x[2].split(' ')
 					self.subjects_assigned[sem][section].remove(sub + ' - ' + faculty)
 					self.faculty_subjects[faculty].remove(sub + ' - ' + sem + ' ' + section)
 					pass
-				logger.debug('Subject assignment %s removed', self.subjects_assigned[sem][section])
-				logger.debug('Faculty assignment %s removed', self.faculty_subjects[faculty])
+				logger.debug('Subject-faculty assignment: [%s - %s] removed', sub, faculty)
 		pass
 
 
@@ -1335,12 +1290,10 @@ class ParentWindow(QMainWindow):
 			self.ui3.section_combobox.addItem(section)
 		section = self.ui3.section_combobox.currentText()
 		logger.info('Subject constraints: %s', self.section_fixed_slots)
-		#print(self.section_fixed_slots)
 		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]:
 			for row in self.section_fixed_slots[sem][section]:
 				for column in self.section_fixed_slots[sem][section][row]:
 					logger.info('%s %s %s %s', sem, section, row, column)
-					#print(sem, section, row, column)
 					a = self.section_fixed_slots[sem][section][row][column]
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
@@ -1352,13 +1305,11 @@ class ParentWindow(QMainWindow):
 		section = self.ui3.section_combobox.currentText()
 		logger.info('Section %s', section)
 		logger.info('Displaying subject constraints for: %s %s', sem, section)
-		#print(self.section_fixed_slots)
 		if sem in self.section_fixed_slots and section in self.section_fixed_slots[sem]:
 			logger.info('Subject constraints: %s', self.section_fixed_slots[sem][section])
 			for row in self.section_fixed_slots[sem][section]:
 				for column in self.section_fixed_slots[sem][section][row]:
 					logger.info('%s %s %s %s', sem, section, row, column)
-					#print(sem, section, row, column)
 					a = self.section_fixed_slots[sem][section][row][column]
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
@@ -1372,7 +1323,6 @@ class ParentWindow(QMainWindow):
 		slot = self.ui3.slotType_combobox.currentText()
 		logger.info('Assigning subject constraints')
 		logger.info('%s %s', str(row), str(column))
-		#print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
 
 		sem = self.ui3.semester_combobox.currentText()
@@ -1394,7 +1344,6 @@ class ParentWindow(QMainWindow):
 					for section in self.sections[sem]:
 						self.section_fixed_slots[sem][section][row].pop(column)
 					logger.info('%s exists', slot)
-					#print(slot + 'exists')
 					item.setText('')
 					assign_elective = False
 				else:
@@ -1420,7 +1369,6 @@ class ParentWindow(QMainWindow):
 
 		elif dict_entry_exists and self.section_fixed_slots[sem][section][row][column] == slot:
 			logger.info('%s exists', slot)
-			#print(slot + ' exists')
 			self.section_fixed_slots[sem][section][row].pop(column)
 			item.setText('')
 		else:
@@ -1435,7 +1383,6 @@ class ParentWindow(QMainWindow):
 			
 		self.ui3.subject_table.setItem(row, column, item)
 		logger.info('Subject constraints: %s', self.section_fixed_slots)
-		#print(self.section_fixed_slots)
 
 	def reset_third_window(self):
 		logger.debug('Resetting Third Window')
@@ -1457,7 +1404,6 @@ class ParentWindow(QMainWindow):
 			for row in self.faculty_fixed_slots[faculty]:
 				for column in self.faculty_fixed_slots[faculty][row]:
 					logger.info('%s %s %s', faculty, row, column)
-					#print(faculty, row, column)
 					a = self.faculty_fixed_slots[faculty][row][column]
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
@@ -1466,7 +1412,6 @@ class ParentWindow(QMainWindow):
 	def cellClick4_event(self, row, column):
 		logger.info('Assigning faculty constraints')
 		logger.info('%s %s', str(row), str(column))
-		#print (str(row), str(column))
 		item = QtWidgets.QTableWidgetItem()
 		item.setText('-')		
 
@@ -1484,7 +1429,6 @@ class ParentWindow(QMainWindow):
 				self.faculty_fixed_slots[faculty][row] = dict()
 			self.faculty_fixed_slots[faculty][row][column] = item.text()
 		logger.info('Faculty constraints: %s', self.faculty_fixed_slots)
-		#print(self.faculty_fixed_slots)
 
 	def generate_event(self):
 		logger.debug('Generating timetable...\nScheduling slots...\nAlotting subjects to slots...')
@@ -1504,6 +1448,7 @@ class ParentWindow(QMainWindow):
 		sem = self.ui5.semester_combobox.currentText()
 		logger.debug('Populating section combobox for %s semester', sem)
 		self.ui5.section_combobox.clear()
+		self.ui5.roomno_textbox.clear()
 		for section in self.sections[sem]:
 			self.ui5.section_combobox.addItem(section)
 		section = self.ui5.section_combobox.currentText()
@@ -1513,6 +1458,7 @@ class ParentWindow(QMainWindow):
 		self.ui5.generated_table.clearContents()
 		sem = self.ui5.semester_combobox.currentText()
 		section = self.ui5.section_combobox.currentText()
+		self.ui5.roomno_textbox.clear()
 		logger.debug('Displaying timetable for %s %s', sem, section)
 		if sem in self.timetables and section in self.timetables[sem]:
 			if self.timetables[sem][section].roomno:
@@ -1523,7 +1469,6 @@ class ParentWindow(QMainWindow):
 					if sub == '':
 						a = '-'
 					else:
-						#print(sub)
 						a = sub[3] # 3rd field is subject short name
 					item = QtWidgets.QTableWidgetItem()
 					item.setText(a)
@@ -1551,7 +1496,6 @@ class ParentWindow(QMainWindow):
 					self.ui5.generated_table.setItem(row, column, item)
 
 	def show_swap_conflict_dialog(self, conflicts):
-		#print(conflicts)
 		logger.debug('Conflicts during swapping in generated timetable dialog')
 		logger.debug(conflicts)
 		msg = QMessageBox()
@@ -1567,9 +1511,7 @@ class ParentWindow(QMainWindow):
 			logger.info('Swapping alloted classes between two slots at user\'s risk')
 			r, c = self.selected_cell
 			logger.info('%s %s', r, c)
-			#print(r, c)
 			logger.info('%s %s', str(row), str(column))
-			#print(str(row), str(column))
 			if r == row and c == column: # if same cell is selected twice
 				self.ui5.generated_table.clearSelection()
 				self.selected_cell = ''
@@ -1595,7 +1537,6 @@ class ParentWindow(QMainWindow):
 							cur_sem = sec[0]
 							cur_sec = sec[1]
 							logger.info('Swap element 1: %s %s %s', cur_sem, cur_sec, cur_sub)
-							#print(cur_sem, cur_sec, cur_sub)
 							if self.timetables[cur_sem][cur_sec][prev_d][prev_t]:
 								can_swap = False
 								conflicts.append((cur_sem + ' ' + cur_sec, prev_d, prev_t, self.timetables[cur_sem][cur_sec][prev_d][prev_t][3]))
@@ -1607,7 +1548,6 @@ class ParentWindow(QMainWindow):
 							prev_sec = sec[1]
 							prev_cell_text = '{} ({})'.format(prev_sub[1][3], prev_sem + ' ' + prev_sec) 
 							logger.info('Swap element 2: %s %s %s', prev_sem, prev_sec, prev_sub)
-							#print(prev_sem, prev_sec, prev_sub)
 							if self.timetables[prev_sem][prev_sec][cur_d][cur_t]:
 								can_swap = False
 								conflicts.append((prev_sem + ' ' + prev_sec, cur_d, cur_t, self.timetables[prev_sem][prev_sec][cur_d][cur_t][3]))
@@ -1656,7 +1596,6 @@ class ParentWindow(QMainWindow):
 					can_swap = True
 					conflicts = []
 					if prev_sub != '':
-						#print(prev_sub)
 						prev_cell_text = prev_sub[3]
 						logger.info('Swap element 1: %s', prev_cell_text)
 						if self.subs[prev_sub[3]].lab == True:
@@ -1679,10 +1618,6 @@ class ParentWindow(QMainWindow):
 								can_swap = False
 								conflicts.append((cur_teacher, prev_d, prev_t, sec + ' ' + sub[3]))
 
-					'''
-					if prev_sub and cur_sub and prev_teacher == cur_teacher:
-						can_swap = True
-					'''
 					logger.info('Swap element 2: %s', cur_cell.text())
 
 					if can_swap:
@@ -1737,9 +1672,12 @@ class ParentWindow(QMainWindow):
 						num_rooms += 1
 						for day in tt:
 							for timeslot in tt[day]:
-								if not tt[day][timeslot]: 
-									rooms[day][timeslot].append(tt.roomno)
-									#print(day, timeslot, tt.roomno)
+								try:
+									if not tt[day][timeslot] or self.subs[tt[day][timeslot][3]].lab:
+										rooms[day][timeslot].append(tt.roomno)
+								except KeyError as err:
+									logger.exception(err)
+									continue
 			for day in rooms:
 				for timeslot in rooms[day]:
 					if len(rooms[day][timeslot]) == num_rooms and num_rooms > 0: # at times such as lunch breaks
@@ -1753,66 +1691,6 @@ class ParentWindow(QMainWindow):
 			self.show_printerror_dialog(err)
 			logger.exception(err)
 
-	def print_btn_event_plaintext(self):
-		inputType = self.ui5.inputType_combobox.currentText()
-		if inputType == "Students":
-			sem = self.ui5.semester_combobox.currentText()
-			sec = self.ui5.section_combobox.currentText()
-			if sem =='' or sec == '':
-				#self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Select Semester and Section to print timetable')
-			else:
-				tt = self.timetables[sem][sec]
-				f = open('Output/Class Timetables/' + sem + ' ' + sec + '.txt','w')
-				filename = 'Output\Class Timetables\\' + sem + ' ' + sec + '.txt'
-				print('NMAM Institute of Technology, Nitte\nDept. of Computer Science & Engineering\nTime Table (Autonomy) Even Semester\n\n', file = f)
-				print('Semester:' + sem + '\nSection:' + sec + '\n\n', file = f)
-				print(('%-20s ' * 9) % ('', '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'), file = f)
-				print('\n', file = f)
-				for day in tt:
-					print('%-20s' % day, end = ' ', file = f)
-					for timeslot in tt[day]:
-						if tt[day][timeslot] == '':
-							print('%-20s' % '-', end = ' ', file = f)
-						else:
-							print('%-20s' % tt[day][timeslot][3], end = ' ', file = f)
-					print('\n', file = f)
-				print('\n', file = f)
-				print('Faculty Assigned\n', file = f)
-				fac = self.subjects_assigned[sem][sec]
-				print('%-50s %-15s %-30s'  % ('SUBJECT', 'SHORT-NAME', 'FACULTY'), file = f)
-				for s in fac:
-					sub_name, short_sub, faculty = s.split(' - ')
-					print('%-50s %-15s %-30s'  % (sub_name, short_sub, faculty), file = f)
-				f.close()
-				os.startfile(filename)
-		else:
-			faculty = self.ui5.faculty_combobox.currentText()
-			if faculty == '':
-				#self.systemtray_icon.show()
-				self.systemtray_icon.showMessage('Warning!', 'Select the Faculty to print timetable')
-			else:
-				tt = self.faculty_timetables[faculty]
-				f = open('Output/Personal Timetables/' + faculty + '.txt','w')
-				filename = 'Output\Personal Timetables\\' + faculty + '.txt'
-				print('NMAM Institute of Technology, Nitte\nPersonal Time Table\n\n', file = f)
-				print('Department :  CSE\nStaff Name:' + faculty + '\n\n', file = f)
-				print(('%-20s ' * 9) % ('', '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'), file = f)
-				print('\n', file = f)
-				for day in tt:
-					print('%-20s' % day, end = ' ', file = f)
-					for timeslot in tt[day]:
-						if tt[day][timeslot] == '':
-							print('%-20s' % '-', end = ' ', file = f)
-						else:
-							section = tt[day][timeslot][0]
-							subject = tt[day][timeslot][1][3]
-							print('%-20s' % (subject + ' (' + section + ')') , end = ' ', file = f)
-					print('\n', file = f)
-				print('\n', file = f)
-				f.close()
-				os.startfile(filename)
-
 	def print_btn_event(self):
 		logger.info('Printing...')
 		inputType = self.ui5.inputType_combobox.currentText()
@@ -1821,8 +1699,8 @@ class ParentWindow(QMainWindow):
 			sem = self.ui5.semester_combobox.currentText()
 			sec = self.ui5.section_combobox.currentText()
 			if sem =='' or sec == '':
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Warning!', 'Select Semester and Section to print timetable.')
+				self.systemtray_icon.hide()
 				logger.debug('Warning! Select Semester and Section to print timetable.')
 			else:
 				tt = self.timetables[sem][sec]
@@ -1830,8 +1708,6 @@ class ParentWindow(QMainWindow):
 				filepath = os.path.join('Output', 'Class Timetables', '{}.docx'.format(tt.name))
 				try:
 					year = '{}. {} - {}. {}'.format(self.startMonth[:3], self.startYear, self.endMonth[:3], self.endYear)
-					#roomno = self.ui5.roomno_textbox.text()
-					#tt.roomno = roomno
 					worddoc.make_docx(tt, 'section', filepath, self.subjects_assigned[sem][sec], self.subs, self.faculty_list_value, year)
 					os.startfile(filepath)
 				except OSError as err:
@@ -1842,8 +1718,8 @@ class ParentWindow(QMainWindow):
 			logger.info('Faculty')
 			faculty = self.ui5.faculty_combobox.currentText()
 			if faculty == '':
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Warning!', 'Select the Faculty to print timetable')
+				self.systemtray_icon.hide()
 				logger.debug('Warning! Select the faculty to print timetable.')
 			else:
 				tt = self.faculty_timetables[faculty]
@@ -1896,7 +1772,6 @@ class ParentWindow(QMainWindow):
 		if buttonReply == QMessageBox.Yes:
 			logger.debug('User clicked Yes')
 			logger.debug('Quitting Program by user\'s choice, no errors')
-			#sys.exit()
 		elif buttonReply == QMessageBox.Save:
 			logger.debug('User clicked Save. Program will save and exit')
 			if self.cur_open_filename:
@@ -1905,8 +1780,8 @@ class ParentWindow(QMainWindow):
 				else:
 					success = self.save_state(self.cur_open_filename)
 				if success:
-					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Success', 'Saved to ' + self.cur_open_filename)
+					self.systemtray_icon.hide()
 					logger.debug('Success. Saved to %s', self.cur_open_filename)
 				else:
 					event.ignore()
@@ -1915,7 +1790,6 @@ class ParentWindow(QMainWindow):
 				if not saved:
 					event.ignore()
 			logger.debug('Quitting Program by user\'s choice, no errors')
-			#sys.exit()
 		elif buttonReply == QMessageBox.Cancel:
 			logger.debug('Exit Cancelled')
 			event.ignore()
@@ -1954,6 +1828,7 @@ class ParentWindow(QMainWindow):
 		elif self.FourthWindow.isVisible():
 			self.FourthWindow.hide()
 			self.FifthWindow.show()
+			self.reset_fifth_window()
 			self.current_window = self.FifthWindow
 			logger.debug('Fifth Window')
 			if self.ui5.faculty_combobox.currentText() == "" and self.ui5.faculty_combobox.count() == 0:
@@ -1988,9 +1863,7 @@ class ParentWindow(QMainWindow):
 	def filemenuevent(self, option):
 		option = option.text()
 		logger.info('File Menu option clicked: %s', option)
-		#print(option)
 		if option == "Exit":
-			#self.finish_btn_event()
 			self.current_window.close()
 		elif option == "Save":
 			if self.cur_open_filename:
@@ -1999,8 +1872,8 @@ class ParentWindow(QMainWindow):
 				else:
 					success = self.save_state(self.cur_open_filename)
 				if success:
-					#self.systemtray_icon.show()
 					self.systemtray_icon.showMessage('Success', 'Saved to ' + self.cur_open_filename)
+					self.systemtray_icon.hide()
 					logger.debug('Success. Saved to %s', self.cur_open_filename)
 			else:
 				self.show_save_file_dialog()
@@ -2015,7 +1888,6 @@ class ParentWindow(QMainWindow):
 				if dialog.exec_():
 					fname = dialog.selectedFiles()[0]
 					logger.info('File name: %s', fname)
-					#print(fname)
 					if fname.endswith('.json'):
 						success = self.load_state_json(fname)
 					elif fname.endswith('.xlsx') or fname.endswith('.xls'):
@@ -2023,8 +1895,8 @@ class ParentWindow(QMainWindow):
 					else:
 						success = self.load_state(fname)
 					if success:
-						#self.systemtray_icon.show()
 						self.systemtray_icon.showMessage('Success', 'Loaded all saved data from ' + fname)
+						self.systemtray_icon.hide()
 						logger.debug('Success. Loaded all saved data from %s', fname)
 						logger.debug('Reset all windows and displaying 1st window')
 						if not fname.endswith('.xls') and not fname.endswith('.xlsx'):
@@ -2055,15 +1927,15 @@ class ParentWindow(QMainWindow):
 				self.faculty_list_value = []
 				self.subjects = dict()
 				self.subs = dict()
-				self.num_sections = dict()
+				self.num_sections = OrderedDict()
 				self.electives = dict()
 				for sem in self.sem_list:
 					self.subjects[sem] = []
 					self.num_sections[sem] = 0
 					self.electives[sem] = dict()
 				self.row = self.ui.input_list.selectedItems()
-				self.sections = dict()
-				self.subjects_assigned = dict()
+				self.sections = OrderedDict()
+				self.subjects_assigned = OrderedDict()
 				self.faculty_subjects = dict()
 				self.section_fixed_slots = dict()
 				self.faculty_fixed_slots = dict()
@@ -2075,8 +1947,8 @@ class ParentWindow(QMainWindow):
 				self.reset_Btn_event()	#reset elective window
 				self.reset_year_window()
 				logger.debug('All variables and forms cleared and reset')
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Reset', 'All unsaved data have been cleared.')
+				self.systemtray_icon.hide()
 				logger.debug('Reset-All unsaved data have been cleared.')
 			else:
 				logger.debug('Clear All cancelled')
@@ -2102,8 +1974,8 @@ class ParentWindow(QMainWindow):
 					designation = self.faculty_list_value[i].designation
 					worddoc.make_docx(tt, 'faculty', filepath, self.faculty_subjects[faculty], self.subs, self.timetables, designation)
 				
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Print All', 'All timetables have been printed to ' + fp)
+				self.systemtray_icon.hide()
 				logger.debug('Print All-All timetables have been printed to %s', fp)
 				os.startfile(fp)
 			except OSError as err:
@@ -2115,6 +1987,8 @@ class ParentWindow(QMainWindow):
 			self.YearWindow.show()
 		elif option == "About":
 			self.AboutWindow.show()
+		elif option == "License":
+			self.LicenseWindow.show()
 
 
 	#save and load functions
@@ -2131,14 +2005,13 @@ class ParentWindow(QMainWindow):
 				if buttonReply == QMessageBox.Cancel:
 					logger.debug('Overwrite Cancelled')
 					continue
-			#print(fname)
 			if fname.endswith('.json'):
 				success = self.save_state_json(fname)
 			else:
 				success = self.save_state(fname)
 			if success:
-				#self.systemtray_icon.show()
 				self.systemtray_icon.showMessage('Success', 'Saved to ' + fname)
+				self.systemtray_icon.hide()
 				logger.debug('Success. Saved to %s', fname)
 				self.cur_open_filename = fname
 			break
@@ -2150,7 +2023,6 @@ class ParentWindow(QMainWindow):
 				state = (self.startMonth, self.startYear, self.endMonth, self.endYear, self.department,
 						 self.faculty_list_value,
 						 self.subjects,
-						 #self.subs,
 						 self.num_sections,
 						 self.sections,
 						 self.subjects_assigned,
@@ -2164,9 +2036,10 @@ class ParentWindow(QMainWindow):
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
-		except:
+		except Exception as err:
 			self.file_error_dialog('Error pickling data')
 			logger.exception('Error pickling data')
+			logger.exception(err)
 
 	def update_sub(self):
 		for sem in self.subjects:
@@ -2212,19 +2085,16 @@ class ParentWindow(QMainWindow):
 
 			self.merge_data(faculty_list_value, subjects, electives)
 
-			
-			#print(self.subs)
 			logger.info('Subjects assigned to faculty: %s', self.faculty_subjects)
 			logger.info('Faculty fixed slots: %s', self.faculty_fixed_slots)
-			#print(self.faculty_subjects)
-			#print(self.faculty_fixed_slots)
 			return True
 		except IOError as err:
 			self.file_error_dialog(err.strerror + ': ' + err.filename)
 			logger.exception(err)
-		except:
+		except Exception as err:
 			self.file_error_dialog('Error with the file or format')
 			logger.exception('Error with the file or format')
+			logger.exception(err)
 
 	def save_state_json(self, fname):
 		try:
@@ -2236,24 +2106,7 @@ class ParentWindow(QMainWindow):
 				subjects[sem] = []
 				for sub in self.subjects[sem]:
 					subjects[sem].append(sub.__repr__())
-			'''
-			faculty_fixed_slots = dict()
-			for teacher in self.faculty_fixed_slots:
-				if type(teacher) == type('str'):
-					faculty_fixed_slots[teacher] = self.faculty_fixed_slots[teacher]
-				else:
-					faculty_fixed_slots[teacher.name] = self.faculty_fixed_slots[teacher]
-			faculty_subjects = dict()
-			for teacher in self.faculty_subjects:
-				if type(teacher) == type('str'):
-					try:
-						name = self.faculty_list_value[self.faculty_list_value.index(teacher)].name
-					except ValueError:
-						pass
-					faculty_subjects[name] = self.faculty_subjects[teacher]
-				else:
-					faculty_subjects[teacher.name] = self.faculty_subjects[teacher]
-			'''
+			
 			electives = dict()
 			for sem in self.electives:
 				electives[sem] = dict()
@@ -2284,11 +2137,12 @@ class ParentWindow(QMainWindow):
 		except Exception as err:
 			self.file_error_dialog('Error encoding json')
 			logger.exception('Error encoding json')
+			logger.exception(err)
 
 	def load_state_json(self, fname):
 		try:
 			with open(fname, "r") as file:
-				state = json.loads(file.read())
+				state = json.loads(file.read(), object_pairs_hook = OrderedDict)
 
 			(startMonth, startYear, endMonth, endYear, department,
 				faculty_list_value,
@@ -2356,7 +2210,7 @@ class ParentWindow(QMainWindow):
 		msg = QMessageBox()
 		msg.setIcon(QMessageBox.Critical)
 		msg.setText('There was an error opening the file')
-		msg.setInformativeText(error)
+		msg.setInformativeText(str(error))
 		msg.setWindowTitle("Error")
 		msg.setStandardButtons(QMessageBox.Ok)
 		msg.exec_()
@@ -2371,9 +2225,9 @@ class ParentWindow(QMainWindow):
 			logger.info('Loading from Excel file')
 			subjects = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
 			electives = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
-			subjects_assigned = {'III': dict(), 'IV': dict(), 'V': dict(), 'VI': dict(), 'VII': dict(), 'VIII': dict()}
+			subjects_assigned = OrderedDict({'III': OrderedDict(), 'IV': OrderedDict(), 'V': OrderedDict(), 'VI': OrderedDict(), 'VII': OrderedDict(), 'VIII': OrderedDict()})
 			faculty_subjects = dict()
-			sections = {'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []}
+			sections = OrderedDict({'III': [], 'IV': [], 'V': [], 'VI': [], 'VII': [], 'VIII': []})
 			cur_sem = ''
 			cur_sub = ''
 			cur_sec = 1
@@ -2416,20 +2270,20 @@ class ParentWindow(QMainWindow):
 				f = f.split(',')
 				for i, fac_name in enumerate(f):
 					fac_name = fac_name.strip()
-					f[i] = fac_name
-					if fac_name not in faculty:
-						faculty.add(faculty_class(fac_name, ' '))
-						faculty_subjects[fac_name] = []
-					faculty_subjects[fac_name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
+					fac = faculty_class(fac_name)
+					f[i] = fac.name
+					if fac.name not in faculty:
+						faculty.add(fac)
+						faculty_subjects[fac.name] = []
+					faculty_subjects[fac.name].append('{} - {} - {} {}'.format(sub_name, sub_short, cur_sem, section))
 				subjects_assigned[cur_sem][section].append('{} - {} - {}'.format(sub_name, sub_short, ', '.join(f)))
 
 			self.merge_data(faculty, subjects, electives)
 			self.subjects_assigned = subjects_assigned
 			logger.info('Subjects Assigned: %s', self.subjects_assigned)
-			#print(self.subjects_assigned)
 			self.faculty_subjects = faculty_subjects
 			self.sections = sections
-			num_sections = dict()
+			num_sections = OrderedDict()
 			for sem in sections:
 				num_sections[sem] = len(sections[sem])
 			self.num_sections = num_sections
@@ -2456,12 +2310,6 @@ def my_logger():
 	logger = logging.getLogger('tt_main')
 	logging.basicConfig(filename = loc, level = logging.DEBUG)
 
-'''def my_excepthook(type, value, tb):
-	traceback.print_exception(type, value, tb)
-	sys.exit(0)
-'''
-
-
 if __name__ == "__main__":
 
 	if os.path.isdir('logs') == False:
@@ -2477,7 +2325,7 @@ if __name__ == "__main__":
 			os.mkdir('Output\\Personal Timetables')
 
 	global loc
-	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.txt", time.localtime()))
+	loc = os.path.realpath(os.curdir) + '\\' + os.path.join('logs', time.strftime("%a, %d %b %Y %H-%M-%S.log", time.localtime()))
 	my_logger()
 
 	sys.excepthook = my_excepthook
@@ -2486,5 +2334,4 @@ if __name__ == "__main__":
 	app.setApplicationName('TimeTable Scheduler')
 	main = ParentWindow()
 	logger.debug('Year Window')
-	#main.show()
 	sys.exit(app.exec_())

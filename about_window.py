@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'about_window.ui'
-#
-# Created by: PyQt5 UI code generator 5.8.2
-#
-# WARNING! All changes made in this file will be lost!
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
@@ -13,7 +7,7 @@ class Ui_aboutWindow(object):
     def setupUi(self, aboutWindow):
         aboutWindow.setObjectName("aboutWindow")
         aboutWindow.resize(800, 450)
-        aboutWindow.setStyleSheet(lightstyle.css.replace('bgwlogo.png', 'img13.png'))
+        aboutWindow.setStyleSheet(lightstyle.css.replace('bgwlogo.png', 'img14.jpg'))
         aboutWindow.setWindowIcon(QtGui.QIcon('icons/favicon.ico'))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -112,9 +106,7 @@ class Ui_aboutWindow(object):
 "𝗔𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁 𝗣𝗿𝗼𝗳𝗲𝘀𝘀𝗼𝗿\n"
 "𝗗𝗲𝗽𝗮𝗿𝘁𝗺𝗲𝗻𝘁 𝗼𝗳 𝗖𝗼𝗺𝗽𝘂𝘁𝗲𝗿 𝗦𝗰𝗶𝗲𝗻𝗰𝗲 & 𝗘𝗻𝗴𝗶𝗻𝗲𝗲𝗿𝗶𝗻𝗴\n"
 "\n"
-#"𝑭𝒐𝒓:\n"
-"𝗡𝗠𝗔𝗠 𝗜𝗻𝘀𝘁𝗶𝘁𝘂𝘁𝗲 𝗼𝗳 𝗧𝗲𝗰𝗵𝗻𝗼𝗹𝗼𝗴𝘆, 𝗡𝗶𝘁𝘁𝗲"
-" 𝟮𝟬𝟭𝟳"))
+"𝗡𝗠𝗔𝗠 𝗜𝗻𝘀𝘁𝗶𝘁𝘂𝘁𝗲 𝗼𝗳 𝗧𝗲𝗰𝗵𝗻𝗼𝗹𝗼𝗴𝘆, 𝗡𝗶𝘁𝘁𝗲 𝟮𝟬𝟭𝟳"))
 
 
 if __name__ == "__main__":

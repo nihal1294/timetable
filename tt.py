@@ -1,3 +1,5 @@
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
+
 import random
 from data import *
 from collections import deque
@@ -5,30 +7,6 @@ import os
 import sys
 import logging
 
-'''
-def getfreeslots1(tt):
-	freeslots = []
-	nonfinalslots = []
-	for day in tt:
-		for timeslot in tt[day]:
-			if tt[day][timeslot] == '' and tt.final[day][timeslot] != True: # time slot is free
-				freeslots.append((day, timeslot))
-			elif tt.final[day][timeslot] != True:
-				nonfinalslots.append((day, timeslot))
-	return freeslots, nonfinalslots
-
-def getfreeslots2(tt):
-	freeslots = []
-	nonfinalslots = []
-	for timeslot in range(1, 8+1):
-		for day in tt:
-			if timeslot in tt[day]:
-				if tt[day][timeslot] == '' and tt.final[day][timeslot] != True: # time slot is free
-					freeslots.append((day, timeslot))
-				elif tt.final[day][timeslot] != True:
-					nonfinalslots.append((day, timeslot))
-	return freeslots, nonfinalslots
-'''
 
 day_row_num = {
 	'monday': 0,
@@ -85,7 +63,6 @@ def is_consecutive_hour(teacher, d, h):
 	else:
 		return True
 
-
 def generate(tt, subjects, faculty, location): # subjects is a list of tuples (name, hours/week, teacher, short name); faculty is a dict
 	remaining_hours = [i[1] for i in subjects]
 	freeslots, _ = getfreeslots(tt)
@@ -95,7 +72,6 @@ def generate(tt, subjects, faculty, location): # subjects is a list of tuples (n
 
 	for _ in range(max(remaining_hours)): # repeat for as many times as the max credits 
 		for i in range(len(subjects)): # iterate through all subjects, allot 1 hour for each subject
-	#        print(tt.name, subject)
 			if remaining_hours[i] > 0:
 				subject = subjects[i]
 				for day, time in freeslots:
@@ -106,14 +82,7 @@ def generate(tt, subjects, faculty, location): # subjects is a list of tuples (n
 						freeslots.remove((day, time))
 						break
 				else:
-					'''
-					print("no free slots for ", tt.name, subject)
-					print_timetable(tt)
-					print_timetable(faculty[subject[2]], style = 'staff')
-					sys.exit()
-					'''
 					logger.info("no free slots for %s %s", tt.name, subject)
-					#print("no free slots for ", tt.name, subject)
 					dayclash.append((tt, subject))
 	return tt
 
@@ -123,40 +92,32 @@ def print_timetable(tt, location, style = 'section', name = ''):
 	if name == '':
 		name = tt.name
 	logger.info(('%-20s ' * 9) % (name, '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'))
-	#print(('%-20s ' * 9) % (name, '9:00-9:55', '9:55-10:50', '11:10-12:05', '12:05-1:00', '1:00-1:55', '1:55-2:50', '2:50-3:40', '3:40-4:30'))
 	for day in tt:
 		x = '%-20s' % day
-		#print('%-20s' % day, end = ' ')
 		for timeslot in tt[day]:
 			if tt[day][timeslot] == '':
 				x += ' ' + '%-20s' % '-'
-				#print('%-20s' % '-', end = ' ')
 			else:
 
 				if style == 'section':
 					x += ' ' + '%-20s' % tt[day][timeslot][3]
-					#print('%-20s' % tt[day][timeslot][3], end = ' ')
 				else:
 					section = tt[day][timeslot][0]
 					subject = tt[day][timeslot][1][3]
 					x += ' ' + '%-20s' % (subject + ' (' + section + ')')
-					#print('%-20s' % (subject + ' (' + section + ')') , end = ' ')
 		logger.info('%s', x)
-		#print()
-	#print()
 	logger.info('\n')
 
 def rehabilitate(day, section, subject, faculty):
 	teacher = faculty[subject[2]]
 	for timeslot in teacher[day]:
-		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot): # and getnumhours(section, subject, day)[0] < 1: # teacher is available
+		if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot) and getnumhours(section, subject, day)[0] < 2: # teacher is available
 			if section.final[day][timeslot] != True: # time slot for that section is not finalized
 				clashing_subject = section[day][timeslot]
 				if teacher.workload > section.final[day][timeslot]: # whatever subject has been allotted, move it to clash
 					if clashing_subject != '': 
 						clash.append((section, clashing_subject))
 						clashing_teacher = clashing_subject[2]
-						#print(clashing_teacher)
 						faculty[clashing_teacher][day][timeslot] = ''
 					section.final[day][timeslot] = teacher.workload # finalize the lecture by moving the new subject into the time slot
 					section[day][timeslot] = subject
@@ -194,8 +155,6 @@ def adjust_clash(timetables, location, faculty):
 	logger = logging.getLogger('tt_algo')
 	logging.basicConfig(filename = location, level = logging.DEBUG)
 	for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']:
-		#print(day)
-
 		n_dayclash = len(dayclash)
 		for i in range(n_dayclash):
 			dayclash_ele = dayclash.popleft()
@@ -203,20 +162,17 @@ def adjust_clash(timetables, location, faculty):
 	
 		timeslots = 8 if day != 'saturday' else 4
 		for timeslot in range(1, timeslots+1):
-#            print(timeslot)
 			for sem in timetables:
 				for section in timetables[sem]:
 					section = timetables[sem][section]
 					if section[day][timeslot] != '' and section.final[day][timeslot] == False: # if lecture has not been finalized
 						subject = section[day][timeslot]
 						teacher = faculty[subject[2]]
-						#numhours, hours = getnumhours(section, subject, day)
 						
 						try:
 							if teacher[day][timeslot] == '' and teacher.final[day][timeslot] != True and not is_consecutive_hour(teacher, day, timeslot):
 								teacher[day][timeslot] = (section.name, subject)
 								section.final[day][timeslot] = teacher.workload
-								#teacher.final[day][timeslot] = True
 							elif teacher[day][timeslot] != '' and (teacher[day][timeslot][0] != section.name or teacher[day][timeslot][1] != subject): # teacher is not available, there is a clash
 								# teacher is not available
 								# what if teacher takes 2 subjects for same section? 2nd condition takes care of this
@@ -230,18 +186,15 @@ def adjust_clash(timetables, location, faculty):
 								rehabilitate(day, section, subject, faculty)
 							else: # if teacher is available, finalize the lecture 
 								section.final[day][timeslot] = teacher.workload
-								#teacher.final[day][timeslot] = True
 						except Exception as e:
 							logger.info('%s %s %s %s %s', section.name, subject, day, timeslot, faculty[subject[2]][day][timeslot])
-							#print(section.name, subject, day, timeslot, faculty[subject[2]][day][timeslot])
 							print_timetable(faculty[subject[2]], location, style = 'staff')
 							print_timetable(section, location)
 							logger.exception(e)
 							raise 
 		while len(clash) > 0:
 			clash_ele = clash.popleft()
-			rehabilitate(day, clash_ele[0], clash_ele[1], faculty)
-		
+			rehabilitate(day, clash_ele[0], clash_ele[1], faculty)		
 
 def finalize_lab(section, day, time, subject, hours = 3):
 	global faculty
@@ -296,9 +249,7 @@ def print_dayclash(location):
 	logger = logging.getLogger('tt_algo')
 	logging.basicConfig(filename = location, level = logging.DEBUG)
 	for item in dayclash:
-		#print(item[0].name, item[1])
 		logger.info('%s %s', item[0].name, item[1])
-	#print(len(dayclash))
 	logger.info(len(dayclash))
 
 def produce_timetable(ui, loc):
@@ -316,14 +267,14 @@ def produce_timetable(ui, loc):
 	for member in ui.faculty_list_value:
 		faculty[member] = timetable(str(member))
 		faculty[member].dept = ui.department
-	subjects = dict()
+	subjects = OrderedDict()
 	subjects_ref = dict()
-	timetables = dict()
+	timetables = OrderedDict()
 	for sem in ui.num_sections:
 		if ui.num_sections[sem] > 0:
-			subjects[sem] = dict()
+			subjects[sem] = OrderedDict()
 			subjects_ref[sem] = dict()
-			timetables[sem] = dict()
+			timetables[sem] = OrderedDict()
 			for section in ui.sections[sem]:
 				subjects[sem][section] = []
 				subjects_ref[sem][section] = dict()
@@ -338,13 +289,10 @@ def produce_timetable(ui, loc):
 				if ui.subs[sub_short].lab == False:
 					staff = staff[0]
 					faculty[staff].workload += sub.credits
-				#print(sub_long, sub_short, staff)
-				#print(ui.subs)
 				s = [sub_long, sub.credits, staff, sub_short]
 				subjects[sem][section].append(s)
 				subjects_ref[sem][section][sub_short] = s
 
-	#print(subjects)
 	for sem in ui.section_fixed_slots:
 		for section in ui.section_fixed_slots[sem]:
 			for row in ui.section_fixed_slots[sem][section]:
@@ -366,10 +314,8 @@ def produce_timetable(ui, loc):
 						else: # not elective
 							short = sub_short[0]
 							sub = subjects_ref[sem][section][short]
-							#print(sub, row, col)
 							if ui.subs[short].lab == True:
 								finalize_lab(timetables[sem][section], day, hour, sub, 1)
-								#finalize_theory(timetables[sem][section], day, hour, sub)
 							else:
 								finalize_theory(timetables[sem][section], day, hour, sub, 1)
 			print_timetable(timetables[sem][section], location)
@@ -379,7 +325,6 @@ def produce_timetable(ui, loc):
 				day = ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday')[row]
 				hour = column+1
 				free_faculty(faculty[staff], hour, day)
-	#print('...generating...')
 	logger.info('...generating...')
 	for sem in timetables:
 		for section in timetables[sem]:
@@ -387,7 +332,6 @@ def produce_timetable(ui, loc):
 			print_timetable(timetables[sem][section], location)
 	for teacher in faculty:
 		faculty[teacher].calc_workload()
-	#print('...adjusting clashes...')
 	logger.info('...adjusting clashes...')
 	adjust_clash(timetables, location, faculty)
 	adjust_clash(timetables, location, faculty)
@@ -397,6 +341,7 @@ def produce_timetable(ui, loc):
 			print_timetable(timetables[sem][section], location)
 	print_dayclash(location)
 	return timetables, faculty, dayclash
+
 
 if __name__ == '__main__':
 
@@ -538,7 +483,6 @@ if __name__ == '__main__':
 	print_timetable(fourc)
 	print_timetable(fourd)
 	'''
-	#print('... generating ...')
 	logger.info('... generating ...')
 	generate(sixa, subjects['6A'], faculty, location)
 	generate(sixb, subjects['6B'], faculty, location)
@@ -572,7 +516,6 @@ if __name__ == '__main__':
 	print_timetable(sixc)
 	print_timetable(sixd)
 	'''
-	#print('... adjusting clashes ...')
 	logger.info('... adjusting clashes ...')
 	timetables = OrderedDict({
 		'VI': OrderedDict({
@@ -602,11 +545,9 @@ if __name__ == '__main__':
 				faculty[name].workload += hours
 	for name in faculty:
 		faculty[name].calc_workload()
-		#print(name, faculty[name].workload)
 	
 	adjust_clash(timetables, location, faculty=faculty)
 	print_dayclash(location)
-	#print('... 2nd pass ...')
 	logger.info('... 2nd pass ...')
 	adjust_clash(timetables, location, faculty=faculty)
 	print_dayclash(location)
@@ -626,28 +567,6 @@ if __name__ == '__main__':
 	print_timetable(sixd, location)
 	
 
-	#print('... faculty timetable ...')
 	print_timetable(faculty['Mr. Venugopala P S'], location, style = 'staff', name = 'Mr. Venugopal')
 	#print_timetable(faculty['Mr. Ramesha Shettigar'], style = 'staff', name = 'Mr. RS')
 	#print_timetable(faculty['Mr. Pradeep Nazareth'], style = 'staff', name = 'Mr. Pradeep')
-
-	
-	'''
-	print()
-
-	print_timetable(sixa, 'VI A')
-	print_timetable(sixb, 'VI B')
-	print_timetable(sixc, 'VI C')
-	print_timetable(sixd, 'VI D')
-
-	print()
-
-	print_timetable(eighta, 'VIII A')
-	print_timetable(eightb, 'VIII B')
-	print_timetable(eightc, 'VIII C')
-	print_timetable(eightd, 'VIII D')
-
-	print()
-
-	print_timetable(faculty['Mr. Ramesha Shettigar'], style = 'staff')
-	'''

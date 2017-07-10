@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'window5.ui'
-#
-# Created by: PyQt5 UI code generator 5.7.1
-#
-# WARNING! All changes made in this file will be lost!
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import lightstyle
@@ -218,11 +212,8 @@ class Ui_window5(object):
         self.actionLoad.setShortcut("Ctrl+L")
         self.actionExit = QtWidgets.QAction(window5)
         self.actionExit.setObjectName("actionExit")
-        #self.actionExit.triggered.connect(self.closeEvent)
         self.actionAbout = QtWidgets.QAction(window5)
         self.actionAbout.setObjectName("actionAbout")
-        self.actionManual = QtWidgets.QAction(window5)
-        self.actionManual.setObjectName("actionManual")
         self.actionClear_All = QtWidgets.QAction(window5)
         self.actionClear_All.setObjectName("actionClear_All")
         self.actionClear_All.setShortcut("Ctrl+R")
@@ -235,6 +226,8 @@ class Ui_window5(object):
         self.actionSet_Year_Department.setObjectName("actionSet_Year_Department")
         self.aboutMenu = QtWidgets.QAction(window5)
         self.aboutMenu.setObjectName("aboutMenu")
+        self.LicenseMenu = QtWidgets.QAction(window5)
+        self.LicenseMenu.setObjectName("LicenseMenu")
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSaveAs)
         self.menuFile.addAction(self.actionLoad)
@@ -247,6 +240,7 @@ class Ui_window5(object):
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.aboutMenu)
+        self.menuHelp.addAction(self.LicenseMenu)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
@@ -308,12 +302,12 @@ class Ui_window5(object):
         self.actionLoad.setText(_translate("window5", "Load"))
         self.actionExit.setText(_translate("window5", "Exit"))
         self.actionAbout.setText(_translate("window5", "About"))
-        self.actionManual.setText(_translate("window5", "Manual"))
         self.actionSet_Year_Department.setText(_translate("window5", "Set Year/Department"))
         self.actionClear_All.setText(_translate("window5", "Clear All"))
         self.actionShow_free_classrooms.setText(_translate("window5", "Show Free Classrooms"))
         self.actionPrint_All.setText(_translate("window5", "Print All"))
         self.aboutMenu.setText(_translate("window5", "About"))
+        self.LicenseMenu.setText(_translate("window5", "License"))
 
 
 if __name__ == "__main__":

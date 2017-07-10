@@ -1,5 +1,6 @@
-'''
+#Copyright (C)  2017  Nihal Rao I, Sanjan S Poojari, Shishir Upadhya
 
+'''
 xml paths:
 section timetable:
 1st table:
@@ -227,8 +228,6 @@ def print_freeslots_wordxml(rooms, department):
 			#print(r, c)
 			col = row[c][1][1][1]
 			freerooms = '\n'.join(rooms[day][timeslot])
-			print()
-			print(freerooms)
 			col.text = freerooms
 	return ET.tostring(root)
 
